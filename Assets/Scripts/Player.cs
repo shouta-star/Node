@@ -20,9 +20,6 @@ public class Player : MonoBehaviour
     private bool isMoving = false;
     private Vector3 targetPos;
 
-    private bool prevLeftHit;
-    private bool prevRightHit;
-
     // ★ 追加：設置済みセル集合
     private readonly HashSet<Vector2Int> placedNodeCells = new();
 
@@ -31,7 +28,7 @@ public class Player : MonoBehaviour
         moveDir = startDirection.normalized;
         targetPos = transform.position;
 
-        // 開始セルに何か置きたくなる場合に備えて初期登録だけしておく場合はコメント解除
+        // 初期位置にNodeを置きたい場合は以下を有効化
         // TryPlaceNode(transform.position);
     }
 
@@ -54,23 +51,19 @@ public class Player : MonoBehaviour
         Debug.DrawRay(transform.position, leftDir * rayDistance, Color.blue);
         Debug.DrawRay(transform.position, rightDir * rayDistance, Color.green);
 
-        // ★ Rayの変化でNode設置（重複防止付き）
-        if (leftHit != prevLeftHit || rightHit != prevRightHit)
+        // ★ 曲がり角 or 分岐点でNode設置（未設置セルのみ）
+        int openCount = 0;
+        if (!frontHit) openCount++;
+        if (!leftHit) openCount++;
+        if (!rightHit) openCount++;
+
+        // 前が壁、または通れる方向が2つ以上（＝分岐・曲がり角）
+        if (frontHit || openCount >= 2)
         {
             TryPlaceNode(transform.position);
-
-            // ランダム方向変更（前・左・右のうち通れる方向）
-            var options = new List<Vector3>(3);
-            if (!frontHit) options.Add(moveDir);
-            if (!leftHit) options.Add(leftDir);
-            if (!rightHit) options.Add(rightDir);
-            if (options.Count > 0) moveDir = options[Random.Range(0, options.Count)];
         }
 
-        prevLeftHit = leftHit;
-        prevRightHit = rightHit;
-
-        // 前が空いていれば前へ、ダメなら左右空きからランダム
+        // 前が空いていればそのまま進行
         if (!frontHit)
         {
             targetPos = transform.position + moveDir * cellSize;
@@ -78,6 +71,7 @@ public class Player : MonoBehaviour
         }
         else
         {
+            // 前が壁なら左右のどちらか空いている方向へ方向転換
             var open = new List<Vector3>(2);
             if (!leftHit) open.Add(leftDir);
             if (!rightHit) open.Add(rightDir);
@@ -101,20 +95,19 @@ public class Player : MonoBehaviour
         }
     }
 
-    // ★ 追加：グリッド重複チェック付きNode設置
+    // ★ グリッド重複チェック付きNode設置
     void TryPlaceNode(Vector3 worldPos)
     {
         Vector2Int cell = WorldToCell(worldPos);
         if (placedNodeCells.Add(cell)) // 未登録セルならtrue
         {
-            // セル中央に置きたい場合は CellToWorld(cell) を使う
             Vector3 placePos = CellToWorld(cell);
             Instantiate(nodePrefab, placePos, Quaternion.identity);
         }
-        // 登録済みならスキップ
+        // 登録済みセルならスキップ
     }
 
-    // ★ 追加：座標変換（原点・セルサイズ対応）
+    // ★ 座標変換（原点・セルサイズ対応）
     Vector2Int WorldToCell(Vector3 worldPos)
     {
         Vector3 p = worldPos - gridOrigin;
