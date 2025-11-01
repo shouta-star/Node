@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     private bool isMoving = false;
     private Vector3 targetPos;
 
-    // ★ 追加：設置済みセル集合
+    // 追加：設置済みセル集合
     private readonly HashSet<Vector2Int> placedNodeCells = new();
 
     void Start()
@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
         Debug.DrawRay(transform.position, leftDir * rayDistance, Color.blue);
         Debug.DrawRay(transform.position, rightDir * rayDistance, Color.green);
 
-        // ★ 曲がり角 or 分岐点でNode設置（未設置セルのみ）
+        // 曲がり角 or 分岐点でNode設置（未設置セルのみ）
         int openCount = 0;
         if (!frontHit) openCount++;
         if (!leftHit) openCount++;
@@ -95,7 +95,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    // ★ グリッド重複チェック付きNode設置
+    // グリッド重複チェック付きNode設置
     void TryPlaceNode(Vector3 worldPos)
     {
         Vector2Int cell = WorldToCell(worldPos);
@@ -107,7 +107,7 @@ public class Player : MonoBehaviour
         // 登録済みセルならスキップ
     }
 
-    // ★ 座標変換（原点・セルサイズ対応）
+    // 座標変換（原点・セルサイズ対応）
     Vector2Int WorldToCell(Vector3 worldPos)
     {
         Vector3 p = worldPos - gridOrigin;
