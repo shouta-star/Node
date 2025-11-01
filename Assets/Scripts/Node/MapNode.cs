@@ -4,6 +4,11 @@ using UnityEngine;
 [ExecuteAlways]
 public class MapNode : MonoBehaviour
 {
+    // =========================================
+    // 全プレイヤー共有のNode座標リスト
+    // =========================================
+    public static HashSet<Vector2Int> allNodeCells = new HashSet<Vector2Int>();
+
     [Header("リンク情報")]
     public List<MapNode> links = new List<MapNode>();
     public float value = 0f;
@@ -13,9 +18,14 @@ public class MapNode : MonoBehaviour
     public int maxSteps = 20;              // 何マス先まで探索するか
     public LayerMask wallLayer;            // 壁レイヤー
     public LayerMask nodeLayer;            // Nodeレイヤー
+    public Vector3 gridOrigin = Vector3.zero; // グリッド原点（オフセット補正用）
 
     private void Start()
     {
+        // 起動時に自身の位置を登録（重複は自動スキップ）
+        Vector2Int cell = WorldToCell(transform.position);
+        allNodeCells.Add(cell);
+
         if (Application.isPlaying)
             FindNeighbors();
     }
@@ -28,9 +38,33 @@ public class MapNode : MonoBehaviour
     }
 #endif
 
-    /// <summary>
-    /// グリッドベースでRayを段階的に伸ばし、壁 or Node に当たるまで探索
-    /// </summary>
+    // =====================================================
+    // 静的関数：指定位置にNodeが存在するかをチェック
+    // =====================================================
+    public static bool NodeExistsAt(Vector3 worldPos, float cellSize, Vector3 origin)
+    {
+        Vector3 p = worldPos - origin;
+        Vector2Int cell = new Vector2Int(
+            Mathf.RoundToInt(p.x / cellSize),
+            Mathf.RoundToInt(p.z / cellSize)
+        );
+        return allNodeCells.Contains(cell);
+    }
+
+    // =====================================================
+    // ワールド座標 → グリッド座標変換
+    // =====================================================
+    private Vector2Int WorldToCell(Vector3 worldPos)
+    {
+        Vector3 p = worldPos - gridOrigin;
+        int cx = Mathf.RoundToInt(p.x / cellSize);
+        int cz = Mathf.RoundToInt(p.z / cellSize);
+        return new Vector2Int(cx, cz);
+    }
+
+    // =====================================================
+    // グリッドベースでRayを段階的に伸ばし、壁 or Node に当たるまで探索
+    // =====================================================
     public void FindNeighbors()
     {
         links.Clear();
@@ -84,6 +118,9 @@ public class MapNode : MonoBehaviour
         }
     }
 
+    // =====================================================
+    // Gizmos：リンク線を赤で表示
+    // =====================================================
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4454722764683333740}
   - component: {fileID: 2764244951383049385}
   - component: {fileID: 1221000895244678938}
-  - component: {fileID: -5658824854478473672}
+  - component: {fileID: 3258887847046610457}
   m_Layer: 7
   m_Name: Node
   m_TagString: Untagged
@@ -109,7 +109,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-5658824854478473672
+--- !u!114 &3258887847046610457
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,10 +123,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   links: []
   value: 0
-  maxCheckDistance: 20
+  cellSize: 1
+  maxSteps: 20
   wallLayer:
     serializedVersion: 2
     m_Bits: 64
   nodeLayer:
     serializedVersion: 2
     m_Bits: 128
+  gridOrigin: {x: 0, y: 0, z: 0}

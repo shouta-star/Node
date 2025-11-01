@@ -20,16 +20,10 @@ public class Player : MonoBehaviour
     private bool isMoving = false;
     private Vector3 targetPos;
 
-    // 追加：設置済みセル集合
-    private readonly HashSet<Vector2Int> placedNodeCells = new();
-
     void Start()
     {
         moveDir = startDirection.normalized;
         targetPos = transform.position;
-
-        // 初期位置にNodeを置きたい場合は以下を有効化
-        // TryPlaceNode(transform.position);
     }
 
     void Update()
@@ -51,13 +45,12 @@ public class Player : MonoBehaviour
         Debug.DrawRay(transform.position, leftDir * rayDistance, Color.blue);
         Debug.DrawRay(transform.position, rightDir * rayDistance, Color.green);
 
-        // 曲がり角 or 分岐点でNode設置（未設置セルのみ）
         int openCount = 0;
         if (!frontHit) openCount++;
         if (!leftHit) openCount++;
         if (!rightHit) openCount++;
 
-        // 前が壁、または通れる方向が2つ以上（＝分岐・曲がり角）
+        // 曲がり角 or 前が壁ならNode設置
         if (frontHit || openCount >= 2)
         {
             TryPlaceNode(transform.position);
@@ -71,7 +64,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            // 前が壁なら左右のどちらか空いている方向へ方向転換
+            // 前が壁なら左右方向へランダム転換
             var open = new List<Vector3>(2);
             if (!leftHit) open.Add(leftDir);
             if (!rightHit) open.Add(rightDir);
@@ -95,19 +88,29 @@ public class Player : MonoBehaviour
         }
     }
 
-    // グリッド重複チェック付きNode設置
-    void TryPlaceNode(Vector3 worldPos)
+    // =====================================================
+    // Node設置（共有チェック＋スナップ＋即登録）
+    // =====================================================
+    void TryPlaceNode(Vector3 pos)
     {
-        Vector2Int cell = WorldToCell(worldPos);
-        if (placedNodeCells.Add(cell)) // 未登録セルならtrue
-        {
-            Vector3 placePos = CellToWorld(cell);
-            Instantiate(nodePrefab, placePos, Quaternion.identity);
-        }
-        // 登録済みセルならスキップ
+        // 1 スナップ（浮動小数誤差防止）
+        Vector2Int cell = WorldToCell(pos);
+        Vector3 placePos = CellToWorld(cell);
+
+        // 2 すでに共有リストに存在するか確認
+        if (MapNode.allNodeCells.Contains(cell))
+            return;
+
+        // 3 即座に共有リストに登録（他プレイヤーも認識可能）
+        MapNode.allNodeCells.Add(cell);
+
+        // 4 Nodeを生成
+        Instantiate(nodePrefab, placePos, Quaternion.identity);
     }
 
-    // 座標変換（原点・セルサイズ対応）
+    // =====================================================
+    // ワールド→セル変換
+    // =====================================================
     Vector2Int WorldToCell(Vector3 worldPos)
     {
         Vector3 p = worldPos - gridOrigin;
@@ -116,6 +119,9 @@ public class Player : MonoBehaviour
         return new Vector2Int(cx, cz);
     }
 
+    // =====================================================
+    // セル→ワールド変換
+    // =====================================================
     Vector3 CellToWorld(Vector2Int cell)
     {
         return new Vector3(cell.x * cellSize, 0f, cell.y * cellSize) + gridOrigin;
