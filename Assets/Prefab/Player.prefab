@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5d6336b9fc68ed4c96e965702b0377e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  moveSpeed: 100
   cellSize: 1
   rayDistance: 1
   wallLayer:

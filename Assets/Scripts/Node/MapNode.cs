@@ -5,32 +5,31 @@ using UnityEngine;
 public class MapNode : MonoBehaviour
 {
     [Header("リンク情報")]
-    public List<MapNode> links = new List<MapNode>(); // 隣接Node
-    public float value = 0f;                          // 期待値（学習用）
+    public List<MapNode> links = new List<MapNode>();
+    public float value = 0f;
 
     [Header("探索設定")]
-    public float linkCheckDistance = 1.1f;            // 隣接Node探索距離
-    public LayerMask nodeLayer;                       // NodePrefabのレイヤー
+    public float cellSize = 1f;            // グリッド1マスの長さ
+    public int maxSteps = 20;              // 何マス先まで探索するか
+    public LayerMask wallLayer;            // 壁レイヤー
+    public LayerMask nodeLayer;            // Nodeレイヤー
 
     private void Start()
     {
         if (Application.isPlaying)
-        {
             FindNeighbors();
-        }
     }
 
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        // Editor上でPrefab配置直後にも隣接更新できるようにする
         if (!Application.isPlaying)
             FindNeighbors();
     }
 #endif
 
     /// <summary>
-    /// 上下左右に短距離Raycastを飛ばして隣接Nodeを探す
+    /// グリッドベースでRayを段階的に伸ばし、壁 or Node に当たるまで探索
     /// </summary>
     public void FindNeighbors()
     {
@@ -39,26 +38,52 @@ public class MapNode : MonoBehaviour
 
         foreach (var dir in directions)
         {
-            if (Physics.Raycast(transform.position, dir, out RaycastHit hit, linkCheckDistance, nodeLayer))
-            {
-                MapNode neighbor = hit.collider.GetComponent<MapNode>();
-                if (neighbor != null && !links.Contains(neighbor))
-                {
-                    links.Add(neighbor);
+            bool hitSomething = false;
 
-                    // 双方向リンク（相手からも自分を登録）
-                    if (!neighbor.links.Contains(this))
+            // 1マスずつ伸ばして調べる
+            for (int step = 1; step <= maxSteps; step++)
+            {
+                float distance = step * cellSize;
+                Vector3 origin = transform.position;
+
+                // Rayを飛ばす
+                if (Physics.Raycast(origin, dir, out RaycastHit hit, distance))
+                {
+                    GameObject obj = hit.collider.gameObject;
+                    int layerMask = 1 << obj.layer;
+
+                    // 壁なら探索終了（リンクしない）
+                    if ((wallLayer.value & layerMask) != 0)
                     {
-                        neighbor.links.Add(this);
+                        hitSomething = true;
+                        break;
+                    }
+
+                    // Nodeならリンク確定
+                    if ((nodeLayer.value & layerMask) != 0)
+                    {
+                        MapNode neighbor = obj.GetComponent<MapNode>();
+                        if (neighbor != null && neighbor != this)
+                        {
+                            if (!links.Contains(neighbor))
+                            {
+                                links.Add(neighbor);
+                                if (!neighbor.links.Contains(this))
+                                    neighbor.links.Add(this);
+                            }
+                        }
+                        hitSomething = true;
+                        break;
                     }
                 }
             }
+
+            // 何にも当たらなかった方向は無視
+            if (!hitSomething)
+                continue;
         }
     }
 
-    /// <summary>
-    /// Gizmosでリンク線を可視化（赤いライン）
-    /// </summary>
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
