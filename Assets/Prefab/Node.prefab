@@ -123,7 +123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   links: []
   value: 0
-  linkCheckDistance: 1.1
+  linkCheckDistance: 2
   nodeLayer:
     serializedVersion: 2
     m_Bits: 128
