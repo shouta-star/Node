@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class PlayerMoveGrid : MonoBehaviour
+public class Player : MonoBehaviour
 {
     [Header("ˆÚ“®İ’è")]
-    public float moveSpeed = 5f;
+    public float moveSpeed;
     public float cellSize = 1f;
     public float rayDistance = 1f;
     public LayerMask wallLayer;
