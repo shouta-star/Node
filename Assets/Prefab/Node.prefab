@@ -123,6 +123,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   links: []
   value: 0
+  visits: 0
+  alpha: 0.3
+  gamma: 0.9
+  rho: 0.02
+  beta: 0.5
   cellSize: 1
   maxSteps: 20
   wallLayer:
@@ -132,5 +137,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   gridOrigin: {x: 0, y: 0, z: 0}
+  debugLog: 0
   recheckInterval: 0.5
-  debugLog: 1

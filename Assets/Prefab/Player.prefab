@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5d6336b9fc68ed4c96e965702b0377e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  moveSpeed: 2
   cellSize: 1
   rayDistance: 1
   wallLayer:
@@ -131,7 +131,9 @@ MonoBehaviour:
   startDirection: {x: 0, y: 0, z: 1}
   nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
   gridOrigin: {x: 0, y: 0, z: 0}
-  debugLog: 1
+  goalNode: {fileID: 286847407677603923, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
+  exploreModeChance: 0.5
+  debugLog: 0
 --- !u!114 &5475200703984475894
 MonoBehaviour:
   m_ObjectHideFlags: 0
