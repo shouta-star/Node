@@ -134,6 +134,9 @@ MonoBehaviour:
   goalNode: {fileID: 286847407677603923, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
   exploreModeChance: 0.5
   debugLog: 0
+  bodyRenderer: {fileID: 3303906976382372999}
+  exploreMaterial: {fileID: 2100000, guid: acf7ff37ebb90214cb86cbf4c62185b3, type: 2}
+  learnMaterial: {fileID: 2100000, guid: 4a9d26b300742fd4a9b8471ebea733bc, type: 2}
 --- !u!114 &5475200703984475894
 MonoBehaviour:
   m_ObjectHideFlags: 0
