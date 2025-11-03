@@ -1,33 +1,39 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 //[ExecuteAlways]
 public class MapNode : MonoBehaviour
 {
     // =========================================
-    // ‘SƒvƒŒƒCƒ„[‹¤—L‚ÌNodeÀ•WƒŠƒXƒg
+    // å…¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å…±æœ‰ã®Nodeåº§æ¨™ãƒªã‚¹ãƒˆ
     // =========================================
     public static HashSet<Vector2Int> allNodeCells = new HashSet<Vector2Int>();
 
-    [Header("ƒŠƒ“ƒNî•ñ")]
+    [Header("ãƒªãƒ³ã‚¯æƒ…å ±")]
     public List<MapNode> links = new List<MapNode>();
     public float value = 0f;
 
-    [Header("’Tõİ’è")]
-    public float cellSize = 1f;            // ƒOƒŠƒbƒh1ƒ}ƒX‚Ì’·‚³
-    public int maxSteps = 20;              // ‰½ƒ}ƒXæ‚Ü‚Å’Tõ‚·‚é‚©
-    public LayerMask wallLayer;            // •ÇƒŒƒCƒ„[
-    public LayerMask nodeLayer;            // NodeƒŒƒCƒ„[
-    public Vector3 gridOrigin = Vector3.zero; // ƒOƒŠƒbƒhŒ´“_iƒIƒtƒZƒbƒg•â³—pj
+    [Header("æ¢ç´¢è¨­å®š")]
+    public float cellSize = 1f;            // ã‚°ãƒªãƒƒãƒ‰1ãƒã‚¹ã®é•·ã•
+    public int maxSteps = 20;              // ä½•ãƒã‚¹å…ˆã¾ã§æ¢ç´¢ã™ã‚‹ã‹
+    public LayerMask wallLayer;            // å£ãƒ¬ã‚¤ãƒ¤ãƒ¼
+    public LayerMask nodeLayer;            // Nodeãƒ¬ã‚¤ãƒ¤ãƒ¼
+    public Vector3 gridOrigin = Vector3.zero; // ã‚°ãƒªãƒƒãƒ‰åŸç‚¹ï¼ˆã‚ªãƒ•ã‚»ãƒƒãƒˆè£œæ­£ç”¨ï¼‰
 
     private void Start()
     {
-        // ‹N“®‚É©g‚ÌˆÊ’u‚ğ“o˜^id•¡‚Í©“®ƒXƒLƒbƒvj
+        // èµ·å‹•æ™‚ã«è‡ªèº«ã®ä½ç½®ã‚’ç™»éŒ²ï¼ˆé‡è¤‡ã¯è‡ªå‹•ã‚¹ã‚­ãƒƒãƒ—ï¼‰
         Vector2Int cell = WorldToCell(transform.position);
         allNodeCells.Add(cell);
 
-        if (Application.isPlaying)
-            FindNeighbors();
+        //if (Application.isPlaying)
+        //    FindNeighbors();
+
+        // æ—¢å­˜Nodeã¨ã®ãƒªãƒ³ã‚¯åŒæœŸ
+        LinkWithNearbyNodes();
+
+        // å‘¨å›²ã‚’Rayã§å†ç¢ºèª
+        FindNeighbors();
     }
 
 #if UNITY_EDITOR
@@ -39,7 +45,7 @@ public class MapNode : MonoBehaviour
 #endif
 
     // =====================================================
-    // Ã“IŠÖ”Fw’èˆÊ’u‚ÉNode‚ª‘¶İ‚·‚é‚©‚ğƒ`ƒFƒbƒN
+    // é™çš„é–¢æ•°ï¼šæŒ‡å®šä½ç½®ã«NodeãŒå­˜åœ¨ã™ã‚‹ã‹ã‚’ãƒã‚§ãƒƒã‚¯
     // =====================================================
     public static bool NodeExistsAt(Vector3 worldPos, float cellSize, Vector3 origin)
     {
@@ -52,7 +58,7 @@ public class MapNode : MonoBehaviour
     }
 
     // =====================================================
-    // ƒ[ƒ‹ƒhÀ•W ¨ ƒOƒŠƒbƒhÀ•W•ÏŠ·
+    // ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ â†’ ã‚°ãƒªãƒƒãƒ‰åº§æ¨™å¤‰æ›
     // =====================================================
     private Vector2Int WorldToCell(Vector3 worldPos)
     {
@@ -63,7 +69,31 @@ public class MapNode : MonoBehaviour
     }
 
     // =====================================================
-    // ƒOƒŠƒbƒhƒx[ƒX‚ÅRay‚ğ’iŠK“I‚ÉL‚Î‚µA•Ç or Node ‚É“–‚½‚é‚Ü‚Å’Tõ
+    // è¿‘éš£ãƒãƒ¼ãƒ‰ã¨ã®è‡ªå‹•ãƒªãƒ³ã‚¯ï¼ˆç”Ÿæˆæ™‚ã«å‘¼ã¶ï¼‰
+    // =====================================================
+    private void LinkWithNearbyNodes()
+    {
+        MapNode[] allNodes = FindObjectsOfType<MapNode>();
+        foreach (var node in allNodes)
+        {
+            if (node == this) continue;
+
+            float dist = Vector3.Distance(node.transform.position, transform.position);
+            // 1ãƒã‚¹ä»¥å†…ï¼ˆä¸Šä¸‹å·¦å³ï¼‰ã®Nodeã¨æ¥ç¶š
+            if (Mathf.Abs(dist - cellSize) < 0.05f)
+            {
+                if (!links.Contains(node))
+                    links.Add(node);
+                if (!node.links.Contains(this))
+                    node.links.Add(this);
+
+                node.FindNeighbors();
+            }
+        }
+    }
+
+    // =====================================================
+    // ã‚°ãƒªãƒƒãƒ‰ãƒ™ãƒ¼ã‚¹ã§Rayã‚’æ®µéšçš„ã«ä¼¸ã°ã—ã€å£ or Node ã«å½“ãŸã‚‹ã¾ã§æ¢ç´¢
     // =====================================================
     public void FindNeighbors()
     {
@@ -74,26 +104,26 @@ public class MapNode : MonoBehaviour
         {
             bool hitSomething = false;
 
-            // 1ƒ}ƒX‚¸‚ÂL‚Î‚µ‚Ä’²‚×‚é
+            // 1ãƒã‚¹ãšã¤ä¼¸ã°ã—ã¦èª¿ã¹ã‚‹
             for (int step = 1; step <= maxSteps; step++)
             {
                 float distance = step * cellSize;
                 Vector3 origin = transform.position;
 
-                // Ray‚ğ”ò‚Î‚·
+                // Rayã‚’é£›ã°ã™
                 if (Physics.Raycast(origin, dir, out RaycastHit hit, distance))
                 {
                     GameObject obj = hit.collider.gameObject;
                     int layerMask = 1 << obj.layer;
 
-                    // •Ç‚È‚ç’TõI—¹iƒŠƒ“ƒN‚µ‚È‚¢j
+                    // å£ãªã‚‰æ¢ç´¢çµ‚äº†ï¼ˆãƒªãƒ³ã‚¯ã—ãªã„ï¼‰
                     if ((wallLayer.value & layerMask) != 0)
                     {
                         hitSomething = true;
                         break;
                     }
 
-                    // Node‚È‚çƒŠƒ“ƒNŠm’è
+                    // Nodeãªã‚‰ãƒªãƒ³ã‚¯ç¢ºå®š
                     if ((nodeLayer.value & layerMask) != 0)
                     {
                         MapNode neighbor = obj.GetComponent<MapNode>();
@@ -112,14 +142,14 @@ public class MapNode : MonoBehaviour
                 }
             }
 
-            // ‰½‚É‚à“–‚½‚ç‚È‚©‚Á‚½•ûŒü‚Í–³‹
+            // ä½•ã«ã‚‚å½“ãŸã‚‰ãªã‹ã£ãŸæ–¹å‘ã¯ç„¡è¦–
             if (!hitSomething)
                 continue;
         }
     }
 
     // =====================================================
-    // GizmosFƒŠƒ“ƒNü‚ğÔ‚Å•\¦
+    // Gizmosï¼šãƒªãƒ³ã‚¯ç·šã‚’èµ¤ã§è¡¨ç¤º
     // =====================================================
     private void OnDrawGizmos()
     {

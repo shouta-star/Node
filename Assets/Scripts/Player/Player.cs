@@ -40,6 +40,74 @@ public class Player : MonoBehaviour
     // =====================================================
     // 次の移動先を決定して移動を開始
     // =====================================================
+    //void TryMove()
+    //{
+    //    Vector3 leftDir = Quaternion.Euler(0, -90, 0) * moveDir;
+    //    Vector3 rightDir = Quaternion.Euler(0, 90, 0) * moveDir;
+
+    //    bool frontHit = Physics.Raycast(transform.position, moveDir, rayDistance, wallLayer);
+    //    bool leftHit = Physics.Raycast(transform.position, leftDir, rayDistance, wallLayer);
+    //    bool rightHit = Physics.Raycast(transform.position, rightDir, rayDistance, wallLayer);
+
+    //    // Debug用のRay可視化
+    //    Debug.DrawRay(transform.position, moveDir * rayDistance, Color.red);
+    //    Debug.DrawRay(transform.position, leftDir * rayDistance, Color.blue);
+    //    Debug.DrawRay(transform.position, rightDir * rayDistance, Color.green);
+
+    //    // 進行可能方向数を数える
+    //    int openCount = 0;
+    //    if (!frontHit) openCount++;
+    //    if (!leftHit) openCount++;
+    //    if (!rightHit) openCount++;
+
+    //    // =============================
+    //    // Node設置条件（前が壁 or 分岐点）
+    //    // =============================
+    //    if (frontHit || openCount >= 2)
+    //    {
+    //        TryPlaceNode(transform.position);
+    //    }
+
+    //    // =============================
+    //    // 移動先を決定
+    //    // =============================
+
+    //    // 前方が開いているなら直進
+    //    if (!frontHit)
+    //    {
+    //        Vector3 snappedPos = SnapToGrid(transform.position);
+    //        targetPos = SnapToGrid(snappedPos + moveDir * cellSize);
+    //        isMoving = true;
+
+    //        if (debugLog)
+    //            Debug.Log($"[Player:{name}] Move forward -> {WorldToCell(targetPos)}");
+    //    }
+    //    else
+    //    {
+    //        // 前が壁なら左右の空き方向を探索
+    //        var openDirs = new List<Vector3>();
+    //        if (!leftHit) openDirs.Add(leftDir);
+    //        if (!rightHit) openDirs.Add(rightDir);
+
+    //        // 開いている方向があればランダムで選択
+    //        if (openDirs.Count > 0)
+    //        {
+    //            moveDir = openDirs[Random.Range(0, openDirs.Count)];
+    //            Vector3 snappedPos = SnapToGrid(transform.position);
+    //            targetPos = SnapToGrid(snappedPos + moveDir * cellSize);
+    //            isMoving = true;
+
+    //            if (debugLog)
+    //                Debug.Log($"[Player:{name}] Turn -> {moveDir}, target={WorldToCell(targetPos)}");
+    //        }
+    //        else
+    //        {
+    //            // 完全に行き止まり
+    //            if (debugLog)
+    //                Debug.Log($"[Player:{name}] Dead end @ {WorldToCell(transform.position)}");
+    //        }
+    //    }
+    //}
     void TryMove()
     {
         Vector3 leftDir = Quaternion.Euler(0, -90, 0) * moveDir;
@@ -49,65 +117,64 @@ public class Player : MonoBehaviour
         bool leftHit = Physics.Raycast(transform.position, leftDir, rayDistance, wallLayer);
         bool rightHit = Physics.Raycast(transform.position, rightDir, rayDistance, wallLayer);
 
-        // Debug用のRay可視化
-        Debug.DrawRay(transform.position, moveDir * rayDistance, Color.red);
-        Debug.DrawRay(transform.position, leftDir * rayDistance, Color.blue);
-        Debug.DrawRay(transform.position, rightDir * rayDistance, Color.green);
-
-        // 進行可能方向数を数える
         int openCount = 0;
         if (!frontHit) openCount++;
         if (!leftHit) openCount++;
         if (!rightHit) openCount++;
 
-        // =============================
-        // Node設置条件（前が壁 or 分岐点）
-        // =============================
+        // Node設置（前が壁 or 分岐点）
         if (frontHit || openCount >= 2)
-        {
             TryPlaceNode(transform.position);
+
+        // ================================
+        // 新しい方向を優先して選択する部分
+        // ================================
+        List<Vector3> openDirs = new List<Vector3>();
+        if (!frontHit) openDirs.Add(moveDir);
+        if (!leftHit) openDirs.Add(leftDir);
+        if (!rightHit) openDirs.Add(rightDir);
+
+        // 「未探索（Node未設置）」方向を抽出
+        List<Vector3> unexploredDirs = new List<Vector3>();
+        foreach (var dir in openDirs)
+        {
+            Vector3 nextPos = SnapToGrid(transform.position + dir * cellSize);
+            Vector2Int nextCell = WorldToCell(nextPos);
+            if (!MapNode.allNodeCells.Contains(nextCell))
+                unexploredDirs.Add(dir);
         }
 
-        // =============================
-        // 移動先を決定
-        // =============================
+        Vector3 chosenDir = moveDir;
 
-        // 前方が開いているなら直進
-        if (!frontHit)
+        if (unexploredDirs.Count > 0)
         {
-            Vector3 snappedPos = SnapToGrid(transform.position);
-            targetPos = SnapToGrid(snappedPos + moveDir * cellSize);
-            isMoving = true;
-
-            if (debugLog)
-                Debug.Log($"[Player:{name}] Move forward -> {WorldToCell(targetPos)}");
+            // 未探索方向があればその中からランダム
+            chosenDir = unexploredDirs[Random.Range(0, unexploredDirs.Count)];
+        }
+        else if (openDirs.Count > 0)
+        {
+            // すべて探索済みなら、既知方向からランダム
+            chosenDir = openDirs[Random.Range(0, openDirs.Count)];
         }
         else
         {
-            // 前が壁なら左右の空き方向を探索
-            var openDirs = new List<Vector3>();
-            if (!leftHit) openDirs.Add(leftDir);
-            if (!rightHit) openDirs.Add(rightDir);
-
-            // 開いている方向があればランダムで選択
-            if (openDirs.Count > 0)
-            {
-                moveDir = openDirs[Random.Range(0, openDirs.Count)];
-                Vector3 snappedPos = SnapToGrid(transform.position);
-                targetPos = SnapToGrid(snappedPos + moveDir * cellSize);
-                isMoving = true;
-
-                if (debugLog)
-                    Debug.Log($"[Player:{name}] Turn -> {moveDir}, target={WorldToCell(targetPos)}");
-            }
-            else
-            {
-                // 完全に行き止まり
-                if (debugLog)
-                    Debug.Log($"[Player:{name}] Dead end @ {WorldToCell(transform.position)}");
-            }
+            // 完全に行き止まり
+            if (debugLog)
+                Debug.Log($"[Player:{name}] Dead end @ {WorldToCell(transform.position)}");
+            return;
         }
+
+        // ================================
+        // 移動を開始
+        // ================================
+        moveDir = chosenDir;
+        targetPos = SnapToGrid(transform.position + chosenDir * cellSize);
+        isMoving = true;
+
+        if (debugLog)
+            Debug.Log($"[Player:{name}] Move dir={chosenDir} -> {WorldToCell(targetPos)}");
     }
+
 
     // =====================================================
     // 滑らかにターゲットまで移動
