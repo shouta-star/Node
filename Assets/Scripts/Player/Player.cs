@@ -1,37 +1,20 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 public class Player : MonoBehaviour
 {
-    [Header("モード設定")]
-    [Range(0f, 1f)] public float nodeModeChance = 0.5f; // Node学習モードを採用する確率
-    private bool useNodeMode = false; // 現在のモード（false=Ray探索, true=Node学習）
-
     [Header("移動設定")]
-    public float moveSpeed = 3f;
-    public float cellSize = 1f;
-    public float rayDistance = 1f;
-    public float waitTime = 0.3f;
-    public LayerMask wallLayer;
-    public LayerMask nodeLayer;
-
-    [Header("学習設定")]
-    public float explorationRate = 0.2f;
-    public float newRouteChance = 0.1f;
-    public float baseReward = 1f;
-    public float decayRate = 0.9f;
-    public float updateRate = 0.5f;
+    public float moveSpeed = 3f;          // 移動速度
+    public float cellSize = 1f;           // グリッド1マスの大きさ
+    public float rayDistance = 1f;        // Rayの距離（1マス分）
+    public LayerMask wallLayer;           // 壁レイヤー
 
     [Header("初期設定")]
     public Vector3 startDirection = Vector3.forward;
 
     [Header("Node設定")]
     public GameObject nodePrefab;
-    public Vector3 gridOrigin = Vector3.zero;
-
-    [Header("Debug")]
+    public Vector3 gridOrigin = Vector3.zero; // グリッド原点
     public bool debugLog = true;
 
     // 内部状態
@@ -39,76 +22,26 @@ public class Player : MonoBehaviour
     private bool isMoving = false;
     private Vector3 targetPos;
 
-    // Node関連
-    private MapNode currentNode;
-    private MapNode previousNode;
-    public MapNode goalNode;
-
     void Start()
     {
         moveDir = startDirection.normalized;
         targetPos = transform.position;
 
-        // 起動時、現在位置をスナップしてNodeを生成（重複防止）
-        Vector3 snapped = SnapToGrid(transform.position);
-        transform.position = snapped;
-
-        Vector2Int cell = WorldToCell(snapped);
-        if (!MapNode.allNodeCells.Contains(cell))
-        {
-            MapNode.allNodeCells.Add(cell);
-            GameObject nodeObj = Instantiate(nodePrefab, snapped, Quaternion.identity);
-            currentNode = nodeObj.GetComponent<MapNode>();
-        }
-        else
-        {
-            currentNode = FindNearestNode(snapped);
-        }
-
-        LinkWithExistingNodes(currentNode);
-        currentNode.FindNeighbors();
-
-        // 最初のモード決定
-        useNodeMode = Random.value < nodeModeChance;
-
-        if (debugLog)
-            Debug.Log($"[Player:{name}] Start -> Mode={(useNodeMode ? "Node" : "Ray")}");
+        // スナップして初期位置を補正
+        transform.position = SnapToGrid(transform.position);
     }
 
     void Update()
     {
-        if (!isMoving && currentNode != null)
-            StartCoroutine(NextAction());
+        if (!isMoving) TryMove();
+        else MoveToTarget();
     }
 
-    // ===========================================================
-    // 次の行動（現在モードに応じて処理）
-    // ===========================================================
-    IEnumerator NextAction()
+    // =====================================================
+    // 次の移動先を決定して移動を開始
+    // =====================================================
+    void TryMove()
     {
-        if (debugLog)
-        {
-            var cellHere = WorldToCell(transform.position);
-            Debug.Log($"[Player:{name}] NextAction Mode={(useNodeMode ? "Node" : "Ray")} @ {cellHere}");
-        }
-
-        if (useNodeMode)
-            yield return StartCoroutine(MoveByNode());
-        else
-            TryMoveByRay();
-    }
-
-    // ===========================================================
-    // RAY 探索移動（誤差完全除去版）
-    // ===========================================================
-    void TryMoveByRay()
-    {
-        if (isMoving) return;
-        isMoving = true;
-
-        transform.position = SnapToGrid(transform.position);
-        moveDir = new Vector3(Mathf.Round(moveDir.x), 0f, Mathf.Round(moveDir.z)).normalized;
-
         Vector3 leftDir = Quaternion.Euler(0, -90, 0) * moveDir;
         Vector3 rightDir = Quaternion.Euler(0, 90, 0) * moveDir;
 
@@ -116,240 +49,106 @@ public class Player : MonoBehaviour
         bool leftHit = Physics.Raycast(transform.position, leftDir, rayDistance, wallLayer);
         bool rightHit = Physics.Raycast(transform.position, rightDir, rayDistance, wallLayer);
 
+        // Debug用のRay可視化
+        Debug.DrawRay(transform.position, moveDir * rayDistance, Color.red);
+        Debug.DrawRay(transform.position, leftDir * rayDistance, Color.blue);
+        Debug.DrawRay(transform.position, rightDir * rayDistance, Color.green);
+
+        // 進行可能方向数を数える
         int openCount = 0;
         if (!frontHit) openCount++;
         if (!leftHit) openCount++;
         if (!rightHit) openCount++;
 
-        if (debugLog)
-            Debug.Log($"[Player:{name}] RayCheck: front={frontHit}, left={leftHit}, right={rightHit}, open={openCount}, dir={moveDir}");
-
+        // =============================
+        // Node設置条件（前が壁 or 分岐点）
+        // =============================
         if (frontHit || openCount >= 2)
+        {
             TryPlaceNode(transform.position);
+        }
 
+        // =============================
+        // 移動先を決定
+        // =============================
+
+        // 前方が開いているなら直進
         if (!frontHit)
         {
             Vector3 snappedPos = SnapToGrid(transform.position);
             targetPos = SnapToGrid(snappedPos + moveDir * cellSize);
-            if (debugLog) Debug.Log($"[Player:{name}] RayMove: forward -> {targetPos}");
-            StartCoroutine(MoveTo(targetPos));
+            isMoving = true;
+
+            if (debugLog)
+                Debug.Log($"[Player:{name}] Move forward -> {WorldToCell(targetPos)}");
         }
         else
         {
-            var open = new List<Vector3>();
-            if (!leftHit) open.Add(leftDir);
-            if (!rightHit) open.Add(rightDir);
+            // 前が壁なら左右の空き方向を探索
+            var openDirs = new List<Vector3>();
+            if (!leftHit) openDirs.Add(leftDir);
+            if (!rightHit) openDirs.Add(rightDir);
 
-            if (open.Count > 0)
+            // 開いている方向があればランダムで選択
+            if (openDirs.Count > 0)
             {
-                moveDir = open[Random.Range(0, open.Count)];
-                moveDir = new Vector3(Mathf.Round(moveDir.x), 0f, Mathf.Round(moveDir.z)).normalized;
-
+                moveDir = openDirs[Random.Range(0, openDirs.Count)];
                 Vector3 snappedPos = SnapToGrid(transform.position);
                 targetPos = SnapToGrid(snappedPos + moveDir * cellSize);
+                isMoving = true;
 
-                if (debugLog) Debug.Log($"[Player:{name}] RayMove: turn -> {moveDir}, target={targetPos}");
-                StartCoroutine(MoveTo(targetPos));
+                if (debugLog)
+                    Debug.Log($"[Player:{name}] Turn -> {moveDir}, target={WorldToCell(targetPos)}");
             }
             else
             {
-                if (debugLog) Debug.Log($"[Player:{name}] RayMove: blocked");
-                isMoving = false;
-            }
-        }
-    }
-
-    // ===========================================================
-    // NODE 学習型移動
-    // ===========================================================
-    IEnumerator MoveByNode()
-    {
-        if (isMoving) yield break;
-        isMoving = true;
-
-        bool createNewRoute = Random.value < newRouteChance;
-
-        if (createNewRoute)
-        {
-            if (debugLog) Debug.Log($"[Player:{name}] NodeMode: try create new route");
-            TryCreateNewRoute();
-        }
-        else if (currentNode.links.Count > 0)
-        {
-            var candidates = currentNode.links.Where(n => n != previousNode).ToList();
-            if (candidates.Count == 0)
-                candidates = currentNode.links.ToList();
-
-            MapNode nextNode = candidates.OrderByDescending(n => n.value).First();
-            bool explore = false;
-            if (Random.value < explorationRate)
-            {
-                nextNode = candidates[Random.Range(0, candidates.Count)];
-                explore = true;
-            }
-
-            if (debugLog)
-            {
-                var here = WorldToCell(currentNode.transform.position);
-                var next = WorldToCell(nextNode.transform.position);
-                Debug.Log($"[Player:{name}] NodeMove: {(explore ? "explore" : "greedy")} from {here} -> {next}");
-            }
-
-            yield return StartCoroutine(MoveTo(nextNode.transform.position));
-
-            previousNode = currentNode;
-            currentNode = nextNode;
-
-            UpdateNodeValue(currentNode);
-        }
-
-        yield return new WaitForSeconds(waitTime);
-        isMoving = false;
-    }
-
-    // ===========================================================
-    // 新ルート開拓（Node生成時にスナップ追加）
-    // ===========================================================
-    void TryCreateNewRoute()
-    {
-        Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
-
-        foreach (var dir in directions.OrderBy(_ => Random.value))
-        {
-            Vector3 origin = currentNode.transform.position + Vector3.up * 0.05f;
-            float distance = cellSize;
-
-            if (!Physics.Raycast(origin, dir, out RaycastHit hit, distance, wallLayer | nodeLayer))
-            {
-                Vector3 newPos = currentNode.transform.position + dir * cellSize;
-                newPos = SnapToGrid(newPos);
-
-                Vector2Int cell = WorldToCell(newPos);
-                if (MapNode.allNodeCells.Contains(cell))
-                    continue;
-
-                MapNode.allNodeCells.Add(cell);
-
-                GameObject newNodeObj = Instantiate(nodePrefab, newPos, Quaternion.identity);
-                MapNode newNode = newNodeObj.GetComponent<MapNode>();
-
-                currentNode.links.Add(newNode);
-                newNode.links.Add(currentNode);
-
+                // 完全に行き止まり
                 if (debugLog)
-                    Debug.Log($"[Player:{name}] NodeMode: created new route dir={dir} -> {cell}");
-
-                // ✅ isMovingがtrueでもMoveToを許可する
-                StartCoroutine(MoveTo(newNode.transform.position));
-
-                previousNode = currentNode;
-                currentNode = newNode;
-
-                UpdateNodeValue(currentNode);
-                return;
+                    Debug.Log($"[Player:{name}] Dead end @ {WorldToCell(transform.position)}");
             }
         }
-
-        if (debugLog)
-            Debug.Log($"[Player:{name}] NodeMode: could not create new route (blocked or duplicate)");
     }
 
-    // ===========================================================
-    // 共通：移動処理＋モード切替（Node到達時）
-    // ===========================================================
-    IEnumerator MoveTo(Vector3 target)
+    // =====================================================
+    // 滑らかにターゲットまで移動
+    // =====================================================
+    void MoveToTarget()
     {
-        // ❌ if (isMoving) yield break; ← 削除済み！
-        isMoving = true;
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
 
-        while (Vector3.Distance(transform.position, target) > 0.01f)
+        if (Vector3.Distance(transform.position, targetPos) < 0.001f)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
-            yield return null;
+            transform.position = targetPos;
+            isMoving = false;
         }
-
-        MapNode nearest = FindNearestNode(transform.position);
-        if (nearest != null)
-        {
-            transform.position = nearest.transform.position;
-            currentNode = nearest;
-        }
-        else
-        {
-            Vector2Int cell = WorldToCell(target);
-            transform.position = CellToWorld(cell);
-        }
-
-        useNodeMode = Random.value < nodeModeChance;
-
-        if (debugLog)
-        {
-            var cellHere = WorldToCell(transform.position);
-            Debug.Log($"[Player:{name}] Reached Node @ {cellHere} -> NextMode={(useNodeMode ? "Node" : "Ray")}");
-        }
-
-        isMoving = false;
-        yield return null; // ✅ フレーム待機
     }
 
-    // ===========================================================
-    // Node設置（共有チェック＋スナップ）
-    // ===========================================================
+    // =====================================================
+    // Node設置（重複防止＋スナップ＋共有登録）
+    // =====================================================
     void TryPlaceNode(Vector3 pos)
     {
-        Vector2Int cell = WorldToCell(pos);
+        // 1. スナップしてセル座標を取得
+        Vector2Int cell = WorldToCell(SnapToGrid(pos));
+        Vector3 placePos = CellToWorld(cell);
+
+        // 2. すでに設置済みならスキップ
         if (MapNode.allNodeCells.Contains(cell))
             return;
 
+        // 3. 新規登録
         MapNode.allNodeCells.Add(cell);
-        Vector3 placePos = CellToWorld(cell);
+
+        // 4. Nodeを生成
         Instantiate(nodePrefab, placePos, Quaternion.identity);
 
         if (debugLog)
-            Debug.Log($"[Player:{name}] RayMode: place node @ {cell}");
+            Debug.Log($"[Player:{name}] Node placed @ {cell}");
     }
 
-    // ===========================================================
-    // Nodeリンク共有
-    // ===========================================================
-    void LinkWithExistingNodes(MapNode selfNode)
-    {
-        MapNode[] allNodes = FindObjectsOfType<MapNode>();
-        foreach (var node in allNodes)
-        {
-            if (node == selfNode) continue;
-            if (Vector3.Distance(node.transform.position, selfNode.transform.position) < 0.05f)
-            {
-                if (!selfNode.links.Contains(node))
-                    selfNode.links.Add(node);
-                if (!node.links.Contains(selfNode))
-                    node.links.Add(selfNode);
-            }
-        }
-    }
-
-    // ===========================================================
-    // Node価値更新
-    // ===========================================================
-    void UpdateNodeValue(MapNode node)
-    {
-        if (goalNode == null) return;
-
-        float dist = Vector3.Distance(node.transform.position, goalNode.transform.position);
-        float reward = baseReward / (dist + 1f);
-        float newValue = Mathf.Lerp(node.value, node.value + reward, updateRate);
-        node.value = newValue * decayRate;
-    }
-
-    // ===========================================================
-    // 補助関数群
-    // ===========================================================
-    MapNode FindNearestNode(Vector3 pos)
-    {
-        MapNode[] allNodes = FindObjectsOfType<MapNode>();
-        return allNodes.OrderBy(n => Vector3.Distance(n.transform.position, pos)).FirstOrDefault();
-    }
-
+    // =====================================================
+    // グリッド補助関数群
+    // =====================================================
     Vector2Int WorldToCell(Vector3 worldPos)
     {
         Vector3 p = worldPos - gridOrigin;
@@ -370,7 +169,6 @@ public class Player : MonoBehaviour
         return new Vector3(x * cellSize, 0f, z * cellSize) + gridOrigin;
     }
 }
-
 
 //using UnityEngine;
 //using System.Collections.Generic;
