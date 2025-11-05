@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3303906976382372999}
   - component: {fileID: 4362335469872980544}
   - component: {fileID: 3154789635546984831}
-  - component: {fileID: 5475200703984475894}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -137,33 +136,6 @@ MonoBehaviour:
   bodyRenderer: {fileID: 3303906976382372999}
   exploreMaterial: {fileID: 2100000, guid: acf7ff37ebb90214cb86cbf4c62185b3, type: 2}
   learnMaterial: {fileID: 2100000, guid: 4a9d26b300742fd4a9b8471ebea733bc, type: 2}
---- !u!114 &5475200703984475894
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7722438679952261210}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f7600b8ab2b61e41b85eb6003a64efa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentNode: {fileID: 0}
-  goalNode: {fileID: 286847407677603923, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
-  moveSpeed: 1
-  waitTime: 0.3
-  explorationRate: 0.2
-  newRouteChance: 0.1
-  baseReward: 1
-  decayRate: 0.9
-  updateRate: 0.5
-  nodePrefab: {fileID: 0}
-  cellSize: 1
-  gridOrigin: {x: 0, y: 0, z: 0}
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 64
   nodeLayer:
     serializedVersion: 2
     m_Bits: 128

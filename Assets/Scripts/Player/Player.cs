@@ -59,6 +59,9 @@ public class Player : MonoBehaviour
     }
     string DumpRecent() => string.Join(" -> ", recentVisited.Select(r => $"{CellStr(r.cell)}:{DirStr(r.dir)}"));
 
+    [Header("Ray settings")]
+    [SerializeField] private LayerMask nodeLayer;
+
     void Start()
     {
         moveDir = startDirection.normalized;
@@ -261,14 +264,68 @@ public class Player : MonoBehaviour
     // =====================================================
     // Node生成
     // =====================================================
+    //MapNode TryPlaceNode(Vector3 pos)
+    //{
+    //    Vector2Int cell = WorldToCell(SnapToGrid(pos));
+    //    if (MapNode.allNodeCells.Contains(cell)) return null;
+    //    GameObject obj = Instantiate(nodePrefab, CellToWorld(cell), Quaternion.identity);
+    //    MapNode node = obj.GetComponent<MapNode>();
+    //    MapNode.allNodeCells.Add(cell);
+    //    return node;
+    //}
     MapNode TryPlaceNode(Vector3 pos)
     {
+        // グリッド位置を計算
         Vector2Int cell = WorldToCell(SnapToGrid(pos));
-        if (MapNode.allNodeCells.Contains(cell)) return null;
+
+        // 既に同じ座標にNodeがあれば新規生成しない
+        if (MapNode.allNodeCells.Contains(cell))
+            return null;
+
+        // 新しいNodeを生成
         GameObject obj = Instantiate(nodePrefab, CellToWorld(cell), Quaternion.identity);
-        MapNode node = obj.GetComponent<MapNode>();
+        MapNode newNode = obj.GetComponent<MapNode>();
         MapNode.allNodeCells.Add(cell);
-        return node;
+
+        // ここから段階的レイキャストによる接続処理
+        Vector3 origin = newNode.transform.position + Vector3.up * 0.1f;
+        Vector3 backDir = -moveDir; // ←来た方向
+        int mask = nodeLayer;
+
+        bool linked = false;
+        Color[] stepColors = { Color.red, Color.yellow, Color.green };
+
+        // 1 → 2 → 3マス分の距離でRayを飛ばす
+        for (int step = 1; step <= 3; step++)
+        {
+            float rayLen = cellSize * step;
+
+            // Sceneビューで確認できるように色分けして描画
+            Debug.DrawRay(origin, backDir * rayLen, stepColors[step - 1], 2f);
+
+            // Raycast実行
+            if (Physics.Raycast(origin, backDir, out RaycastHit hit, rayLen, mask))
+            {
+                MapNode hitNode = hit.collider.GetComponent<MapNode>();
+                if (hitNode != null && hitNode != newNode)
+                {
+                    // 双方向リンク作成
+                    newNode.AddLink(hitNode);
+                    linked = true;
+
+                    if (debugLog)
+                        Debug.Log($"[Player] Linked new {newNode.name} ↔ {hitNode.name} (distance={rayLen:F2})");
+
+                    break; // ヒットしたら終了
+                }
+            }
+        }
+
+        // ヒットしなかった場合のログ
+        if (!linked && debugLog)
+            Debug.Log($"[Player] No Node hit from {newNode.name} (max 3 steps)");
+
+        return newNode;
     }
 
     MapNode GetNearestNode()
