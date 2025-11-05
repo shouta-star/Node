@@ -4,7 +4,7 @@ using System.Linq;
 
 public class Player : MonoBehaviour
 {
-    public enum Mode { Explore, Learn }
+    public enum Mode { Discover, Optimize } // 探索・最適化
 
     [Header("移動設定")]
     public float moveSpeed = 3f;
@@ -14,15 +14,18 @@ public class Player : MonoBehaviour
 
     [Header("初期設定")]
     public Vector3 startDirection = Vector3.forward;
-
-    [Header("Node設定")]
-    public GameObject nodePrefab;
     public Vector3 gridOrigin = Vector3.zero;
     public MapNode goalNode;
-    [Range(0f, 1f)] public float exploreModeChance = 0.5f;
+    public GameObject nodePrefab;
 
-    [Header("Debug")]
+    [Header("モード制御")]
+    [Range(0f, 1f)] public float discoverChance = 0.6f; // 生成時の初期モード確率
+
+    [Header("デバッグ")]
     public bool debugLog = true;
+    [SerializeField] private Renderer bodyRenderer;
+    [SerializeField] private Material discoverMaterial;
+    [SerializeField] private Material optimizeMaterial;
 
     // 内部状態
     private Vector3 moveDir;
@@ -32,311 +35,232 @@ public class Player : MonoBehaviour
     private MapNode currentNode;
     private bool reachedGoal = false;
 
-    [SerializeField] private Renderer bodyRenderer;
-    [SerializeField] private Material exploreMaterial;
-    [SerializeField] private Material learnMaterial;
+    // 履歴（直近訪問Node）
+    private Queue<MapNode> recentNodes = new Queue<MapNode>();
+    private int recentLimit = 8;
 
-    // 直近訪問履歴（位置＋方向）
-    private Queue<(Vector2Int cell, Vector3 dir)> recentVisited = new Queue<(Vector2Int, Vector3)>();
-    private int recentLimit = 10;
-
-    // ===== Debug helpers =====
-    const string LG = "[EXP-DBG]";
-    int decideTick = 0;
-    string CellStr(Vector2Int c) => $"({c.x},{c.y})";
-    string DirStr(Vector3 d)
-    {
-        var f = moveDir;
-        var l = Quaternion.Euler(0, -90, 0) * moveDir;
-        var r = Quaternion.Euler(0, 90, 0) * moveDir;
-        var b = -moveDir;
-        float df = Vector3.Dot(d, f), dl = Vector3.Dot(d, l), dr = Vector3.Dot(d, r), db = Vector3.Dot(d, b);
-        float m = Mathf.Max(df, Mathf.Max(dl, Mathf.Max(dr, db)));
-        if (m == df) return "F";
-        if (m == dl) return "L";
-        if (m == dr) return "R";
-        return "B";
-    }
-    string DumpRecent() => string.Join(" -> ", recentVisited.Select(r => $"{CellStr(r.cell)}:{DirStr(r.dir)}"));
-
-    [Header("Ray settings")]
-    [SerializeField] private LayerMask nodeLayer;
-
+    // ======================================================
+    // 起動
+    // ======================================================
     void Start()
     {
         moveDir = startDirection.normalized;
-        targetPos = transform.position;
-        transform.position = SnapToGrid(transform.position);
+        targetPos = transform.position = SnapToGrid(transform.position);
 
-        currentMode = (Random.value < exploreModeChance) ? Mode.Explore : Mode.Learn;
-        if (debugLog) Debug.Log($"[Player:{name}] Spawned in {currentMode} mode");
+        currentMode = (Random.value < discoverChance) ? Mode.Discover : Mode.Optimize;
         ApplyModeVisual();
-        currentNode = GetNearestNode();
+
+        // 初期位置にNodeを設置
+        currentNode = TryPlaceNode(transform.position);
+        if (debugLog) Debug.Log($"[Player:{name}] Start in {currentMode} mode @ {currentNode}");
     }
 
     void Update()
     {
         if (!isMoving)
         {
-            if (currentMode == Mode.Explore) TryExploreMove();
-            else TryLearnMove();
+            if (currentMode == Mode.Discover) TryDiscoverMove();
+            else TryOptimizeMove();
         }
         else MoveToTarget();
     }
 
+    // ======================================================
+    // モードごとのマテリアル
+    // ======================================================
     private void ApplyModeVisual()
     {
         if (bodyRenderer == null) return;
-        if (currentMode == Mode.Explore)
-            bodyRenderer.material = exploreMaterial ? exploreMaterial : new Material(Shader.Find("Standard")) { color = Color.red };
+
+        if (currentMode == Mode.Discover)
+            bodyRenderer.material = discoverMaterial ? discoverMaterial : new Material(Shader.Find("Standard")) { color = Color.red };
         else
-            bodyRenderer.material = learnMaterial ? learnMaterial : new Material(Shader.Find("Standard")) { color = Color.blue };
+            bodyRenderer.material = optimizeMaterial ? optimizeMaterial : new Material(Shader.Find("Standard")) { color = Color.blue };
     }
 
-    // =====================================================
-    // 探索モード
-    // =====================================================
-    void TryExploreMove()
+    // ======================================================
+    // DISCOVERモード（未知方向を優先）
+    // ======================================================
+    void TryDiscoverMove()
     {
-        decideTick++;
-        Vector3 leftDir = Quaternion.Euler(0, -90, 0) * moveDir;
-        Vector3 rightDir = Quaternion.Euler(0, 90, 0) * moveDir;
-        Vector3 backDir = -moveDir;
+        if (currentNode == null) return;
 
-        bool frontHit = Physics.Raycast(transform.position, moveDir, rayDistance, wallLayer);
-        bool leftHit = Physics.Raycast(transform.position, leftDir, rayDistance, wallLayer);
-        bool rightHit = Physics.Raycast(transform.position, rightDir, rayDistance, wallLayer);
+        var candidates = ScanAroundNodes();
 
-        var curCell = WorldToCell(SnapToGrid(transform.position));
-        if (debugLog)
-            Debug.Log($"{LG} T#{decideTick} pos={CellStr(curCell)} dir={DirStr(moveDir)} hits F:{frontHit} L:{leftHit} R:{rightHit} recent[{recentVisited.Count}] {DumpRecent()}");
-
-        int openCount = 0;
-        if (!frontHit) openCount++;
-        if (!leftHit) openCount++;
-        if (!rightHit) openCount++;
-
-        // 分岐点 or 壁手前のみNode設置
-        if (frontHit || openCount >= 2)
+        if (candidates.Count == 0)
         {
-            MapNode newNode = TryPlaceNode(transform.position);
-            if (newNode && goalNode)
-                newNode.InitializeValue(goalNode.transform.position);
+            currentMode = Mode.Optimize;
+            ApplyModeVisual();
+            if (debugLog) Debug.Log("[Player] No new paths → switch to OPTIMIZE");
+            return;
         }
 
-        List<Vector3> openDirs = new List<Vector3>();
-        if (!frontHit) openDirs.Add(moveDir);
-        if (!leftHit) openDirs.Add(leftDir);
-        if (!rightHit) openDirs.Add(rightDir);
+        float avgUnknown = (recentNodes.Count > 0)
+            ? (float)recentNodes.Average(n => n.UnknownCount)  // ★ 明示キャスト
+            : 2f;
 
-        openDirs.RemoveAll(d => Vector3.Dot(d, backDir) > 0.9f);
-        if (openDirs.Count == 0) openDirs.Add(backDir);
+        var higher = candidates.Where(c => c.node.UnknownCount > avgUnknown).ToList();
 
-        // === 未探索方向＋履歴回避＋リンク参照 ===
-        List<Vector3> unexploredDirs = new List<Vector3>();
-        foreach (var dir in openDirs)
+        MapNode next = (higher.Count > 0)
+            ? higher[Random.Range(0, higher.Count)].node
+            : candidates[Random.Range(0, candidates.Count)].node;
+
+        MoveToNode(next);
+    }
+
+    // ======================================================
+    // OPTIMIZEモード（既知方向を優先）
+    // ======================================================
+    void TryOptimizeMove()
+    {
+        if (currentNode == null) return;
+
+        var candidates = ScanAroundNodes();
+
+        if (candidates.Count == 0)
         {
+            currentMode = Mode.Discover;
+            ApplyModeVisual();
+            if (debugLog) Debug.Log("[Player] Dead end → switch to DISCOVER");
+            return;
+        }
+
+        float avgUnknown = (recentNodes.Count > 0)
+            ? (float)recentNodes.Average(n => n.UnknownCount)  // ★ 明示キャスト
+            : 2f;
+
+        var lower = candidates.Where(c => c.node.UnknownCount <= avgUnknown).ToList();
+
+        MapNode next = (lower.Count > 0)
+            ? lower[Random.Range(0, lower.Count)].node
+            : candidates[Random.Range(0, candidates.Count)].node;
+
+        MoveToNode(next);
+    }
+
+    // ======================================================
+    // 移動候補Node探索（上下左右）
+    // ======================================================
+    List<(MapNode node, Vector3 dir)> ScanAroundNodes()
+    {
+        List<(MapNode node, Vector3 dir)> found = new List<(MapNode, Vector3)>();
+
+        Vector3[] dirs = new Vector3[] { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+
+        foreach (var dir in dirs)
+        {
+            if (Physics.Raycast(transform.position + Vector3.up * 0.1f, dir, rayDistance, wallLayer))
+                continue; // 壁がある方向はスキップ
+
             Vector3 nextPos = SnapToGrid(transform.position + dir * cellSize);
             Vector2Int nextCell = WorldToCell(nextPos);
 
-            bool inRecentSameDir = recentVisited.Any(r => r.cell == nextCell && Vector3.Dot(r.dir, dir) > 0.9f);
-            if (inRecentSameDir) continue;
+            MapNode nextNode = MapNode.FindByCell(nextCell);
+            if (nextNode == null)
+                nextNode = TryPlaceNode(nextPos);
 
-            bool knownNode = MapNode.allNodeCells.Contains(nextCell);
-            bool directionLinked = IsDirectionLinkedFromCurrent(dir);
-
-            if (!knownNode && !directionLinked)
-                unexploredDirs.Add(dir);
+            if (nextNode != null)
+                found.Add((nextNode, dir));
         }
 
-        // === 打ち切り ===
-        if (unexploredDirs.Count == 0 && openDirs.Count == 0)
-        {
-            if (debugLog) Debug.Log($"{LG} No moves -> switch to LEARN");
-            currentMode = Mode.Learn;
-            ApplyModeVisual();
-            return;
-        }
-
-        // === 移動方向決定 ===
-        Vector3 chosenDir = unexploredDirs.Count > 0
-            ? unexploredDirs[Random.Range(0, unexploredDirs.Count)]
-            : openDirs[Random.Range(0, openDirs.Count)];
-
-        moveDir = chosenDir;
-        targetPos = SnapToGrid(transform.position + chosenDir * cellSize);
-        isMoving = true;
-
-        var departCell = curCell;
-        recentVisited.Enqueue((departCell, moveDir));
-        if (recentVisited.Count > recentLimit) recentVisited.Dequeue();
+        return found;
     }
 
-    // =====================================================
-    // 学習モード
-    // =====================================================
-    void TryLearnMove()
+    // ======================================================
+    // 移動処理
+    // ======================================================
+    void MoveToNode(MapNode next)
     {
-        currentNode = GetNearestNode();
-        if (currentNode == null || goalNode == null)
-            return;
+        if (next == null || next == currentNode) return;
 
-        if (currentNode.links == null || currentNode.links.Count == 0)
-        {
-            currentMode = Mode.Explore;
-            ApplyModeVisual();
-            return;
-        }
+        // 相互リンク確立
+        currentNode.AddLink(next);
 
-        MapNode bestNext = currentNode.links
-            .OrderByDescending(n => n.value)
-            .FirstOrDefault();
-
-        if (bestNext == null)
-        {
-            currentMode = Mode.Explore;
-            ApplyModeVisual();
-            return;
-        }
-
-        targetPos = SnapToGrid(bestNext.transform.position);
-        moveDir = (targetPos - transform.position).normalized;
+        moveDir = (next.transform.position - transform.position).normalized;
+        targetPos = next.transform.position;
         isMoving = true;
+
+        if (debugLog)
+            Debug.Log($"[Player] Move {currentMode} -> {next.name} (Unknown={next.UnknownCount})");
     }
 
-    // =====================================================
-    // 移動
-    // =====================================================
     void MoveToTarget()
     {
         transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
-
         if (Vector3.Distance(transform.position, targetPos) < 0.001f)
         {
             transform.position = targetPos;
             isMoving = false;
 
-            MapNode nearest = GetNearestNode();
-            if (nearest)
+            MapNode nearest = MapNode.FindNearest(transform.position);
+            if (nearest != null)
             {
-                nearest.UpdateValue(goalNode);
                 currentNode = nearest;
-
-                Vector2Int cellArrived = WorldToCell(nearest.transform.position);
-                if (!recentVisited.Any(r => r.cell == cellArrived))
+                if (!recentNodes.Contains(nearest))
                 {
-                    recentVisited.Enqueue((cellArrived, moveDir));
-                    if (recentVisited.Count > recentLimit) recentVisited.Dequeue();
+                    recentNodes.Enqueue(nearest);
+                    if (recentNodes.Count > recentLimit)
+                        recentNodes.Dequeue();
                 }
             }
-        }
 
-        if (!reachedGoal && goalNode != null)
-        {
-            float distToGoal = Vector3.Distance(transform.position, goalNode.transform.position);
-            if (distToGoal < 0.1f)
+            // Goal判定
+            if (!reachedGoal && goalNode != null && currentNode == goalNode)
             {
                 reachedGoal = true;
-                Debug.Log($"[Player:{name}] Reached Goal! Destroy.");
-                Destroy(gameObject);
-                return;
+                Debug.Log($"[Player:{name}] Reached GOAL → start distance learning");
+                RecalculateGoalDistance();
             }
         }
     }
 
-    // =====================================================
-    // 現Nodeのlinksを使って「その方向に既知経路があるか」を確認
-    // =====================================================
-    bool IsDirectionLinkedFromCurrent(Vector3 dir)
+    // ======================================================
+    // Goalから距離を再計算（BFS）
+    // ======================================================
+    void RecalculateGoalDistance()
     {
-        if (currentNode == null) return false;
+        if (goalNode == null) return;
 
-        foreach (var neighbor in currentNode.links)
+        Queue<MapNode> queue = new Queue<MapNode>();
+        foreach (var n in FindObjectsOfType<MapNode>())
+            n.DistanceFromGoal = int.MaxValue;
+
+        goalNode.DistanceFromGoal = 0;
+        queue.Enqueue(goalNode);
+
+        while (queue.Count > 0)
         {
-            if (neighbor == null) continue;
-            Vector3 toNeighbor = (neighbor.transform.position - currentNode.transform.position).normalized;
-            float dot = Vector3.Dot(toNeighbor, dir);
-            if (dot > 0.9f) return true; // ほぼ同方向にリンクあり
-        }
-        return false;
-    }
-
-    // =====================================================
-    // Node生成
-    // =====================================================
-    //MapNode TryPlaceNode(Vector3 pos)
-    //{
-    //    Vector2Int cell = WorldToCell(SnapToGrid(pos));
-    //    if (MapNode.allNodeCells.Contains(cell)) return null;
-    //    GameObject obj = Instantiate(nodePrefab, CellToWorld(cell), Quaternion.identity);
-    //    MapNode node = obj.GetComponent<MapNode>();
-    //    MapNode.allNodeCells.Add(cell);
-    //    return node;
-    //}
-    MapNode TryPlaceNode(Vector3 pos)
-    {
-        // グリッド位置を計算
-        Vector2Int cell = WorldToCell(SnapToGrid(pos));
-
-        // 既に同じ座標にNodeがあれば新規生成しない
-        if (MapNode.allNodeCells.Contains(cell))
-            return null;
-
-        // 新しいNodeを生成
-        GameObject obj = Instantiate(nodePrefab, CellToWorld(cell), Quaternion.identity);
-        MapNode newNode = obj.GetComponent<MapNode>();
-        MapNode.allNodeCells.Add(cell);
-
-        // ここから段階的レイキャストによる接続処理
-        Vector3 origin = newNode.transform.position + Vector3.up * 0.1f;
-        Vector3 backDir = -moveDir; // ←来た方向
-        int mask = nodeLayer;
-
-        bool linked = false;
-        Color[] stepColors = { Color.red, Color.yellow, Color.green };
-
-        // 1 → 2 → 3マス分の距離でRayを飛ばす
-        for (int step = 1; step <= 3; step++)
-        {
-            float rayLen = cellSize * step;
-
-            // Sceneビューで確認できるように色分けして描画
-            Debug.DrawRay(origin, backDir * rayLen, stepColors[step - 1], 2f);
-
-            // Raycast実行
-            if (Physics.Raycast(origin, backDir, out RaycastHit hit, rayLen, mask))
+            var node = queue.Dequeue();
+            foreach (var link in node.links)
             {
-                MapNode hitNode = hit.collider.GetComponent<MapNode>();
-                if (hitNode != null && hitNode != newNode)
+                int newDist = node.DistanceFromGoal + 1;
+                if (newDist < link.DistanceFromGoal)
                 {
-                    // 双方向リンク作成
-                    newNode.AddLink(hitNode);
-                    linked = true;
-
-                    if (debugLog)
-                        Debug.Log($"[Player] Linked new {newNode.name} ↔ {hitNode.name} (distance={rayLen:F2})");
-
-                    break; // ヒットしたら終了
+                    link.DistanceFromGoal = newDist;
+                    queue.Enqueue(link);
                 }
             }
         }
 
-        // ヒットしなかった場合のログ
-        if (!linked && debugLog)
-            Debug.Log($"[Player] No Node hit from {newNode.name} (max 3 steps)");
-
-        return newNode;
+        Debug.Log("[Player] Distance learning complete (Goal-based BFS)");
     }
 
-    MapNode GetNearestNode()
+    // ======================================================
+    // Node生成・補助関数
+    // ======================================================
+    MapNode TryPlaceNode(Vector3 pos)
     {
-        MapNode[] nodes = FindObjectsOfType<MapNode>();
-        return nodes.OrderBy(n => Vector3.Distance(transform.position, n.transform.position)).FirstOrDefault();
+        Vector2Int cell = WorldToCell(SnapToGrid(pos));
+        if (MapNode.allNodeCells.Contains(cell))
+            return MapNode.FindByCell(cell);
+
+        GameObject obj = Instantiate(nodePrefab, CellToWorld(cell), Quaternion.identity);
+        MapNode node = obj.GetComponent<MapNode>();
+        MapNode.allNodeCells.Add(cell);
+        node.cell = cell;
+        return node;
     }
 
-    // =====================================================
-    // グリッド変換
-    // =====================================================
     Vector2Int WorldToCell(Vector3 worldPos)
     {
         Vector3 p = worldPos - gridOrigin;
@@ -392,19 +316,17 @@ public class Player : MonoBehaviour
 //    private MapNode currentNode;
 //    private bool reachedGoal = false;
 
-//    [SerializeField] private Renderer bodyRenderer;     // キャラのRendererをアサイン
-//    [SerializeField] private Material exploreMaterial;  // 探索モード用（赤系）
-//    [SerializeField] private Material learnMaterial;    // 学習モード用（青系）
+//    [SerializeField] private Renderer bodyRenderer;
+//    [SerializeField] private Material exploreMaterial;
+//    [SerializeField] private Material learnMaterial;
 
-//    // === 直近の通過Node記録 ===
+//    // 直近訪問履歴（位置＋方向）
 //    private Queue<(Vector2Int cell, Vector3 dir)> recentVisited = new Queue<(Vector2Int, Vector3)>();
-//    private int recentLimit = 10; // 記憶する最大数
+//    private int recentLimit = 10;
 
 //    // ===== Debug helpers =====
 //    const string LG = "[EXP-DBG]";
-//    const string NG = "[NODE-DBG]";
 //    int decideTick = 0;
-
 //    string CellStr(Vector2Int c) => $"({c.x},{c.y})";
 //    string DirStr(Vector3 d)
 //    {
@@ -419,10 +341,10 @@ public class Player : MonoBehaviour
 //        if (m == dr) return "R";
 //        return "B";
 //    }
-//    string DumpRecent()
-//    {
-//        return string.Join(" -> ", recentVisited.Select(r => $"{CellStr(r.cell)}:{DirStr(r.dir)}"));
-//    }
+//    string DumpRecent() => string.Join(" -> ", recentVisited.Select(r => $"{CellStr(r.cell)}:{DirStr(r.dir)}"));
+
+//    [Header("Ray settings")]
+//    [SerializeField] private LayerMask nodeLayer;
 
 //    void Start()
 //    {
@@ -431,9 +353,7 @@ public class Player : MonoBehaviour
 //        transform.position = SnapToGrid(transform.position);
 
 //        currentMode = (Random.value < exploreModeChance) ? Mode.Explore : Mode.Learn;
-//        if (debugLog)
-//            Debug.Log($"[Player:{name}] Spawned in {currentMode} mode");
-
+//        if (debugLog) Debug.Log($"[Player:{name}] Spawned in {currentMode} mode");
 //        ApplyModeVisual();
 //        currentNode = GetNearestNode();
 //    }
@@ -442,40 +362,23 @@ public class Player : MonoBehaviour
 //    {
 //        if (!isMoving)
 //        {
-//            switch (currentMode)
-//            {
-//                case Mode.Explore:
-//                    TryExploreMove();
-//                    break;
-//                case Mode.Learn:
-//                    TryLearnMove();
-//                    break;
-//            }
+//            if (currentMode == Mode.Explore) TryExploreMove();
+//            else TryLearnMove();
 //        }
-//        else
-//        {
-//            MoveToTarget();
-//        }
+//        else MoveToTarget();
 //    }
 
 //    private void ApplyModeVisual()
 //    {
 //        if (bodyRenderer == null) return;
-
 //        if (currentMode == Mode.Explore)
-//        {
-//            if (exploreMaterial != null) bodyRenderer.material = exploreMaterial;
-//            else bodyRenderer.material.color = Color.red;
-//        }
+//            bodyRenderer.material = exploreMaterial ? exploreMaterial : new Material(Shader.Find("Standard")) { color = Color.red };
 //        else
-//        {
-//            if (learnMaterial != null) bodyRenderer.material = learnMaterial;
-//            else bodyRenderer.material.color = Color.blue;
-//        }
+//            bodyRenderer.material = learnMaterial ? learnMaterial : new Material(Shader.Find("Standard")) { color = Color.blue };
 //    }
 
 //    // =====================================================
-//    // 探索モード（詳細デバッグ＋未探索チェック追加）
+//    // 探索モード
 //    // =====================================================
 //    void TryExploreMove()
 //    {
@@ -489,21 +392,20 @@ public class Player : MonoBehaviour
 //        bool rightHit = Physics.Raycast(transform.position, rightDir, rayDistance, wallLayer);
 
 //        var curCell = WorldToCell(SnapToGrid(transform.position));
-//        Debug.Log($"{LG} T#{decideTick} pos={CellStr(curCell)} dir={DirStr(moveDir)} hits F:{frontHit} L:{leftHit} R:{rightHit} recent[{recentVisited.Count}] {DumpRecent()}");
+//        if (debugLog)
+//            Debug.Log($"{LG} T#{decideTick} pos={CellStr(curCell)} dir={DirStr(moveDir)} hits F:{frontHit} L:{leftHit} R:{rightHit} recent[{recentVisited.Count}] {DumpRecent()}");
 
 //        int openCount = 0;
 //        if (!frontHit) openCount++;
 //        if (!leftHit) openCount++;
 //        if (!rightHit) openCount++;
 
-//        // Node設置（前が壁 or 分岐点）
+//        // 分岐点 or 壁手前のみNode設置
 //        if (frontHit || openCount >= 2)
 //        {
-//            var beforeCount = MapNode.allNodeCells.Count;
 //            MapNode newNode = TryPlaceNode(transform.position);
-//            var afterCount = MapNode.allNodeCells.Count;
-//            if (newNode)
-//                Debug.Log($"{LG} T#{decideTick} placeNode @ {CellStr(WorldToCell(newNode.transform.position))} (total {afterCount} / was {beforeCount})");
+//            if (newNode && goalNode)
+//                newNode.InitializeValue(goalNode.transform.position);
 //        }
 
 //        List<Vector3> openDirs = new List<Vector3>();
@@ -511,61 +413,39 @@ public class Player : MonoBehaviour
 //        if (!leftHit) openDirs.Add(leftDir);
 //        if (!rightHit) openDirs.Add(rightDir);
 
-//        var beforeBackCull = openDirs.Select(d => DirStr(d)).ToArray();
 //        openDirs.RemoveAll(d => Vector3.Dot(d, backDir) > 0.9f);
-//        var afterBackCull = openDirs.Select(d => DirStr(d)).ToArray();
-//        if (beforeBackCull.Length != afterBackCull.Length)
-//            Debug.Log($"{LG} T#{decideTick} back-cull {string.Join(",", beforeBackCull)} -> {string.Join(",", afterBackCull)}");
+//        if (openDirs.Count == 0) openDirs.Add(backDir);
 
-//        if (openDirs.Count == 0)
-//        {
-//            openDirs.Add(backDir);
-//            Debug.Log($"{LG} T#{decideTick} dead-end -> allow back");
-//        }
-
+//        // === 未探索方向＋履歴回避＋リンク参照 ===
 //        List<Vector3> unexploredDirs = new List<Vector3>();
-//        foreach (var dir in openDirs.ToList())
+//        foreach (var dir in openDirs)
 //        {
 //            Vector3 nextPos = SnapToGrid(transform.position + dir * cellSize);
-//            Vector2Int ncell = WorldToCell(nextPos);
+//            Vector2Int nextCell = WorldToCell(nextPos);
 
-//            bool inRecentSameDir = recentVisited.Any(r => r.cell == ncell && Vector3.Dot(r.dir, dir) > 0.9f);
-//            bool knownNode = MapNode.allNodeCells.Contains(ncell);
+//            bool inRecentSameDir = recentVisited.Any(r => r.cell == nextCell && Vector3.Dot(r.dir, dir) > 0.9f);
+//            if (inRecentSameDir) continue;
 
-//            Debug.Log($"{LG} T#{decideTick} Check next={nextPos:F2} (cell {ncell}) known={knownNode} totalNodes={MapNode.allNodeCells.Count}");
+//            bool knownNode = MapNode.allNodeCells.Contains(nextCell);
+//            bool directionLinked = IsDirectionLinkedFromCurrent(dir);
 
-//            if (inRecentSameDir)
-//            {
-//                Debug.Log($"{LG} T#{decideTick} filter REJECT by recent: next={CellStr(ncell)} dir={DirStr(dir)}");
-//            }
-//            else
-//            {
-//                if (!knownNode)
-//                {
-//                    unexploredDirs.Add(dir);
-//                    Debug.Log($"{LG} T#{decideTick} candidate UNEXPLORED: next={CellStr(ncell)} dir={DirStr(dir)}");
-//                }
-//                else
-//                {
-//                    Debug.Log($"{LG} T#{decideTick} candidate KNOWN: next={CellStr(ncell)} dir={DirStr(dir)}");
-//                }
-//            }
+//            if (!knownNode && !directionLinked)
+//                unexploredDirs.Add(dir);
 //        }
 
+//        // === 打ち切り ===
 //        if (unexploredDirs.Count == 0 && openDirs.Count == 0)
 //        {
-//            Debug.Log($"{LG} T#{decideTick} No moves -> switch to LEARN");
+//            if (debugLog) Debug.Log($"{LG} No moves -> switch to LEARN");
 //            currentMode = Mode.Learn;
 //            ApplyModeVisual();
 //            return;
 //        }
 
+//        // === 移動方向決定 ===
 //        Vector3 chosenDir = unexploredDirs.Count > 0
 //            ? unexploredDirs[Random.Range(0, unexploredDirs.Count)]
 //            : openDirs[Random.Range(0, openDirs.Count)];
-
-//        var nextChosenCell = WorldToCell(SnapToGrid(transform.position + chosenDir * cellSize));
-//        Debug.Log($"{LG} T#{decideTick} CHOOSE {(unexploredDirs.Count > 0 ? "UNEXPLORED" : "KNOWN")} dir={DirStr(chosenDir)} -> {CellStr(nextChosenCell)}");
 
 //        moveDir = chosenDir;
 //        targetPos = SnapToGrid(transform.position + chosenDir * cellSize);
@@ -573,11 +453,7 @@ public class Player : MonoBehaviour
 
 //        var departCell = curCell;
 //        recentVisited.Enqueue((departCell, moveDir));
-//        if (recentVisited.Count > recentLimit)
-//        {
-//            var popped = recentVisited.Dequeue();
-//            Debug.Log($"{LG} T#{decideTick} recent pop {CellStr(popped.cell)}:{DirStr(popped.dir)} (limit={recentLimit})");
-//        }
+//        if (recentVisited.Count > recentLimit) recentVisited.Dequeue();
 //    }
 
 //    // =====================================================
@@ -593,7 +469,6 @@ public class Player : MonoBehaviour
 //        {
 //            currentMode = Mode.Explore;
 //            ApplyModeVisual();
-//            if (debugLog) Debug.Log($"[Player:{name}] Dead end → switch to EXPLORE");
 //            return;
 //        }
 
@@ -611,13 +486,10 @@ public class Player : MonoBehaviour
 //        targetPos = SnapToGrid(bestNext.transform.position);
 //        moveDir = (targetPos - transform.position).normalized;
 //        isMoving = true;
-
-//        if (debugLog)
-//            Debug.Log($"[Player:{name}] Learn move -> {WorldToCell(targetPos)}");
 //    }
 
 //    // =====================================================
-//    // 滑らか移動
+//    // 移動
 //    // =====================================================
 //    void MoveToTarget()
 //    {
@@ -638,16 +510,7 @@ public class Player : MonoBehaviour
 //                if (!recentVisited.Any(r => r.cell == cellArrived))
 //                {
 //                    recentVisited.Enqueue((cellArrived, moveDir));
-//                    if (recentVisited.Count > recentLimit)
-//                    {
-//                        var popped = recentVisited.Dequeue();
-//                        Debug.Log($"{LG} ARRIVE pop {CellStr(popped.cell)}:{DirStr(popped.dir)}");
-//                    }
-//                    Debug.Log($"{LG} ARRIVE push {CellStr(cellArrived)}:{DirStr(moveDir)}");
-//                }
-//                else
-//                {
-//                    Debug.Log($"{LG} ARRIVE skip (already in recent) {CellStr(cellArrived)}");
+//                    if (recentVisited.Count > recentLimit) recentVisited.Dequeue();
 //                }
 //            }
 //        }
@@ -658,7 +521,7 @@ public class Player : MonoBehaviour
 //            if (distToGoal < 0.1f)
 //            {
 //                reachedGoal = true;
-//                Debug.Log($"[Player:{name}] Reached Goal (dist={distToGoal:F3}). Destroy.");
+//                Debug.Log($"[Player:{name}] Reached Goal! Destroy.");
 //                Destroy(gameObject);
 //                return;
 //            }
@@ -666,19 +529,87 @@ public class Player : MonoBehaviour
 //    }
 
 //    // =====================================================
-//    // Node設置（重複防止＋生成＋返却）＋ログ追加
+//    // 現Nodeのlinksを使って「その方向に既知経路があるか」を確認
 //    // =====================================================
+//    bool IsDirectionLinkedFromCurrent(Vector3 dir)
+//    {
+//        if (currentNode == null) return false;
+
+//        foreach (var neighbor in currentNode.links)
+//        {
+//            if (neighbor == null) continue;
+//            Vector3 toNeighbor = (neighbor.transform.position - currentNode.transform.position).normalized;
+//            float dot = Vector3.Dot(toNeighbor, dir);
+//            if (dot > 0.9f) return true; // ほぼ同方向にリンクあり
+//        }
+//        return false;
+//    }
+
+//    // =====================================================
+//    // Node生成
+//    // =====================================================
+//    //MapNode TryPlaceNode(Vector3 pos)
+//    //{
+//    //    Vector2Int cell = WorldToCell(SnapToGrid(pos));
+//    //    if (MapNode.allNodeCells.Contains(cell)) return null;
+//    //    GameObject obj = Instantiate(nodePrefab, CellToWorld(cell), Quaternion.identity);
+//    //    MapNode node = obj.GetComponent<MapNode>();
+//    //    MapNode.allNodeCells.Add(cell);
+//    //    return node;
+//    //}
 //    MapNode TryPlaceNode(Vector3 pos)
 //    {
+//        // グリッド位置を計算
 //        Vector2Int cell = WorldToCell(SnapToGrid(pos));
-//        Vector3 placePos = CellToWorld(cell);
-//        Debug.Log($"{NG} TryPlaceNode cell={cell} world={placePos}");
+
+//        // 既に同じ座標にNodeがあれば新規生成しない
 //        if (MapNode.allNodeCells.Contains(cell))
 //            return null;
 
+//        // 新しいNodeを生成
+//        GameObject obj = Instantiate(nodePrefab, CellToWorld(cell), Quaternion.identity);
+//        MapNode newNode = obj.GetComponent<MapNode>();
 //        MapNode.allNodeCells.Add(cell);
-//        GameObject obj = Instantiate(nodePrefab, placePos, Quaternion.identity);
-//        return obj.GetComponent<MapNode>();
+
+//        // ここから段階的レイキャストによる接続処理
+//        Vector3 origin = newNode.transform.position + Vector3.up * 0.1f;
+//        Vector3 backDir = -moveDir; // ←来た方向
+//        int mask = nodeLayer;
+
+//        bool linked = false;
+//        Color[] stepColors = { Color.red, Color.yellow, Color.green };
+
+//        // 1 → 2 → 3マス分の距離でRayを飛ばす
+//        for (int step = 1; step <= 3; step++)
+//        {
+//            float rayLen = cellSize * step;
+
+//            // Sceneビューで確認できるように色分けして描画
+//            Debug.DrawRay(origin, backDir * rayLen, stepColors[step - 1], 2f);
+
+//            // Raycast実行
+//            if (Physics.Raycast(origin, backDir, out RaycastHit hit, rayLen, mask))
+//            {
+//                MapNode hitNode = hit.collider.GetComponent<MapNode>();
+//                if (hitNode != null && hitNode != newNode)
+//                {
+//                    // 双方向リンク作成
+//                    newNode.AddLink(hitNode);
+//                    linked = true;
+
+//                    if (debugLog)
+//                        Debug.Log($"[Player] Linked new {newNode.name} ↔ {hitNode.name} (distance={rayLen:F2})");
+
+//                    break; // ヒットしたら終了
+//                }
+//            }
+//        }
+
+//        // ヒットしなかった場合のログ
+//        if (!linked && debugLog)
+//            Debug.Log($"[Player] No Node hit from {newNode.name} (max 3 steps)");
+
+//        return newNode;
 //    }
 
 //    MapNode GetNearestNode()
@@ -688,7 +619,7 @@ public class Player : MonoBehaviour
 //    }
 
 //    // =====================================================
-//    // グリッド補助関数
+//    // グリッド変換
 //    // =====================================================
 //    Vector2Int WorldToCell(Vector3 worldPos)
 //    {
@@ -1064,7 +995,6 @@ public class Player : MonoBehaviour
 ////    }
 ////}
 
-
 //////using UnityEngine;
 //////using System.Collections.Generic;
 //////using System.Linq;
@@ -1108,13 +1038,13 @@ public class Player : MonoBehaviour
 //////    private int recentLimit = 10; // 記憶する最大数
 
 //////    // ===== Debug helpers =====
-//////    const string LG = "[EXP-DBG]";        // ログ識別タグ
-//////    int decideTick = 0;                    // 意思決定の通番
+//////    const string LG = "[EXP-DBG]";
+//////    const string NG = "[NODE-DBG]";
+//////    int decideTick = 0;
 
 //////    string CellStr(Vector2Int c) => $"({c.x},{c.y})";
 //////    string DirStr(Vector3 d)
 //////    {
-//////        // 視覚的に分かるよう 4方向判定（前/左/右/後）
 //////        var f = moveDir;
 //////        var l = Quaternion.Euler(0, -90, 0) * moveDir;
 //////        var r = Quaternion.Euler(0, 90, 0) * moveDir;
@@ -1128,10 +1058,8 @@ public class Player : MonoBehaviour
 //////    }
 //////    string DumpRecent()
 //////    {
-//////        // recentVisited は (cell, dir) のキュー
 //////        return string.Join(" -> ", recentVisited.Select(r => $"{CellStr(r.cell)}:{DirStr(r.dir)}"));
 //////    }
-
 
 //////    void Start()
 //////    {
@@ -1144,7 +1072,6 @@ public class Player : MonoBehaviour
 //////            Debug.Log($"[Player:{name}] Spawned in {currentMode} mode");
 
 //////        ApplyModeVisual();
-
 //////        currentNode = GetNearestNode();
 //////    }
 
@@ -1177,7 +1104,7 @@ public class Player : MonoBehaviour
 //////            if (exploreMaterial != null) bodyRenderer.material = exploreMaterial;
 //////            else bodyRenderer.material.color = Color.red;
 //////        }
-//////        else // Mode.Learn
+//////        else
 //////        {
 //////            if (learnMaterial != null) bodyRenderer.material = learnMaterial;
 //////            else bodyRenderer.material.color = Color.blue;
@@ -1185,87 +1112,8 @@ public class Player : MonoBehaviour
 //////    }
 
 //////    // =====================================================
-//////    // 探索モード
+//////    // 探索モード（詳細デバッグ＋未探索チェック追加）
 //////    // =====================================================
-//////    //void TryExploreMove()
-//////    //{
-//////    //    Vector3 leftDir = Quaternion.Euler(0, -90, 0) * moveDir;
-//////    //    Vector3 rightDir = Quaternion.Euler(0, 90, 0) * moveDir;
-//////    //    Vector3 backDir = -moveDir;
-
-//////    //    bool frontHit = Physics.Raycast(transform.position, moveDir, rayDistance, wallLayer);
-//////    //    bool leftHit = Physics.Raycast(transform.position, leftDir, rayDistance, wallLayer);
-//////    //    bool rightHit = Physics.Raycast(transform.position, rightDir, rayDistance, wallLayer);
-
-//////    //    int openCount = 0;
-//////    //    if (!frontHit) openCount++;
-//////    //    if (!leftHit) openCount++;
-//////    //    if (!rightHit) openCount++;
-
-//////    //    // Node設置（前が壁 or 分岐点）
-//////    //    if (frontHit || openCount >= 2)
-//////    //    {
-//////    //        MapNode newNode = TryPlaceNode(transform.position);
-//////    //        if (newNode && goalNode)
-//////    //            newNode.InitializeValue(goalNode.transform.position);
-//////    //    }
-
-//////    //    // --- 移動候補を収集 ---
-//////    //    List<Vector3> openDirs = new List<Vector3>();
-//////    //    if (!frontHit) openDirs.Add(moveDir);
-//////    //    if (!leftHit) openDirs.Add(leftDir);
-//////    //    if (!rightHit) openDirs.Add(rightDir);
-
-//////    //    // 元来た方向を除外（ただし行き止まり時は許可）
-//////    //    openDirs.RemoveAll(d => Vector3.Dot(d, backDir) > 0.9f);
-//////    //    if (openDirs.Count == 0)
-//////    //        openDirs.Add(backDir);
-
-//////    //    // === 未探索方向＋履歴回避 ===
-//////    //    List<Vector3> unexploredDirs = new List<Vector3>();
-//////    //    foreach (var dir in openDirs)
-//////    //    {
-//////    //        Vector3 nextPos = SnapToGrid(transform.position + dir * cellSize);
-//////    //        Vector2Int nextCell = WorldToCell(nextPos);
-
-//////    //        // --- 直近訪問(位置+方向)チェック ---
-//////    //        if (recentVisited.Any(r =>
-//////    //            r.cell == nextCell && Vector3.Dot(r.dir, dir) > 0.9f))
-//////    //            continue;
-
-//////    //        // 未探索Nodeを優先
-//////    //        if (!MapNode.allNodeCells.Contains(nextCell))
-//////    //            unexploredDirs.Add(dir);
-//////    //    }
-
-//////    //    // === 探索打ち切り条件 ===
-//////    //    if (unexploredDirs.Count == 0 && openDirs.Count == 0)
-//////    //    {
-//////    //        if (debugLog)
-//////    //            Debug.Log($"[Player:{name}] All known → switch to LEARN mode");
-//////    //        currentMode = Mode.Learn;
-//////    //        ApplyModeVisual();
-//////    //        return;
-//////    //    }
-
-//////    //    // === 移動方向を決定 ===
-//////    //    Vector3 chosenDir = unexploredDirs.Count > 0
-//////    //        ? unexploredDirs[Random.Range(0, unexploredDirs.Count)]
-//////    //        : openDirs[Random.Range(0, openDirs.Count)];
-
-//////    //    moveDir = chosenDir;
-//////    //    targetPos = SnapToGrid(transform.position + chosenDir * cellSize);
-//////    //    isMoving = true;
-
-//////    //    // === 履歴に記録 ===
-//////    //    Vector2Int cell = WorldToCell(SnapToGrid(transform.position));
-//////    //    recentVisited.Enqueue((cell, moveDir));
-//////    //    if (recentVisited.Count > recentLimit)
-//////    //        recentVisited.Dequeue();
-
-//////    //    if (debugLog)
-//////    //        Debug.Log($"[Player:{name}] Explore move dir={chosenDir} -> {WorldToCell(targetPos)}");
-//////    //}
 //////    void TryExploreMove()
 //////    {
 //////        decideTick++;
@@ -1295,13 +1143,11 @@ public class Player : MonoBehaviour
 //////                Debug.Log($"{LG} T#{decideTick} placeNode @ {CellStr(WorldToCell(newNode.transform.position))} (total {afterCount} / was {beforeCount})");
 //////        }
 
-//////        // 候補収集
 //////        List<Vector3> openDirs = new List<Vector3>();
 //////        if (!frontHit) openDirs.Add(moveDir);
 //////        if (!leftHit) openDirs.Add(leftDir);
 //////        if (!rightHit) openDirs.Add(rightDir);
 
-//////        // 後退除外（事後ログ用に一旦バックアップ）
 //////        var beforeBackCull = openDirs.Select(d => DirStr(d)).ToArray();
 //////        openDirs.RemoveAll(d => Vector3.Dot(d, backDir) > 0.9f);
 //////        var afterBackCull = openDirs.Select(d => DirStr(d)).ToArray();
@@ -1314,7 +1160,6 @@ public class Player : MonoBehaviour
 //////            Debug.Log($"{LG} T#{decideTick} dead-end -> allow back");
 //////        }
 
-//////        // 未探索 + 履歴回避のフィルタ過程を詳細ログ
 //////        List<Vector3> unexploredDirs = new List<Vector3>();
 //////        foreach (var dir in openDirs.ToList())
 //////        {
@@ -1324,11 +1169,11 @@ public class Player : MonoBehaviour
 //////            bool inRecentSameDir = recentVisited.Any(r => r.cell == ncell && Vector3.Dot(r.dir, dir) > 0.9f);
 //////            bool knownNode = MapNode.allNodeCells.Contains(ncell);
 
+//////            Debug.Log($"{LG} T#{decideTick} Check next={nextPos:F2} (cell {ncell}) known={knownNode} totalNodes={MapNode.allNodeCells.Count}");
+
 //////            if (inRecentSameDir)
 //////            {
 //////                Debug.Log($"{LG} T#{decideTick} filter REJECT by recent: next={CellStr(ncell)} dir={DirStr(dir)}");
-//////                // ここでは openDirs は残したまま（“既知選択”に残すため）
-//////                // unexplored には入れない
 //////            }
 //////            else
 //////            {
@@ -1344,7 +1189,6 @@ public class Player : MonoBehaviour
 //////            }
 //////        }
 
-//////        // 打ち切り判定ログ
 //////        if (unexploredDirs.Count == 0 && openDirs.Count == 0)
 //////        {
 //////            Debug.Log($"{LG} T#{decideTick} No moves -> switch to LEARN");
@@ -1353,7 +1197,6 @@ public class Player : MonoBehaviour
 //////            return;
 //////        }
 
-//////        // 選択理由のログ
 //////        Vector3 chosenDir = unexploredDirs.Count > 0
 //////            ? unexploredDirs[Random.Range(0, unexploredDirs.Count)]
 //////            : openDirs[Random.Range(0, openDirs.Count)];
@@ -1365,7 +1208,6 @@ public class Player : MonoBehaviour
 //////        targetPos = SnapToGrid(transform.position + chosenDir * cellSize);
 //////        isMoving = true;
 
-//////        // 出発時に履歴へ積む
 //////        var departCell = curCell;
 //////        recentVisited.Enqueue((departCell, moveDir));
 //////        if (recentVisited.Count > recentLimit)
@@ -1374,7 +1216,6 @@ public class Player : MonoBehaviour
 //////            Debug.Log($"{LG} T#{decideTick} recent pop {CellStr(popped.cell)}:{DirStr(popped.dir)} (limit={recentLimit})");
 //////        }
 //////    }
-
 
 //////    // =====================================================
 //////    // 学習モード
@@ -1385,7 +1226,6 @@ public class Player : MonoBehaviour
 //////        if (currentNode == null || goalNode == null)
 //////            return;
 
-//////        // 終端Nodeなら探索モードへ
 //////        if (currentNode.links == null || currentNode.links.Count == 0)
 //////        {
 //////            currentMode = Mode.Explore;
@@ -1394,7 +1234,6 @@ public class Player : MonoBehaviour
 //////            return;
 //////        }
 
-//////        // 隣接NodeのValue合計最大方向を仮定
 //////        MapNode bestNext = currentNode.links
 //////            .OrderByDescending(n => n.value)
 //////            .FirstOrDefault();
@@ -1426,22 +1265,12 @@ public class Player : MonoBehaviour
 //////            transform.position = targetPos;
 //////            isMoving = false;
 
-//////            // Node更新
 //////            MapNode nearest = GetNearestNode();
 //////            if (nearest)
 //////            {
 //////                nearest.UpdateValue(goalNode);
 //////                currentNode = nearest;
 
-//////                //// === 直近訪問Nodeを記録（位置＋方向） ===
-//////                //Vector2Int cell = WorldToCell(nearest.transform.position);
-//////                //if (!recentVisited.Any(r => r.cell == cell))
-//////                //{
-//////                //    recentVisited.Enqueue((cell, moveDir));
-//////                //    if (recentVisited.Count > recentLimit)
-//////                //        recentVisited.Dequeue(); // 古いものから削除
-//////                //}
-//////                // === 直近訪問Nodeを記録（到着時のセルも積む場合） ===
 //////                Vector2Int cellArrived = WorldToCell(nearest.transform.position);
 //////                if (!recentVisited.Any(r => r.cell == cellArrived))
 //////                {
@@ -1460,7 +1289,6 @@ public class Player : MonoBehaviour
 //////            }
 //////        }
 
-//////        // === ゴール到達判定 ===
 //////        if (!reachedGoal && goalNode != null)
 //////        {
 //////            float distToGoal = Vector3.Distance(transform.position, goalNode.transform.position);
@@ -1475,12 +1303,13 @@ public class Player : MonoBehaviour
 //////    }
 
 //////    // =====================================================
-//////    // Node設置（重複防止＋生成＋返却）
+//////    // Node設置（重複防止＋生成＋返却）＋ログ追加
 //////    // =====================================================
 //////    MapNode TryPlaceNode(Vector3 pos)
 //////    {
 //////        Vector2Int cell = WorldToCell(SnapToGrid(pos));
 //////        Vector3 placePos = CellToWorld(cell);
+//////        Debug.Log($"{NG} TryPlaceNode cell={cell} world={placePos}");
 //////        if (MapNode.allNodeCells.Contains(cell))
 //////            return null;
 
@@ -1489,9 +1318,6 @@ public class Player : MonoBehaviour
 //////        return obj.GetComponent<MapNode>();
 //////    }
 
-//////    // =====================================================
-//////    // 近傍Node探索
-//////    // =====================================================
 //////    MapNode GetNearestNode()
 //////    {
 //////        MapNode[] nodes = FindObjectsOfType<MapNode>();
@@ -1521,6 +1347,7 @@ public class Player : MonoBehaviour
 //////        return new Vector3(x * cellSize, 0f, z * cellSize) + gridOrigin;
 //////    }
 //////}
+
 
 ////////using UnityEngine;
 ////////using System.Collections.Generic;
@@ -1554,12 +1381,41 @@ public class Player : MonoBehaviour
 ////////    private Vector3 targetPos;
 ////////    private Mode currentMode;
 ////////    private MapNode currentNode;
-
 ////////    private bool reachedGoal = false;
 
 ////////    [SerializeField] private Renderer bodyRenderer;     // キャラのRendererをアサイン
 ////////    [SerializeField] private Material exploreMaterial;  // 探索モード用（赤系）
 ////////    [SerializeField] private Material learnMaterial;    // 学習モード用（青系）
+
+////////    // === 直近の通過Node記録 ===
+////////    private Queue<(Vector2Int cell, Vector3 dir)> recentVisited = new Queue<(Vector2Int, Vector3)>();
+////////    private int recentLimit = 10; // 記憶する最大数
+
+////////    // ===== Debug helpers =====
+////////    const string LG = "[EXP-DBG]";        // ログ識別タグ
+////////    int decideTick = 0;                    // 意思決定の通番
+
+////////    string CellStr(Vector2Int c) => $"({c.x},{c.y})";
+////////    string DirStr(Vector3 d)
+////////    {
+////////        // 視覚的に分かるよう 4方向判定（前/左/右/後）
+////////        var f = moveDir;
+////////        var l = Quaternion.Euler(0, -90, 0) * moveDir;
+////////        var r = Quaternion.Euler(0, 90, 0) * moveDir;
+////////        var b = -moveDir;
+////////        float df = Vector3.Dot(d, f), dl = Vector3.Dot(d, l), dr = Vector3.Dot(d, r), db = Vector3.Dot(d, b);
+////////        float m = Mathf.Max(df, Mathf.Max(dl, Mathf.Max(dr, db)));
+////////        if (m == df) return "F";
+////////        if (m == dl) return "L";
+////////        if (m == dr) return "R";
+////////        return "B";
+////////    }
+////////    string DumpRecent()
+////////    {
+////////        // recentVisited は (cell, dir) のキュー
+////////        return string.Join(" -> ", recentVisited.Select(r => $"{CellStr(r.cell)}:{DirStr(r.dir)}"));
+////////    }
+
 
 ////////    void Start()
 ////////    {
@@ -1612,14 +1468,14 @@ public class Player : MonoBehaviour
 ////////        }
 ////////    }
 
-
-////////    //// =====================================================
-////////    //// 探索モード
-////////    //// =====================================================
+////////    // =====================================================
+////////    // 探索モード
+////////    // =====================================================
 ////////    //void TryExploreMove()
 ////////    //{
 ////////    //    Vector3 leftDir = Quaternion.Euler(0, -90, 0) * moveDir;
 ////////    //    Vector3 rightDir = Quaternion.Euler(0, 90, 0) * moveDir;
+////////    //    Vector3 backDir = -moveDir;
 
 ////////    //    bool frontHit = Physics.Raycast(transform.position, moveDir, rayDistance, wallLayer);
 ////////    //    bool leftHit = Physics.Raycast(transform.position, leftDir, rayDistance, wallLayer);
@@ -1638,22 +1494,35 @@ public class Player : MonoBehaviour
 ////////    //            newNode.InitializeValue(goalNode.transform.position);
 ////////    //    }
 
-////////    //    // 移動方向選択
+////////    //    // --- 移動候補を収集 ---
 ////////    //    List<Vector3> openDirs = new List<Vector3>();
 ////////    //    if (!frontHit) openDirs.Add(moveDir);
 ////////    //    if (!leftHit) openDirs.Add(leftDir);
 ////////    //    if (!rightHit) openDirs.Add(rightDir);
 
-////////    //    // 未探索方向優先
+////////    //    // 元来た方向を除外（ただし行き止まり時は許可）
+////////    //    openDirs.RemoveAll(d => Vector3.Dot(d, backDir) > 0.9f);
+////////    //    if (openDirs.Count == 0)
+////////    //        openDirs.Add(backDir);
+
+////////    //    // === 未探索方向＋履歴回避 ===
 ////////    //    List<Vector3> unexploredDirs = new List<Vector3>();
 ////////    //    foreach (var dir in openDirs)
 ////////    //    {
 ////////    //        Vector3 nextPos = SnapToGrid(transform.position + dir * cellSize);
 ////////    //        Vector2Int nextCell = WorldToCell(nextPos);
+
+////////    //        // --- 直近訪問(位置+方向)チェック ---
+////////    //        if (recentVisited.Any(r =>
+////////    //            r.cell == nextCell && Vector3.Dot(r.dir, dir) > 0.9f))
+////////    //            continue;
+
+////////    //        // 未探索Nodeを優先
 ////////    //        if (!MapNode.allNodeCells.Contains(nextCell))
 ////////    //            unexploredDirs.Add(dir);
 ////////    //    }
 
+////////    //    // === 探索打ち切り条件 ===
 ////////    //    if (unexploredDirs.Count == 0 && openDirs.Count == 0)
 ////////    //    {
 ////////    //        if (debugLog)
@@ -1663,6 +1532,7 @@ public class Player : MonoBehaviour
 ////////    //        return;
 ////////    //    }
 
+////////    //    // === 移動方向を決定 ===
 ////////    //    Vector3 chosenDir = unexploredDirs.Count > 0
 ////////    //        ? unexploredDirs[Random.Range(0, unexploredDirs.Count)]
 ////////    //        : openDirs[Random.Range(0, openDirs.Count)];
@@ -1671,21 +1541,28 @@ public class Player : MonoBehaviour
 ////////    //    targetPos = SnapToGrid(transform.position + chosenDir * cellSize);
 ////////    //    isMoving = true;
 
+////////    //    // === 履歴に記録 ===
+////////    //    Vector2Int cell = WorldToCell(SnapToGrid(transform.position));
+////////    //    recentVisited.Enqueue((cell, moveDir));
+////////    //    if (recentVisited.Count > recentLimit)
+////////    //        recentVisited.Dequeue();
+
 ////////    //    if (debugLog)
 ////////    //        Debug.Log($"[Player:{name}] Explore move dir={chosenDir} -> {WorldToCell(targetPos)}");
 ////////    //}
-////////    // =====================================================
-////////    // 探索モード（修正版：後ろ方向を除外）
-////////    // =====================================================
 ////////    void TryExploreMove()
 ////////    {
+////////        decideTick++;
 ////////        Vector3 leftDir = Quaternion.Euler(0, -90, 0) * moveDir;
 ////////        Vector3 rightDir = Quaternion.Euler(0, 90, 0) * moveDir;
-////////        Vector3 backDir = -moveDir; // ★元来た道を記録
+////////        Vector3 backDir = -moveDir;
 
 ////////        bool frontHit = Physics.Raycast(transform.position, moveDir, rayDistance, wallLayer);
 ////////        bool leftHit = Physics.Raycast(transform.position, leftDir, rayDistance, wallLayer);
 ////////        bool rightHit = Physics.Raycast(transform.position, rightDir, rayDistance, wallLayer);
+
+////////        var curCell = WorldToCell(SnapToGrid(transform.position));
+////////        Debug.Log($"{LG} T#{decideTick} pos={CellStr(curCell)} dir={DirStr(moveDir)} hits F:{frontHit} L:{leftHit} R:{rightHit} recent[{recentVisited.Count}] {DumpRecent()}");
 
 ////////        int openCount = 0;
 ////////        if (!frontHit) openCount++;
@@ -1695,55 +1572,91 @@ public class Player : MonoBehaviour
 ////////        // Node設置（前が壁 or 分岐点）
 ////////        if (frontHit || openCount >= 2)
 ////////        {
+////////            var beforeCount = MapNode.allNodeCells.Count;
 ////////            MapNode newNode = TryPlaceNode(transform.position);
-////////            if (newNode && goalNode)
-////////                newNode.InitializeValue(goalNode.transform.position);
+////////            var afterCount = MapNode.allNodeCells.Count;
+////////            if (newNode)
+////////                Debug.Log($"{LG} T#{decideTick} placeNode @ {CellStr(WorldToCell(newNode.transform.position))} (total {afterCount} / was {beforeCount})");
 ////////        }
 
-////////        // 移動方向選択
+////////        // 候補収集
 ////////        List<Vector3> openDirs = new List<Vector3>();
 ////////        if (!frontHit) openDirs.Add(moveDir);
 ////////        if (!leftHit) openDirs.Add(leftDir);
 ////////        if (!rightHit) openDirs.Add(rightDir);
 
-////////        // ★元来た道を除外（ただし行き止まり時は許可）
+////////        // 後退除外（事後ログ用に一旦バックアップ）
+////////        var beforeBackCull = openDirs.Select(d => DirStr(d)).ToArray();
 ////////        openDirs.RemoveAll(d => Vector3.Dot(d, backDir) > 0.9f);
+////////        var afterBackCull = openDirs.Select(d => DirStr(d)).ToArray();
+////////        if (beforeBackCull.Length != afterBackCull.Length)
+////////            Debug.Log($"{LG} T#{decideTick} back-cull {string.Join(",", beforeBackCull)} -> {string.Join(",", afterBackCull)}");
+
 ////////        if (openDirs.Count == 0)
 ////////        {
-////////            // 完全に行き止まりなら一度だけ戻る
 ////////            openDirs.Add(backDir);
+////////            Debug.Log($"{LG} T#{decideTick} dead-end -> allow back");
 ////////        }
 
-////////        // 未探索方向優先
+////////        // 未探索 + 履歴回避のフィルタ過程を詳細ログ
 ////////        List<Vector3> unexploredDirs = new List<Vector3>();
-////////        foreach (var dir in openDirs)
+////////        foreach (var dir in openDirs.ToList())
 ////////        {
 ////////            Vector3 nextPos = SnapToGrid(transform.position + dir * cellSize);
-////////            Vector2Int nextCell = WorldToCell(nextPos);
-////////            if (!MapNode.allNodeCells.Contains(nextCell))
-////////                unexploredDirs.Add(dir);
+////////            Vector2Int ncell = WorldToCell(nextPos);
+
+////////            bool inRecentSameDir = recentVisited.Any(r => r.cell == ncell && Vector3.Dot(r.dir, dir) > 0.9f);
+////////            bool knownNode = MapNode.allNodeCells.Contains(ncell);
+
+////////            if (inRecentSameDir)
+////////            {
+////////                Debug.Log($"{LG} T#{decideTick} filter REJECT by recent: next={CellStr(ncell)} dir={DirStr(dir)}");
+////////                // ここでは openDirs は残したまま（“既知選択”に残すため）
+////////                // unexplored には入れない
+////////            }
+////////            else
+////////            {
+////////                if (!knownNode)
+////////                {
+////////                    unexploredDirs.Add(dir);
+////////                    Debug.Log($"{LG} T#{decideTick} candidate UNEXPLORED: next={CellStr(ncell)} dir={DirStr(dir)}");
+////////                }
+////////                else
+////////                {
+////////                    Debug.Log($"{LG} T#{decideTick} candidate KNOWN: next={CellStr(ncell)} dir={DirStr(dir)}");
+////////                }
+////////            }
 ////////        }
 
-////////        // 移動先がない場合 → 学習モードへ
+////////        // 打ち切り判定ログ
 ////////        if (unexploredDirs.Count == 0 && openDirs.Count == 0)
 ////////        {
-////////            if (debugLog)
-////////                Debug.Log($"[Player:{name}] All known → switch to LEARN mode");
+////////            Debug.Log($"{LG} T#{decideTick} No moves -> switch to LEARN");
 ////////            currentMode = Mode.Learn;
 ////////            ApplyModeVisual();
 ////////            return;
 ////////        }
 
+////////        // 選択理由のログ
 ////////        Vector3 chosenDir = unexploredDirs.Count > 0
 ////////            ? unexploredDirs[Random.Range(0, unexploredDirs.Count)]
 ////////            : openDirs[Random.Range(0, openDirs.Count)];
+
+////////        var nextChosenCell = WorldToCell(SnapToGrid(transform.position + chosenDir * cellSize));
+////////        Debug.Log($"{LG} T#{decideTick} CHOOSE {(unexploredDirs.Count > 0 ? "UNEXPLORED" : "KNOWN")} dir={DirStr(chosenDir)} -> {CellStr(nextChosenCell)}");
 
 ////////        moveDir = chosenDir;
 ////////        targetPos = SnapToGrid(transform.position + chosenDir * cellSize);
 ////////        isMoving = true;
 
-////////        if (debugLog)
-////////            Debug.Log($"[Player:{name}] Explore move dir={chosenDir} -> {WorldToCell(targetPos)}");
+////////        // 出発時に履歴へ積む
+////////        var departCell = curCell;
+////////        recentVisited.Enqueue((departCell, moveDir));
+////////        if (recentVisited.Count > recentLimit)
+////////        {
+////////            var popped = recentVisited.Dequeue();
+////////            Debug.Log($"{LG} T#{decideTick} recent pop {CellStr(popped.cell)}:{DirStr(popped.dir)} (limit={recentLimit})");
+////////        }
 ////////    }
 
 
@@ -1803,6 +1716,31 @@ public class Player : MonoBehaviour
 ////////            {
 ////////                nearest.UpdateValue(goalNode);
 ////////                currentNode = nearest;
+
+////////                //// === 直近訪問Nodeを記録（位置＋方向） ===
+////////                //Vector2Int cell = WorldToCell(nearest.transform.position);
+////////                //if (!recentVisited.Any(r => r.cell == cell))
+////////                //{
+////////                //    recentVisited.Enqueue((cell, moveDir));
+////////                //    if (recentVisited.Count > recentLimit)
+////////                //        recentVisited.Dequeue(); // 古いものから削除
+////////                //}
+////////                // === 直近訪問Nodeを記録（到着時のセルも積む場合） ===
+////////                Vector2Int cellArrived = WorldToCell(nearest.transform.position);
+////////                if (!recentVisited.Any(r => r.cell == cellArrived))
+////////                {
+////////                    recentVisited.Enqueue((cellArrived, moveDir));
+////////                    if (recentVisited.Count > recentLimit)
+////////                    {
+////////                        var popped = recentVisited.Dequeue();
+////////                        Debug.Log($"{LG} ARRIVE pop {CellStr(popped.cell)}:{DirStr(popped.dir)}");
+////////                    }
+////////                    Debug.Log($"{LG} ARRIVE push {CellStr(cellArrived)}:{DirStr(moveDir)}");
+////////                }
+////////                else
+////////                {
+////////                    Debug.Log($"{LG} ARRIVE skip (already in recent) {CellStr(cellArrived)}");
+////////                }
 ////////            }
 ////////        }
 
@@ -1810,8 +1748,7 @@ public class Player : MonoBehaviour
 ////////        if (!reachedGoal && goalNode != null)
 ////////        {
 ////////            float distToGoal = Vector3.Distance(transform.position, goalNode.transform.position);
-
-////////            if (distToGoal < 0.1f) // ← 誤差許容
+////////            if (distToGoal < 0.1f)
 ////////            {
 ////////                reachedGoal = true;
 ////////                Debug.Log($"[Player:{name}] Reached Goal (dist={distToGoal:F3}). Destroy.");
@@ -1871,47 +1808,99 @@ public class Player : MonoBehaviour
 
 //////////using UnityEngine;
 //////////using System.Collections.Generic;
+//////////using System.Linq;
 
 //////////public class Player : MonoBehaviour
 //////////{
+//////////    public enum Mode { Explore, Learn }
+
 //////////    [Header("移動設定")]
-//////////    public float moveSpeed = 3f;          // 移動速度
-//////////    public float cellSize = 1f;           // グリッド1マスの大きさ
-//////////    public float rayDistance = 1f;        // Rayの距離（1マス分）
-//////////    public LayerMask wallLayer;           // 壁レイヤー
+//////////    public float moveSpeed = 3f;
+//////////    public float cellSize = 1f;
+//////////    public float rayDistance = 1f;
+//////////    public LayerMask wallLayer;
 
 //////////    [Header("初期設定")]
 //////////    public Vector3 startDirection = Vector3.forward;
 
 //////////    [Header("Node設定")]
 //////////    public GameObject nodePrefab;
-//////////    public Vector3 gridOrigin = Vector3.zero; // グリッド原点
+//////////    public Vector3 gridOrigin = Vector3.zero;
+//////////    public MapNode goalNode;
+//////////    [Range(0f, 1f)] public float exploreModeChance = 0.5f;
+
+//////////    [Header("Debug")]
 //////////    public bool debugLog = true;
 
 //////////    // 内部状態
 //////////    private Vector3 moveDir;
 //////////    private bool isMoving = false;
 //////////    private Vector3 targetPos;
+//////////    private Mode currentMode;
+//////////    private MapNode currentNode;
+
+//////////    private bool reachedGoal = false;
+
+//////////    [SerializeField] private Renderer bodyRenderer;     // キャラのRendererをアサイン
+//////////    [SerializeField] private Material exploreMaterial;  // 探索モード用（赤系）
+//////////    [SerializeField] private Material learnMaterial;    // 学習モード用（青系）
 
 //////////    void Start()
 //////////    {
 //////////        moveDir = startDirection.normalized;
 //////////        targetPos = transform.position;
-
-//////////        // スナップして初期位置を補正
 //////////        transform.position = SnapToGrid(transform.position);
+
+//////////        currentMode = (Random.value < exploreModeChance) ? Mode.Explore : Mode.Learn;
+//////////        if (debugLog)
+//////////            Debug.Log($"[Player:{name}] Spawned in {currentMode} mode");
+
+//////////        ApplyModeVisual();
+
+//////////        currentNode = GetNearestNode();
 //////////    }
 
 //////////    void Update()
 //////////    {
-//////////        if (!isMoving) TryMove();
-//////////        else MoveToTarget();
+//////////        if (!isMoving)
+//////////        {
+//////////            switch (currentMode)
+//////////            {
+//////////                case Mode.Explore:
+//////////                    TryExploreMove();
+//////////                    break;
+//////////                case Mode.Learn:
+//////////                    TryLearnMove();
+//////////                    break;
+//////////            }
+//////////        }
+//////////        else
+//////////        {
+//////////            MoveToTarget();
+//////////        }
 //////////    }
 
-//////////    // =====================================================
-//////////    // 次の移動先を決定して移動を開始
-//////////    // =====================================================
-//////////    //void TryMove()
+//////////    private void ApplyModeVisual()
+//////////    {
+//////////        if (bodyRenderer == null) return;
+
+//////////        if (currentMode == Mode.Explore)
+//////////        {
+//////////            if (exploreMaterial != null) bodyRenderer.material = exploreMaterial;
+//////////            else bodyRenderer.material.color = Color.red;
+//////////        }
+//////////        else // Mode.Learn
+//////////        {
+//////////            if (learnMaterial != null) bodyRenderer.material = learnMaterial;
+//////////            else bodyRenderer.material.color = Color.blue;
+//////////        }
+//////////    }
+
+
+//////////    //// =====================================================
+//////////    //// 探索モード
+//////////    //// =====================================================
+//////////    //void TryExploreMove()
 //////////    //{
 //////////    //    Vector3 leftDir = Quaternion.Euler(0, -90, 0) * moveDir;
 //////////    //    Vector3 rightDir = Quaternion.Euler(0, 90, 0) * moveDir;
@@ -1920,69 +1909,63 @@ public class Player : MonoBehaviour
 //////////    //    bool leftHit = Physics.Raycast(transform.position, leftDir, rayDistance, wallLayer);
 //////////    //    bool rightHit = Physics.Raycast(transform.position, rightDir, rayDistance, wallLayer);
 
-//////////    //    // Debug用のRay可視化
-//////////    //    Debug.DrawRay(transform.position, moveDir * rayDistance, Color.red);
-//////////    //    Debug.DrawRay(transform.position, leftDir * rayDistance, Color.blue);
-//////////    //    Debug.DrawRay(transform.position, rightDir * rayDistance, Color.green);
-
-//////////    //    // 進行可能方向数を数える
 //////////    //    int openCount = 0;
 //////////    //    if (!frontHit) openCount++;
 //////////    //    if (!leftHit) openCount++;
 //////////    //    if (!rightHit) openCount++;
 
-//////////    //    // =============================
-//////////    //    // Node設置条件（前が壁 or 分岐点）
-//////////    //    // =============================
+//////////    //    // Node設置（前が壁 or 分岐点）
 //////////    //    if (frontHit || openCount >= 2)
 //////////    //    {
-//////////    //        TryPlaceNode(transform.position);
+//////////    //        MapNode newNode = TryPlaceNode(transform.position);
+//////////    //        if (newNode && goalNode)
+//////////    //            newNode.InitializeValue(goalNode.transform.position);
 //////////    //    }
 
-//////////    //    // =============================
-//////////    //    // 移動先を決定
-//////////    //    // =============================
+//////////    //    // 移動方向選択
+//////////    //    List<Vector3> openDirs = new List<Vector3>();
+//////////    //    if (!frontHit) openDirs.Add(moveDir);
+//////////    //    if (!leftHit) openDirs.Add(leftDir);
+//////////    //    if (!rightHit) openDirs.Add(rightDir);
 
-//////////    //    // 前方が開いているなら直進
-//////////    //    if (!frontHit)
+//////////    //    // 未探索方向優先
+//////////    //    List<Vector3> unexploredDirs = new List<Vector3>();
+//////////    //    foreach (var dir in openDirs)
 //////////    //    {
-//////////    //        Vector3 snappedPos = SnapToGrid(transform.position);
-//////////    //        targetPos = SnapToGrid(snappedPos + moveDir * cellSize);
-//////////    //        isMoving = true;
+//////////    //        Vector3 nextPos = SnapToGrid(transform.position + dir * cellSize);
+//////////    //        Vector2Int nextCell = WorldToCell(nextPos);
+//////////    //        if (!MapNode.allNodeCells.Contains(nextCell))
+//////////    //            unexploredDirs.Add(dir);
+//////////    //    }
 
+//////////    //    if (unexploredDirs.Count == 0 && openDirs.Count == 0)
+//////////    //    {
 //////////    //        if (debugLog)
-//////////    //            Debug.Log($"[Player:{name}] Move forward -> {WorldToCell(targetPos)}");
+//////////    //            Debug.Log($"[Player:{name}] All known → switch to LEARN mode");
+//////////    //        currentMode = Mode.Learn;
+//////////    //        ApplyModeVisual();
+//////////    //        return;
 //////////    //    }
-//////////    //    else
-//////////    //    {
-//////////    //        // 前が壁なら左右の空き方向を探索
-//////////    //        var openDirs = new List<Vector3>();
-//////////    //        if (!leftHit) openDirs.Add(leftDir);
-//////////    //        if (!rightHit) openDirs.Add(rightDir);
 
-//////////    //        // 開いている方向があればランダムで選択
-//////////    //        if (openDirs.Count > 0)
-//////////    //        {
-//////////    //            moveDir = openDirs[Random.Range(0, openDirs.Count)];
-//////////    //            Vector3 snappedPos = SnapToGrid(transform.position);
-//////////    //            targetPos = SnapToGrid(snappedPos + moveDir * cellSize);
-//////////    //            isMoving = true;
+//////////    //    Vector3 chosenDir = unexploredDirs.Count > 0
+//////////    //        ? unexploredDirs[Random.Range(0, unexploredDirs.Count)]
+//////////    //        : openDirs[Random.Range(0, openDirs.Count)];
 
-//////////    //            if (debugLog)
-//////////    //                Debug.Log($"[Player:{name}] Turn -> {moveDir}, target={WorldToCell(targetPos)}");
-//////////    //        }
-//////////    //        else
-//////////    //        {
-//////////    //            // 完全に行き止まり
-//////////    //            if (debugLog)
-//////////    //                Debug.Log($"[Player:{name}] Dead end @ {WorldToCell(transform.position)}");
-//////////    //        }
-//////////    //    }
+//////////    //    moveDir = chosenDir;
+//////////    //    targetPos = SnapToGrid(transform.position + chosenDir * cellSize);
+//////////    //    isMoving = true;
+
+//////////    //    if (debugLog)
+//////////    //        Debug.Log($"[Player:{name}] Explore move dir={chosenDir} -> {WorldToCell(targetPos)}");
 //////////    //}
-//////////    void TryMove()
+//////////    // =====================================================
+//////////    // 探索モード（修正版：後ろ方向を除外）
+//////////    // =====================================================
+//////////    void TryExploreMove()
 //////////    {
 //////////        Vector3 leftDir = Quaternion.Euler(0, -90, 0) * moveDir;
 //////////        Vector3 rightDir = Quaternion.Euler(0, 90, 0) * moveDir;
+//////////        Vector3 backDir = -moveDir; // ★元来た道を記録
 
 //////////        bool frontHit = Physics.Raycast(transform.position, moveDir, rayDistance, wallLayer);
 //////////        bool leftHit = Physics.Raycast(transform.position, leftDir, rayDistance, wallLayer);
@@ -1995,17 +1978,27 @@ public class Player : MonoBehaviour
 
 //////////        // Node設置（前が壁 or 分岐点）
 //////////        if (frontHit || openCount >= 2)
-//////////            TryPlaceNode(transform.position);
+//////////        {
+//////////            MapNode newNode = TryPlaceNode(transform.position);
+//////////            if (newNode && goalNode)
+//////////                newNode.InitializeValue(goalNode.transform.position);
+//////////        }
 
-//////////        // ================================
-//////////        // 新しい方向を優先して選択する部分
-//////////        // ================================
+//////////        // 移動方向選択
 //////////        List<Vector3> openDirs = new List<Vector3>();
 //////////        if (!frontHit) openDirs.Add(moveDir);
 //////////        if (!leftHit) openDirs.Add(leftDir);
 //////////        if (!rightHit) openDirs.Add(rightDir);
 
-//////////        // 「未探索（Node未設置）」方向を抽出
+//////////        // ★元来た道を除外（ただし行き止まり時は許可）
+//////////        openDirs.RemoveAll(d => Vector3.Dot(d, backDir) > 0.9f);
+//////////        if (openDirs.Count == 0)
+//////////        {
+//////////            // 完全に行き止まりなら一度だけ戻る
+//////////            openDirs.Add(backDir);
+//////////        }
+
+//////////        // 未探索方向優先
 //////////        List<Vector3> unexploredDirs = new List<Vector3>();
 //////////        foreach (var dir in openDirs)
 //////////        {
@@ -2015,40 +2008,69 @@ public class Player : MonoBehaviour
 //////////                unexploredDirs.Add(dir);
 //////////        }
 
-//////////        Vector3 chosenDir = moveDir;
-
-//////////        if (unexploredDirs.Count > 0)
+//////////        // 移動先がない場合 → 学習モードへ
+//////////        if (unexploredDirs.Count == 0 && openDirs.Count == 0)
 //////////        {
-//////////            // 未探索方向があればその中からランダム
-//////////            chosenDir = unexploredDirs[Random.Range(0, unexploredDirs.Count)];
-//////////        }
-//////////        else if (openDirs.Count > 0)
-//////////        {
-//////////            // すべて探索済みなら、既知方向からランダム
-//////////            chosenDir = openDirs[Random.Range(0, openDirs.Count)];
-//////////        }
-//////////        else
-//////////        {
-//////////            // 完全に行き止まり
 //////////            if (debugLog)
-//////////                Debug.Log($"[Player:{name}] Dead end @ {WorldToCell(transform.position)}");
+//////////                Debug.Log($"[Player:{name}] All known → switch to LEARN mode");
+//////////            currentMode = Mode.Learn;
+//////////            ApplyModeVisual();
 //////////            return;
 //////////        }
 
-//////////        // ================================
-//////////        // 移動を開始
-//////////        // ================================
+//////////        Vector3 chosenDir = unexploredDirs.Count > 0
+//////////            ? unexploredDirs[Random.Range(0, unexploredDirs.Count)]
+//////////            : openDirs[Random.Range(0, openDirs.Count)];
+
 //////////        moveDir = chosenDir;
 //////////        targetPos = SnapToGrid(transform.position + chosenDir * cellSize);
 //////////        isMoving = true;
 
 //////////        if (debugLog)
-//////////            Debug.Log($"[Player:{name}] Move dir={chosenDir} -> {WorldToCell(targetPos)}");
+//////////            Debug.Log($"[Player:{name}] Explore move dir={chosenDir} -> {WorldToCell(targetPos)}");
 //////////    }
 
 
 //////////    // =====================================================
-//////////    // 滑らかにターゲットまで移動
+//////////    // 学習モード
+//////////    // =====================================================
+//////////    void TryLearnMove()
+//////////    {
+//////////        currentNode = GetNearestNode();
+//////////        if (currentNode == null || goalNode == null)
+//////////            return;
+
+//////////        // 終端Nodeなら探索モードへ
+//////////        if (currentNode.links == null || currentNode.links.Count == 0)
+//////////        {
+//////////            currentMode = Mode.Explore;
+//////////            ApplyModeVisual();
+//////////            if (debugLog) Debug.Log($"[Player:{name}] Dead end → switch to EXPLORE");
+//////////            return;
+//////////        }
+
+//////////        // 隣接NodeのValue合計最大方向を仮定
+//////////        MapNode bestNext = currentNode.links
+//////////            .OrderByDescending(n => n.value)
+//////////            .FirstOrDefault();
+
+//////////        if (bestNext == null)
+//////////        {
+//////////            currentMode = Mode.Explore;
+//////////            ApplyModeVisual();
+//////////            return;
+//////////        }
+
+//////////        targetPos = SnapToGrid(bestNext.transform.position);
+//////////        moveDir = (targetPos - transform.position).normalized;
+//////////        isMoving = true;
+
+//////////        if (debugLog)
+//////////            Debug.Log($"[Player:{name}] Learn move -> {WorldToCell(targetPos)}");
+//////////    }
+
+//////////    // =====================================================
+//////////    // 滑らか移動
 //////////    // =====================================================
 //////////    void MoveToTarget()
 //////////    {
@@ -2058,34 +2080,57 @@ public class Player : MonoBehaviour
 //////////        {
 //////////            transform.position = targetPos;
 //////////            isMoving = false;
+
+//////////            // Node更新
+//////////            MapNode nearest = GetNearestNode();
+//////////            if (nearest)
+//////////            {
+//////////                nearest.UpdateValue(goalNode);
+//////////                currentNode = nearest;
+//////////            }
+//////////        }
+
+//////////        // === ゴール到達判定 ===
+//////////        if (!reachedGoal && goalNode != null)
+//////////        {
+//////////            float distToGoal = Vector3.Distance(transform.position, goalNode.transform.position);
+
+//////////            if (distToGoal < 0.1f) // ← 誤差許容
+//////////            {
+//////////                reachedGoal = true;
+//////////                Debug.Log($"[Player:{name}] Reached Goal (dist={distToGoal:F3}). Destroy.");
+//////////                Destroy(gameObject);
+//////////                return;
+//////////            }
 //////////        }
 //////////    }
 
 //////////    // =====================================================
-//////////    // Node設置（重複防止＋スナップ＋共有登録）
+//////////    // Node設置（重複防止＋生成＋返却）
 //////////    // =====================================================
-//////////    void TryPlaceNode(Vector3 pos)
+//////////    MapNode TryPlaceNode(Vector3 pos)
 //////////    {
-//////////        // 1. スナップしてセル座標を取得
 //////////        Vector2Int cell = WorldToCell(SnapToGrid(pos));
 //////////        Vector3 placePos = CellToWorld(cell);
-
-//////////        // 2. すでに設置済みならスキップ
 //////////        if (MapNode.allNodeCells.Contains(cell))
-//////////            return;
+//////////            return null;
 
-//////////        // 3. 新規登録
 //////////        MapNode.allNodeCells.Add(cell);
-
-//////////        // 4. Nodeを生成
-//////////        Instantiate(nodePrefab, placePos, Quaternion.identity);
-
-//////////        if (debugLog)
-//////////            Debug.Log($"[Player:{name}] Node placed @ {cell}");
+//////////        GameObject obj = Instantiate(nodePrefab, placePos, Quaternion.identity);
+//////////        return obj.GetComponent<MapNode>();
 //////////    }
 
 //////////    // =====================================================
-//////////    // グリッド補助関数群
+//////////    // 近傍Node探索
+//////////    // =====================================================
+//////////    MapNode GetNearestNode()
+//////////    {
+//////////        MapNode[] nodes = FindObjectsOfType<MapNode>();
+//////////        return nodes.OrderBy(n => Vector3.Distance(transform.position, n.transform.position)).FirstOrDefault();
+//////////    }
+
+//////////    // =====================================================
+//////////    // グリッド補助関数
 //////////    // =====================================================
 //////////    Vector2Int WorldToCell(Vector3 worldPos)
 //////////    {
@@ -2114,18 +2159,20 @@ public class Player : MonoBehaviour
 ////////////public class Player : MonoBehaviour
 ////////////{
 ////////////    [Header("移動設定")]
-////////////    public float moveSpeed;
-////////////    public float cellSize = 1f;
-////////////    public float rayDistance = 1f;
-////////////    public LayerMask wallLayer;
+////////////    public float moveSpeed = 3f;          // 移動速度
+////////////    public float cellSize = 1f;           // グリッド1マスの大きさ
+////////////    public float rayDistance = 1f;        // Rayの距離（1マス分）
+////////////    public LayerMask wallLayer;           // 壁レイヤー
 
 ////////////    [Header("初期設定")]
 ////////////    public Vector3 startDirection = Vector3.forward;
 
-////////////    [Header("Node")]
+////////////    [Header("Node設定")]
 ////////////    public GameObject nodePrefab;
-////////////    public Vector3 gridOrigin = Vector3.zero; // グリッド原点（必要なら調整）
+////////////    public Vector3 gridOrigin = Vector3.zero; // グリッド原点
+////////////    public bool debugLog = true;
 
+////////////    // 内部状態
 ////////////    private Vector3 moveDir;
 ////////////    private bool isMoving = false;
 ////////////    private Vector3 targetPos;
@@ -2134,6 +2181,9 @@ public class Player : MonoBehaviour
 ////////////    {
 ////////////        moveDir = startDirection.normalized;
 ////////////        targetPos = transform.position;
+
+////////////        // スナップして初期位置を補正
+////////////        transform.position = SnapToGrid(transform.position);
 ////////////    }
 
 ////////////    void Update()
@@ -2142,6 +2192,77 @@ public class Player : MonoBehaviour
 ////////////        else MoveToTarget();
 ////////////    }
 
+////////////    // =====================================================
+////////////    // 次の移動先を決定して移動を開始
+////////////    // =====================================================
+////////////    //void TryMove()
+////////////    //{
+////////////    //    Vector3 leftDir = Quaternion.Euler(0, -90, 0) * moveDir;
+////////////    //    Vector3 rightDir = Quaternion.Euler(0, 90, 0) * moveDir;
+
+////////////    //    bool frontHit = Physics.Raycast(transform.position, moveDir, rayDistance, wallLayer);
+////////////    //    bool leftHit = Physics.Raycast(transform.position, leftDir, rayDistance, wallLayer);
+////////////    //    bool rightHit = Physics.Raycast(transform.position, rightDir, rayDistance, wallLayer);
+
+////////////    //    // Debug用のRay可視化
+////////////    //    Debug.DrawRay(transform.position, moveDir * rayDistance, Color.red);
+////////////    //    Debug.DrawRay(transform.position, leftDir * rayDistance, Color.blue);
+////////////    //    Debug.DrawRay(transform.position, rightDir * rayDistance, Color.green);
+
+////////////    //    // 進行可能方向数を数える
+////////////    //    int openCount = 0;
+////////////    //    if (!frontHit) openCount++;
+////////////    //    if (!leftHit) openCount++;
+////////////    //    if (!rightHit) openCount++;
+
+////////////    //    // =============================
+////////////    //    // Node設置条件（前が壁 or 分岐点）
+////////////    //    // =============================
+////////////    //    if (frontHit || openCount >= 2)
+////////////    //    {
+////////////    //        TryPlaceNode(transform.position);
+////////////    //    }
+
+////////////    //    // =============================
+////////////    //    // 移動先を決定
+////////////    //    // =============================
+
+////////////    //    // 前方が開いているなら直進
+////////////    //    if (!frontHit)
+////////////    //    {
+////////////    //        Vector3 snappedPos = SnapToGrid(transform.position);
+////////////    //        targetPos = SnapToGrid(snappedPos + moveDir * cellSize);
+////////////    //        isMoving = true;
+
+////////////    //        if (debugLog)
+////////////    //            Debug.Log($"[Player:{name}] Move forward -> {WorldToCell(targetPos)}");
+////////////    //    }
+////////////    //    else
+////////////    //    {
+////////////    //        // 前が壁なら左右の空き方向を探索
+////////////    //        var openDirs = new List<Vector3>();
+////////////    //        if (!leftHit) openDirs.Add(leftDir);
+////////////    //        if (!rightHit) openDirs.Add(rightDir);
+
+////////////    //        // 開いている方向があればランダムで選択
+////////////    //        if (openDirs.Count > 0)
+////////////    //        {
+////////////    //            moveDir = openDirs[Random.Range(0, openDirs.Count)];
+////////////    //            Vector3 snappedPos = SnapToGrid(transform.position);
+////////////    //            targetPos = SnapToGrid(snappedPos + moveDir * cellSize);
+////////////    //            isMoving = true;
+
+////////////    //            if (debugLog)
+////////////    //                Debug.Log($"[Player:{name}] Turn -> {moveDir}, target={WorldToCell(targetPos)}");
+////////////    //        }
+////////////    //        else
+////////////    //        {
+////////////    //            // 完全に行き止まり
+////////////    //            if (debugLog)
+////////////    //                Debug.Log($"[Player:{name}] Dead end @ {WorldToCell(transform.position)}");
+////////////    //        }
+////////////    //    }
+////////////    //}
 ////////////    void TryMove()
 ////////////    {
 ////////////        Vector3 leftDir = Quaternion.Euler(0, -90, 0) * moveDir;
@@ -2151,46 +2272,72 @@ public class Player : MonoBehaviour
 ////////////        bool leftHit = Physics.Raycast(transform.position, leftDir, rayDistance, wallLayer);
 ////////////        bool rightHit = Physics.Raycast(transform.position, rightDir, rayDistance, wallLayer);
 
-////////////        Debug.DrawRay(transform.position, moveDir * rayDistance, Color.red);
-////////////        Debug.DrawRay(transform.position, leftDir * rayDistance, Color.blue);
-////////////        Debug.DrawRay(transform.position, rightDir * rayDistance, Color.green);
-
 ////////////        int openCount = 0;
 ////////////        if (!frontHit) openCount++;
 ////////////        if (!leftHit) openCount++;
 ////////////        if (!rightHit) openCount++;
 
-////////////        // 曲がり角 or 前が壁ならNode設置
+////////////        // Node設置（前が壁 or 分岐点）
 ////////////        if (frontHit || openCount >= 2)
-////////////        {
 ////////////            TryPlaceNode(transform.position);
+
+////////////        // ================================
+////////////        // 新しい方向を優先して選択する部分
+////////////        // ================================
+////////////        List<Vector3> openDirs = new List<Vector3>();
+////////////        if (!frontHit) openDirs.Add(moveDir);
+////////////        if (!leftHit) openDirs.Add(leftDir);
+////////////        if (!rightHit) openDirs.Add(rightDir);
+
+////////////        // 「未探索（Node未設置）」方向を抽出
+////////////        List<Vector3> unexploredDirs = new List<Vector3>();
+////////////        foreach (var dir in openDirs)
+////////////        {
+////////////            Vector3 nextPos = SnapToGrid(transform.position + dir * cellSize);
+////////////            Vector2Int nextCell = WorldToCell(nextPos);
+////////////            if (!MapNode.allNodeCells.Contains(nextCell))
+////////////                unexploredDirs.Add(dir);
 ////////////        }
 
-////////////        // 前が空いていればそのまま進行
-////////////        if (!frontHit)
+////////////        Vector3 chosenDir = moveDir;
+
+////////////        if (unexploredDirs.Count > 0)
 ////////////        {
-////////////            targetPos = transform.position + moveDir * cellSize;
-////////////            isMoving = true;
+////////////            // 未探索方向があればその中からランダム
+////////////            chosenDir = unexploredDirs[Random.Range(0, unexploredDirs.Count)];
+////////////        }
+////////////        else if (openDirs.Count > 0)
+////////////        {
+////////////            // すべて探索済みなら、既知方向からランダム
+////////////            chosenDir = openDirs[Random.Range(0, openDirs.Count)];
 ////////////        }
 ////////////        else
 ////////////        {
-////////////            // 前が壁なら左右方向へランダム転換
-////////////            var open = new List<Vector3>(2);
-////////////            if (!leftHit) open.Add(leftDir);
-////////////            if (!rightHit) open.Add(rightDir);
-
-////////////            if (open.Count > 0)
-////////////            {
-////////////                moveDir = open[Random.Range(0, open.Count)];
-////////////                targetPos = transform.position + moveDir * cellSize;
-////////////                isMoving = true;
-////////////            }
+////////////            // 完全に行き止まり
+////////////            if (debugLog)
+////////////                Debug.Log($"[Player:{name}] Dead end @ {WorldToCell(transform.position)}");
+////////////            return;
 ////////////        }
+
+////////////        // ================================
+////////////        // 移動を開始
+////////////        // ================================
+////////////        moveDir = chosenDir;
+////////////        targetPos = SnapToGrid(transform.position + chosenDir * cellSize);
+////////////        isMoving = true;
+
+////////////        if (debugLog)
+////////////            Debug.Log($"[Player:{name}] Move dir={chosenDir} -> {WorldToCell(targetPos)}");
 ////////////    }
 
+
+////////////    // =====================================================
+////////////    // 滑らかにターゲットまで移動
+////////////    // =====================================================
 ////////////    void MoveToTarget()
 ////////////    {
 ////////////        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+
 ////////////        if (Vector3.Distance(transform.position, targetPos) < 0.001f)
 ////////////        {
 ////////////            transform.position = targetPos;
@@ -2199,27 +2346,30 @@ public class Player : MonoBehaviour
 ////////////    }
 
 ////////////    // =====================================================
-////////////    // Node設置（共有チェック＋スナップ＋即登録）
+////////////    // Node設置（重複防止＋スナップ＋共有登録）
 ////////////    // =====================================================
 ////////////    void TryPlaceNode(Vector3 pos)
 ////////////    {
-////////////        // 1 スナップ（浮動小数誤差防止）
-////////////        Vector2Int cell = WorldToCell(pos);
+////////////        // 1. スナップしてセル座標を取得
+////////////        Vector2Int cell = WorldToCell(SnapToGrid(pos));
 ////////////        Vector3 placePos = CellToWorld(cell);
 
-////////////        // 2 すでに共有リストに存在するか確認
+////////////        // 2. すでに設置済みならスキップ
 ////////////        if (MapNode.allNodeCells.Contains(cell))
 ////////////            return;
 
-////////////        // 3 即座に共有リストに登録（他プレイヤーも認識可能）
+////////////        // 3. 新規登録
 ////////////        MapNode.allNodeCells.Add(cell);
 
-////////////        // 4 Nodeを生成
+////////////        // 4. Nodeを生成
 ////////////        Instantiate(nodePrefab, placePos, Quaternion.identity);
+
+////////////        if (debugLog)
+////////////            Debug.Log($"[Player:{name}] Node placed @ {cell}");
 ////////////    }
 
 ////////////    // =====================================================
-////////////    // ワールド→セル変換
+////////////    // グリッド補助関数群
 ////////////    // =====================================================
 ////////////    Vector2Int WorldToCell(Vector3 worldPos)
 ////////////    {
@@ -2229,11 +2379,145 @@ public class Player : MonoBehaviour
 ////////////        return new Vector2Int(cx, cz);
 ////////////    }
 
-////////////    // =====================================================
-////////////    // セル→ワールド変換
-////////////    // =====================================================
 ////////////    Vector3 CellToWorld(Vector2Int cell)
 ////////////    {
 ////////////        return new Vector3(cell.x * cellSize, 0f, cell.y * cellSize) + gridOrigin;
 ////////////    }
+
+////////////    Vector3 SnapToGrid(Vector3 worldPos)
+////////////    {
+////////////        int x = Mathf.RoundToInt((worldPos.x - gridOrigin.x) / cellSize);
+////////////        int z = Mathf.RoundToInt((worldPos.z - gridOrigin.z) / cellSize);
+////////////        return new Vector3(x * cellSize, 0f, z * cellSize) + gridOrigin;
+////////////    }
 ////////////}
+
+//////////////using UnityEngine;
+//////////////using System.Collections.Generic;
+
+//////////////public class Player : MonoBehaviour
+//////////////{
+//////////////    [Header("移動設定")]
+//////////////    public float moveSpeed;
+//////////////    public float cellSize = 1f;
+//////////////    public float rayDistance = 1f;
+//////////////    public LayerMask wallLayer;
+
+//////////////    [Header("初期設定")]
+//////////////    public Vector3 startDirection = Vector3.forward;
+
+//////////////    [Header("Node")]
+//////////////    public GameObject nodePrefab;
+//////////////    public Vector3 gridOrigin = Vector3.zero; // グリッド原点（必要なら調整）
+
+//////////////    private Vector3 moveDir;
+//////////////    private bool isMoving = false;
+//////////////    private Vector3 targetPos;
+
+//////////////    void Start()
+//////////////    {
+//////////////        moveDir = startDirection.normalized;
+//////////////        targetPos = transform.position;
+//////////////    }
+
+//////////////    void Update()
+//////////////    {
+//////////////        if (!isMoving) TryMove();
+//////////////        else MoveToTarget();
+//////////////    }
+
+//////////////    void TryMove()
+//////////////    {
+//////////////        Vector3 leftDir = Quaternion.Euler(0, -90, 0) * moveDir;
+//////////////        Vector3 rightDir = Quaternion.Euler(0, 90, 0) * moveDir;
+
+//////////////        bool frontHit = Physics.Raycast(transform.position, moveDir, rayDistance, wallLayer);
+//////////////        bool leftHit = Physics.Raycast(transform.position, leftDir, rayDistance, wallLayer);
+//////////////        bool rightHit = Physics.Raycast(transform.position, rightDir, rayDistance, wallLayer);
+
+//////////////        Debug.DrawRay(transform.position, moveDir * rayDistance, Color.red);
+//////////////        Debug.DrawRay(transform.position, leftDir * rayDistance, Color.blue);
+//////////////        Debug.DrawRay(transform.position, rightDir * rayDistance, Color.green);
+
+//////////////        int openCount = 0;
+//////////////        if (!frontHit) openCount++;
+//////////////        if (!leftHit) openCount++;
+//////////////        if (!rightHit) openCount++;
+
+//////////////        // 曲がり角 or 前が壁ならNode設置
+//////////////        if (frontHit || openCount >= 2)
+//////////////        {
+//////////////            TryPlaceNode(transform.position);
+//////////////        }
+
+//////////////        // 前が空いていればそのまま進行
+//////////////        if (!frontHit)
+//////////////        {
+//////////////            targetPos = transform.position + moveDir * cellSize;
+//////////////            isMoving = true;
+//////////////        }
+//////////////        else
+//////////////        {
+//////////////            // 前が壁なら左右方向へランダム転換
+//////////////            var open = new List<Vector3>(2);
+//////////////            if (!leftHit) open.Add(leftDir);
+//////////////            if (!rightHit) open.Add(rightDir);
+
+//////////////            if (open.Count > 0)
+//////////////            {
+//////////////                moveDir = open[Random.Range(0, open.Count)];
+//////////////                targetPos = transform.position + moveDir * cellSize;
+//////////////                isMoving = true;
+//////////////            }
+//////////////        }
+//////////////    }
+
+//////////////    void MoveToTarget()
+//////////////    {
+//////////////        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+//////////////        if (Vector3.Distance(transform.position, targetPos) < 0.001f)
+//////////////        {
+//////////////            transform.position = targetPos;
+//////////////            isMoving = false;
+//////////////        }
+//////////////    }
+
+//////////////    // =====================================================
+//////////////    // Node設置（共有チェック＋スナップ＋即登録）
+//////////////    // =====================================================
+//////////////    void TryPlaceNode(Vector3 pos)
+//////////////    {
+//////////////        // 1 スナップ（浮動小数誤差防止）
+//////////////        Vector2Int cell = WorldToCell(pos);
+//////////////        Vector3 placePos = CellToWorld(cell);
+
+//////////////        // 2 すでに共有リストに存在するか確認
+//////////////        if (MapNode.allNodeCells.Contains(cell))
+//////////////            return;
+
+//////////////        // 3 即座に共有リストに登録（他プレイヤーも認識可能）
+//////////////        MapNode.allNodeCells.Add(cell);
+
+//////////////        // 4 Nodeを生成
+//////////////        Instantiate(nodePrefab, placePos, Quaternion.identity);
+//////////////    }
+
+//////////////    // =====================================================
+//////////////    // ワールド→セル変換
+//////////////    // =====================================================
+//////////////    Vector2Int WorldToCell(Vector3 worldPos)
+//////////////    {
+//////////////        Vector3 p = worldPos - gridOrigin;
+//////////////        int cx = Mathf.RoundToInt(p.x / cellSize);
+//////////////        int cz = Mathf.RoundToInt(p.z / cellSize);
+//////////////        return new Vector2Int(cx, cz);
+//////////////    }
+
+//////////////    // =====================================================
+//////////////    // セル→ワールド変換
+//////////////    // =====================================================
+//////////////    Vector3 CellToWorld(Vector2Int cell)
+//////////////    {
+//////////////        return new Vector3(cell.x * cellSize, 0f, cell.y * cellSize) + gridOrigin;
+//////////////    }
+//////////////}
