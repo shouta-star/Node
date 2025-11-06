@@ -127,12 +127,16 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 64
+  nodeLayer:
+    serializedVersion: 2
+    m_Bits: 128
   startDirection: {x: 0, y: 0, z: 1}
   gridOrigin: {x: 0, y: 0, z: 0}
   goalNode: {fileID: 286847407677603923, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
   nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
-  discoverChance: 0.6
+  exploreBias: 0.6
+  linkRayMaxSteps: 100
   debugLog: 0
+  debugRay: 1
   bodyRenderer: {fileID: 3303906976382372999}
-  discoverMaterial: {fileID: 2100000, guid: acf7ff37ebb90214cb86cbf4c62185b3, type: 2}
-  optimizeMaterial: {fileID: 2100000, guid: 4a9d26b300742fd4a9b8471ebea733bc, type: 2}
+  exploreMaterial: {fileID: 2100000, guid: acf7ff37ebb90214cb86cbf4c62185b3, type: 2}
