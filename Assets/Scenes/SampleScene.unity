@@ -5454,7 +5454,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 7722438679952261210, guid: 6e123b8a46865cd44b7c3be018715904, type: 3}
   spawnPoint: {fileID: 1757142805}
-  spawnInterval: 3
+  spawnInterval: 10
   spawnCount: 1
   loop: 1
 --- !u!1001 &1794134151
