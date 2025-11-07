@@ -2517,7 +2517,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3154789635546984831, guid: 6e123b8a46865cd44b7c3be018715904, type: 3}
       propertyPath: debugLog
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7722438679952261210, guid: 6e123b8a46865cd44b7c3be018715904, type: 3}
       propertyPath: m_Name
