@@ -136,6 +136,11 @@ MonoBehaviour:
   nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
   exploreBias: 0.6
   linkRayMaxSteps: 100
+  goalTransform: {fileID: 1343801100588082762, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
+  goalWorldPos: {x: 0, y: 0, z: 0}
+  goalReachThreshold: 0.15
+  destroyOnGoal: 1
+  destroyDelay: 0
   debugLog: 0
   debugRay: 1
   bodyRenderer: {fileID: 3303906976382372999}

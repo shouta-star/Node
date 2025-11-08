@@ -229,13 +229,24 @@ public class Player : MonoBehaviour
             MapNode node = MapNode.FindByCell(cell);
             currentNode = node;
 
-            // ゴールに到達したら距離学習を実行
-            if (!reachedGoal && goalNode != null && currentNode == goalNode)
+            // ゴール判定（goalNodeの座標に到達したらDestroy）
+            if (!reachedGoal && goalNode != null)
             {
-                reachedGoal = true;
-                Debug.Log($"[Player:{name}] Reached GOAL → start distance learning");
-                RecalculateGoalDistance();
+                // Player基準のグリッド変換を使用して統一
+                Vector2Int playerCell = WorldToCell(SnapToGrid(transform.position));
+                Vector2Int goalCell = WorldToCell(SnapToGrid(goalNode.transform.position));
+
+                if (playerCell == goalCell)
+                {
+                    reachedGoal = true;
+                    Debug.Log($"[Player:{name}] Reached GOAL(cell={goalCell}) → start distance learning & destroy");
+                    RecalculateGoalDistance();
+
+                    Destroy(gameObject);
+                    return;
+                }
             }
+
         }
     }
 
@@ -258,11 +269,11 @@ public class Player : MonoBehaviour
         LayerMask mask = wallLayer | nodeLayer;        // 衝突対象は壁＋Node
 
         // --- デバッグ出力 ---
-        Debug.Log(
-            $"[NODE-RAY][LinkBack] node={node.name} pos={nodePos} " +
-            $"origin={origin} dir(back)={backDir} " +
-            $"cellSize={cellSize:F3} maxSteps={linkRayMaxSteps}"
-        );
+        //Debug.Log(
+        //    $"[NODE-RAY][LinkBack] node={node.name} pos={nodePos} " +
+        //    $"origin={origin} dir(back)={backDir} " +
+        //    $"cellSize={cellSize:F3} maxSteps={linkRayMaxSteps}"
+        //);
 
         // --- レイを段階的に伸ばしてNodeを探索 ---
         for (int step = 1; step <= linkRayMaxSteps; step++)
