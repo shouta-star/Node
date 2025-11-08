@@ -132,15 +132,10 @@ MonoBehaviour:
     m_Bits: 128
   startDirection: {x: 0, y: 0, z: 1}
   gridOrigin: {x: 0, y: 0, z: 0}
-  goalNode: {fileID: 286847407677603923, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
+  goalNode: {fileID: 0}
   nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
   exploreBias: 0.6
   linkRayMaxSteps: 100
-  goalTransform: {fileID: 1343801100588082762, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
-  goalWorldPos: {x: 0, y: 0, z: 0}
-  goalReachThreshold: 0.15
-  destroyOnGoal: 1
-  destroyDelay: 0
   debugLog: 0
   debugRay: 1
   bodyRenderer: {fileID: 3303906976382372999}

@@ -17,7 +17,8 @@ public class MapNode : MonoBehaviour
     [Header("学習パラメータ")]
     public float value = 0f;
     public int visits = 0;
-    public int DistanceFromGoal = int.MaxValue;
+    public int DistanceFromGoal = 0;
+    //public int DistanceFromGoal = int.MaxValue;
 
     [Range(0f, 1f)] public float alpha = 0.3f;  // 学習率
     [Range(0f, 1f)] public float gamma = 0.9f;  // 割引率
