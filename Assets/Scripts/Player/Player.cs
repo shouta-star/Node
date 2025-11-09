@@ -145,58 +145,6 @@ public class Player : MonoBehaviour
     // ======================================================
     // ■ TryExploreMove() : Node設置＋次の進行方向を決定
     // ======================================================
-    //void TryExploreMove()
-    //{
-    //    // 現在地にNodeを設置 or 再取得（内部でLinkBackWithRayも実行）
-    //    currentNode = TryPlaceNode(transform.position);
-    //    if (debugLog) Debug.Log("[Player] Node placed → decide next direction");
-
-    //    // 進める方向候補を調べる
-    //    var dirs = ScanAroundDirections();
-    //    if (dirs.Count == 0)
-    //    {
-    //        if (debugLog) Debug.Log("[Player] No available directions");
-    //        return;
-    //    }
-
-    //    // --- ① 終端Nodeなら未知方向を優先 ---
-    //    bool isDeadEnd = (currentNode == null || currentNode.links.Count <= 1);
-    //    if (isDeadEnd)
-    //    {
-    //        var unknownDirs = dirs.Where(d => d.node == null || !d.hasLink).ToList();
-    //        if (unknownDirs.Count > 0)
-    //        {
-    //            var chosen = unknownDirs[Random.Range(0, unknownDirs.Count)];
-    //            moveDir = chosen.dir;
-    //            MoveForward();
-    //            if (debugLog) Debug.Log("[Player] Dead-end → move unexplored");
-    //            return;
-    //        }
-    //    }
-
-    //    // --- ② 通常時は探索傾向（exploreBias）に従って選択 ---
-    //    bool chooseUnexplored = Random.value < exploreBias;
-    //    var unexploredDirs = dirs.Where(d => d.node == null || !d.hasLink).ToList();
-    //    var knownDirs = dirs.Where(d => d.node != null && d.hasLink).ToList();
-
-    //    (Vector3 dir, MapNode node, bool hasLink)? chosenDir = null;
-
-    //    if (chooseUnexplored && unexploredDirs.Count > 0)
-    //        chosenDir = unexploredDirs[Random.Range(0, unexploredDirs.Count)];
-    //    else if (knownDirs.Count > 0)
-    //        chosenDir = knownDirs[Random.Range(0, knownDirs.Count)];
-    //    else if (unexploredDirs.Count > 0)
-    //        chosenDir = unexploredDirs[Random.Range(0, unexploredDirs.Count)];
-
-    //    // --- ③ 実際に方向を確定して前進 ---
-    //    if (chosenDir.HasValue)
-    //    {
-    //        moveDir = chosenDir.Value.dir;
-    //        MoveForward();
-    //        if (debugLog)
-    //            Debug.Log($"[Player] Move {(chooseUnexplored ? "Unexplored" : "Known")} → {chosenDir.Value.dir}");
-    //    }
-    //}
     void TryExploreMove()
     {
         // 現在地にNodeを設置 or 再取得
@@ -211,109 +159,42 @@ public class Player : MonoBehaviour
             return;
         }
 
-        //// =====================================================
-        //// 【③ 最短経路フェーズ】GoalNodeに一度でも到達した後
-        //// =====================================================
-        //if (reachedGoal)
-        //{
-        //    if (bodyRenderer != null)
-        //        bodyRenderer.material.color = Color.red;
-
-        //    // 既知ノードのみを対象に、Goalまでの距離が小さい方向を選ぶ
-        //    var knownDirs = dirs.Where(d => d.node != null).ToList();
-        //    if (knownDirs.Count > 0)
-        //    {
-        //        // DistanceFromGoalが最小のノード方向を選ぶ
-        //        var best = knownDirs.OrderBy(d => d.node.DistanceFromGoal).First();
-        //        moveDir = best.dir;
-        //        MoveForward();
-
-        //        if (debugLog)
-        //            Debug.Log($"[Player] Follow shortest path → {best.dir} (Dist={best.node.DistanceFromGoal})");
-
-        //        return;
-        //    }
-        //    else
-        //    {
-        //        // 近くにNodeが無い場合は通常探索へフォールバック
-        //        if (debugLog) Debug.Log("[Player] No linked node found → fallback to explore mode");
-        //    }
-        //}
-        //// =====================================================
-        //// 【③ 最短経路フェーズ】GoalNodeに一度でも到達した後（全体共有）
-        //// =====================================================
-        //if (hasLearnedGoal)
-        //{
-        //    // ✅ Materialを赤に変更
-        //    if (bodyRenderer != null)
-        //        bodyRenderer.material.color = Color.red;
-
-        //    // 既知ノードのみを対象に、Goalまでの距離が小さい方向を選ぶ
-        //    var knownDirs = dirs.Where(d => d.node != null).ToList();
-        //    if (knownDirs.Count > 0)
-        //    {
-        //        var best = knownDirs.OrderBy(d => d.node.DistanceFromGoal).First();
-        //        moveDir = best.dir;
-        //        MoveForward();
-
-        //        if (debugLog)
-        //            Debug.Log($"[Player] Follow shortest path → {best.dir} (Dist={best.node.DistanceFromGoal})");
-
-        //        return;
-        //    }
-        //}
-        //// =====================================================
-        //// 【③ 最短経路フェーズ】GoalNodeに一度でも到達した後（全体共有）
-        //// =====================================================
-        //if (hasLearnedGoal && currentNode != null)
-        //{
-        //    // ✅ Materialを赤に変更
-        //    if (bodyRenderer != null)
-        //        bodyRenderer.material.color = Color.red;
-
-        //    var knownDirs = dirs.Where(d => d.node != null).ToList();
-        //    if (knownDirs.Count > 0)
-        //    {
-        //        int currentDist = currentNode.DistanceFromGoal;
-
-        //        // ✅ 自分より小さい距離を持つノードだけに絞る
-        //        var closerNodes = knownDirs
-        //            .Where(d => d.node.DistanceFromGoal < currentDist)
-        //            .ToList();
-
-        //        if (closerNodes.Count > 0)
-        //        {
-        //            // その中で最も距離が小さい方向を選ぶ
-        //            var best = closerNodes.OrderBy(d => d.node.DistanceFromGoal).First();
-        //            moveDir = best.dir;
-        //            MoveForward();
-
-        //            if (debugLog)
-        //                Debug.Log($"[Player] Move closer → {best.dir} (Now {currentDist} → Next {best.node.DistanceFromGoal})");
-        //            return;
-        //        }
-        //        else
-        //        {
-        //            // ✅ すべて同距離または遠ざかる場合 → 終点または袋小路
-        //            if (debugLog)
-        //                Debug.Log($"[Player] No closer node (current {currentDist}) → stay or stop");
-        //            return;
-        //        }
-        //    }
-        //}
         // =====================================================
         // 【③ 最短経路フェーズ】GoalNodeに一度でも到達した後（全体共有）
         // =====================================================
+        //if (hasLearnedGoal && currentNode != null)
+        //{
+        //    // すでに別の最短経路コルーチンが動作中ならスキップ
+        //    StopAllCoroutines();
+
+        //    // Goalまで自動で距離が減少する方向へ進む
+        //    StartCoroutine(FollowShortestPath());
+        //    return;
+        //}
         if (hasLearnedGoal && currentNode != null)
         {
-            // すでに別の最短経路コルーチンが動作中ならスキップ
-            StopAllCoroutines();
+            // 50%の確率で最短経路モードへ
+            //if (Random.value < 0.1f)
+            {
+                // すでに別の最短経路コルーチンが動作中ならスキップ
+                StopAllCoroutines();
 
-            // Goalまで自動で距離が減少する方向へ進む
-            StartCoroutine(FollowShortestPath());
-            return;
+                // Goalまで自動で距離が減少する方向へ進む
+                StartCoroutine(FollowShortestPath());
+
+                if (debugLog)
+                    Debug.Log("[Player] Switch to shortest-path mode");
+
+                return;
+            }
+            //else
+            //{
+            //    // 残り半分は通常探索モードのまま動作
+            //    if (debugLog)
+            //        Debug.Log("[Player] Continue explore mode (did not switch)");
+            //    // ※returnしないので、この後の探索ロジックが実行される
+            //}
         }
-
 
         // =====================================================
         // 【① 探索フェーズ】GoalNode未発見時
@@ -413,8 +294,6 @@ public class Player : MonoBehaviour
         Debug.Log("[Player] Reached GoalNode via shortest path!");
     }
 
-
-
     // ======================================================
     // ■ ScanAroundDirections() : 周囲4方向のNode状況を取得
     // ======================================================
@@ -506,11 +385,365 @@ public class Player : MonoBehaviour
                     Destroy(gameObject);
                     return;
                 }
+                //if (playerCell == goalCell)
+                //{
+                //    reachedGoal = true;
+                //    Debug.Log($"[Player:{name}] Reached GOAL(cell={goalCell}) → link by ray & destroy");
+
+                //    // 通常の隣接ノード接続
+                //    if (currentNode != null)
+                //        LinkBackWithRay(currentNode);
+
+                //    // ゴール距離学習
+                //    RecalculateGoalDistance();
+
+                //    // 全プレイヤー共通フラグを立てる
+                //    hasLearnedGoal = true;
+                //    Debug.Log("[GLOBAL] Goal reached → all players now know the shortest path.");
+
+                //    // ✅ 50%の確率でこの到達個体だけ最短経路モードを発動
+                //    if (Random.value < 0.5f)
+                //    {
+                //        Debug.Log("[Player] 50% chance succeeded → Start FollowShortestPath() before destroy");
+                //        StopAllCoroutines();
+                //        StartCoroutine(FollowShortestPath());
+
+                //        // Destroyを遅らせてコルーチンを動かす（1秒後に破棄など）
+                //        Destroy(gameObject, 1.0f);
+                //    }
+                //    else
+                //    {
+                //        Debug.Log("[Player] 50% chance failed → no auto path follow");
+                //        Destroy(gameObject);
+                //    }
+
+                //    return;
+                //}
+
 
             }
         }
     }
+    //using UnityEngine;
+    //using System.Collections.Generic;
+    //using System.Linq;
+    //using System.Collections;
 
+    //public class Player : MonoBehaviour
+    //{
+    //    // ======================================================
+    //    // ■ フィールド宣言
+    //    // ======================================================
+
+    //    [Header("移動設定")]
+    //    public float moveSpeed = 3f;
+    //    public float cellSize = 1f;
+    //    public float rayDistance = 1f;
+    //    public LayerMask wallLayer;
+    //    public LayerMask nodeLayer;
+
+    //    [Header("初期設定")]
+    //    public Vector3 startDirection = Vector3.forward;
+    //    public Vector3 gridOrigin = Vector3.zero;
+    //    public MapNode goalNode;
+    //    public GameObject nodePrefab;
+
+    //    [Header("行動傾向")]
+    //    [Range(0f, 1f)] public float exploreBias = 0.6f;
+
+    //    [Header("リンク探索")]
+    //    public int linkRayMaxSteps = 100;
+
+    //    [Header("デバッグ")]
+    //    public bool debugLog = true;
+    //    public bool debugRay = true;
+    //    [SerializeField] private Renderer bodyRenderer;
+    //    [SerializeField] private Material exploreMaterial;
+
+    //    public static bool hasLearnedGoal = false; // ★全プレイヤー共通（Goal学習完了フラグ）
+
+    //    // 内部状態
+    //    private Vector3 moveDir;
+    //    private bool isMoving = false;
+    //    private Vector3 targetPos;
+    //    private MapNode currentNode;
+    //    private bool reachedGoal = false;
+
+    //    // ======================================================
+    //    // ■ Start() : 初期化処理
+    //    // ======================================================
+    //    void Start()
+    //    {
+    //        moveDir = startDirection.normalized;
+    //        targetPos = transform.position = SnapToGrid(transform.position);
+    //        ApplyVisual();
+    //        currentNode = TryPlaceNode(transform.position);
+
+    //        if (goalNode == null)
+    //        {
+    //            GameObject goalObj = GameObject.Find("Goal");
+    //            if (goalObj != null)
+    //            {
+    //                goalNode = goalObj.GetComponent<MapNode>();
+    //                Debug.Log($"[Player] GoalNode assigned from Scene object: {goalNode.name}");
+    //            }
+    //            else
+    //            {
+    //                Debug.LogWarning("[Player] Goal object not found in scene!");
+    //            }
+    //        }
+
+    //        // ======================================================
+    //        // ★修正①：Goal発見済みなら生成時に一度だけモード判定
+    //        // ======================================================
+    //        if (hasLearnedGoal)
+    //        {
+    //            if (Random.value < 0.5f)
+    //            {
+    //                Debug.Log($"[Player:{name}] Spawned as shortest-path follower");
+    //                StopAllCoroutines();
+    //                StartCoroutine(FollowShortestPath());
+    //                return;
+    //            }
+    //            else
+    //            {
+    //                Debug.Log($"[Player:{name}] Spawned as explorer (continue exploring)");
+    //            }
+    //        }
+
+    //        if (debugLog) Debug.Log($"[Player:{name}] Start @ {currentNode}");
+    //    }
+
+    //    // ======================================================
+    //    // ■ Update() : 毎フレーム呼ばれるメインループ
+    //    // ======================================================
+    //    void Update()
+    //    {
+    //        if (!isMoving)
+    //        {
+    //            if (CanPlaceNodeHere())
+    //                TryExploreMove();
+    //            else
+    //                MoveForward();
+    //        }
+    //        else
+    //        {
+    //            MoveToTarget();
+    //        }
+    //    }
+
+    //    // ======================================================
+    //    // ■ ApplyVisual()
+    //    // ======================================================
+    //    private void ApplyVisual()
+    //    {
+    //        if (bodyRenderer == null) return;
+    //        bodyRenderer.material = exploreMaterial
+    //            ? exploreMaterial
+    //            : new Material(Shader.Find("Standard")) { color = Color.cyan };
+    //    }
+
+    //    // ======================================================
+    //    // ■ MoveForward()
+    //    // ======================================================
+    //    void MoveForward()
+    //    {
+    //        Vector3 nextPos = SnapToGrid(transform.position + moveDir * cellSize);
+    //        targetPos = nextPos;
+    //        isMoving = true;
+    //    }
+
+    //    // ======================================================
+    //    // ■ CanPlaceNodeHere()
+    //    // ======================================================
+    //    bool CanPlaceNodeHere()
+    //    {
+    //        Vector3 leftDir = Quaternion.Euler(0, -90, 0) * moveDir;
+    //        Vector3 rightDir = Quaternion.Euler(0, 90, 0) * moveDir;
+
+    //        bool frontHit = Physics.Raycast(transform.position + Vector3.up * 0.1f, moveDir, rayDistance, wallLayer);
+    //        bool leftHit = Physics.Raycast(transform.position + Vector3.up * 0.1f, leftDir, rayDistance, wallLayer);
+    //        bool rightHit = Physics.Raycast(transform.position + Vector3.up * 0.1f, rightDir, rayDistance, wallLayer);
+
+    //        int openCount = 0;
+    //        if (!frontHit) openCount++;
+    //        if (!leftHit) openCount++;
+    //        if (!rightHit) openCount++;
+
+    //        return (frontHit || openCount >= 2);
+    //    }
+
+    //    // ======================================================
+    //    // ■ TryExploreMove()
+    //    // ======================================================
+    //    void TryExploreMove()
+    //    {
+    //        currentNode = TryPlaceNode(transform.position);
+    //        if (debugLog) Debug.Log("[Player] Node placed → decide next direction");
+
+    //        // ======================================================
+    //        // ★修正②：ここで hasLearnedGoal 判定は削除（以前はここで呼ばれていた）
+    //        // ======================================================
+
+    //        var dirs = ScanAroundDirections();
+    //        if (dirs.Count == 0)
+    //        {
+    //            if (debugLog) Debug.Log("[Player] No available directions");
+    //            return;
+    //        }
+
+    //        bool isDeadEnd = (currentNode == null || currentNode.links.Count <= 1);
+    //        bool chooseUnexplored = Random.value < exploreBias;
+
+    //        var unexploredDirs = dirs.Where(d => d.node == null || !d.hasLink).ToList();
+    //        var knownDirs2 = dirs.Where(d => d.node != null && d.hasLink).ToList();
+
+    //        (Vector3 dir, MapNode node, bool hasLink)? chosenDir = null;
+
+    //        if (isDeadEnd && unexploredDirs.Count > 0)
+    //        {
+    //            chosenDir = unexploredDirs[Random.Range(0, unexploredDirs.Count)];
+    //        }
+    //        else
+    //        {
+    //            if (chooseUnexplored && unexploredDirs.Count > 0)
+    //                chosenDir = unexploredDirs[Random.Range(0, unexploredDirs.Count)];
+    //            else if (knownDirs2.Count > 0)
+    //                chosenDir = knownDirs2[Random.Range(0, knownDirs2.Count)];
+    //            else if (unexploredDirs.Count > 0)
+    //                chosenDir = unexploredDirs[Random.Range(0, unexploredDirs.Count)];
+    //        }
+
+    //        if (chosenDir.HasValue)
+    //        {
+    //            moveDir = chosenDir.Value.dir;
+    //            MoveForward();
+
+    //            if (debugLog)
+    //                Debug.Log($"[Player] Move {(chooseUnexplored ? "Unexplored" : "Known")} → {chosenDir.Value.dir}");
+    //        }
+    //    }
+
+    //    // ======================================================
+    //    // ■ ScanAroundDirections()
+    //    // ======================================================
+    //    List<(Vector3 dir, MapNode node, bool hasLink)> ScanAroundDirections()
+    //    {
+    //        List<(Vector3, MapNode, bool)> found = new();
+    //        Vector3[] dirs = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+
+    //        foreach (var dir in dirs)
+    //        {
+    //            if (Physics.Raycast(transform.position + Vector3.up * 0.1f, dir, rayDistance, wallLayer))
+    //                continue;
+
+    //            Vector3 nextPos = SnapToGrid(transform.position + dir * cellSize);
+    //            Vector2Int nextCell = WorldToCell(nextPos);
+    //            MapNode nextNode = MapNode.FindByCell(nextCell);
+    //            bool linked = (currentNode != null && nextNode != null && currentNode.links.Contains(nextNode));
+    //            found.Add((dir, nextNode, linked));
+    //        }
+    //        return found;
+    //    }
+
+    //    // ======================================================
+    //    // ■ FollowShortestPath()
+    //    // ======================================================
+    //    private IEnumerator FollowShortestPath()
+    //    {
+    //        if (currentNode == null)
+    //        {
+    //            Debug.LogWarning("[Player] Cannot follow shortest path: currentNode is null");
+    //            yield break;
+    //        }
+
+    //        if (bodyRenderer != null) bodyRenderer.material.color = Color.red;
+    //        Debug.Log("[Player] Start following shortest path");
+
+    //        while (currentNode != null && currentNode.DistanceFromGoal > 0)
+    //        {
+    //            int currentDist = currentNode.DistanceFromGoal;
+    //            var closer = currentNode.links
+    //                .Where(n => n != null && n.DistanceFromGoal < currentDist)
+    //                .OrderBy(n => n.DistanceFromGoal)
+    //                .FirstOrDefault();
+
+    //            if (closer == null)
+    //            {
+    //                Debug.Log($"[Player] No closer linked node from {currentDist} → stop");
+    //                yield break;
+    //            }
+
+    //            Vector3 dir = (closer.transform.position - transform.position);
+    //            dir.y = 0f;
+    //            if (Mathf.Abs(dir.x) >= Mathf.Abs(dir.z))
+    //                dir = new Vector3(Mathf.Sign(dir.x), 0, 0);
+    //            else
+    //                dir = new Vector3(0, 0, Mathf.Sign(dir.z));
+
+    //            moveDir = dir.normalized;
+    //            MoveForward();
+
+    //            while (isMoving) yield return null;
+
+    //            Vector2Int cell = WorldToCell(SnapToGrid(transform.position));
+    //            currentNode = MapNode.FindByCell(cell);
+    //            if (currentNode == null)
+    //            {
+    //                Debug.LogWarning("[Player] Lost current node while following path");
+    //                yield break;
+    //            }
+
+    //            Debug.Log($"[Player] Step: {currentDist} → {currentNode.DistanceFromGoal}");
+    //        }
+
+    //        Debug.Log("[Player] Reached GoalNode via shortest path!");
+    //    }
+
+    //    // ======================================================
+    //    // ■ MoveToTarget()
+    //    // ======================================================
+    //    void MoveToTarget()
+    //    {
+    //        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+    //        if (Vector3.Distance(transform.position, targetPos) < 0.001f)
+    //        {
+    //            transform.position = targetPos;
+    //            isMoving = false;
+
+    //            if (debugLog)
+    //                Debug.Log($"[MOVE][Arrived] pos={transform.position}");
+
+    //            Vector2Int cell = WorldToCell(SnapToGrid(transform.position));
+    //            MapNode node = MapNode.FindByCell(cell);
+    //            currentNode = node;
+
+    //            // ======================================================
+    //            // ★修正③：Goal到達処理（staticフラグ更新のみ）
+    //            // ======================================================
+    //            if (!reachedGoal && goalNode != null)
+    //            {
+    //                Vector2Int playerCell = WorldToCell(SnapToGrid(transform.position));
+    //                Vector2Int goalCell = WorldToCell(SnapToGrid(goalNode.transform.position));
+
+    //                if (playerCell == goalCell)
+    //                {
+    //                    reachedGoal = true;
+    //                    Debug.Log($"[Player:{name}] Reached GOAL(cell={goalCell}) → link & destroy");
+
+    //                    if (currentNode != null)
+    //                        LinkBackWithRay(currentNode);
+
+    //                    RecalculateGoalDistance();
+    //                    hasLearnedGoal = true; // ★全プレイヤーへ通知
+    //                    Debug.Log("[GLOBAL] Goal reached → all players now know the shortest path.");
+
+    //                    Destroy(gameObject);
+    //                    return;
+    //                }
+    //            }
+    //        }
+    //    }
     // ======================================================
     // ■ LinkBackWithRay() : Node背面へのレイキャストで接続確認
     // ======================================================
