@@ -11,12 +11,13 @@ public class MapNode : MonoBehaviour
     public Vector2Int cell;
     public List<MapNode> links = new List<MapNode>();
 
+    [Header("Goalからの距離")]
+    // ★修正：int → float に変更（実距離格納用）
+    public float DistanceFromGoal = Mathf.Infinity;
+
     [Header("学習パラメータ")]
     public float value = 0f;
     public int visits = 0;
-
-    // ★修正：int → float に変更（実距離格納用）
-    public float DistanceFromGoal = Mathf.Infinity;
 
     [Range(0f, 1f)] public float alpha = 0.3f;
     [Range(0f, 1f)] public float gamma = 0.9f;
