@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3303906976382372999}
   - component: {fileID: 4362335469872980544}
   - component: {fileID: 3154789635546984831}
+  - component: {fileID: 5839266597705261206}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -116,7 +117,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7722438679952261210}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5d6336b9fc68ed4c96e965702b0377e, type: 3}
   m_Name: 
@@ -140,3 +141,32 @@ MonoBehaviour:
   debugRay: 1
   bodyRenderer: {fileID: 3303906976382372999}
   exploreMaterial: {fileID: 2100000, guid: acf7ff37ebb90214cb86cbf4c62185b3, type: 2}
+--- !u!114 &5839266597705261206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7722438679952261210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04ae01773e0bd0341a093a0b50d7aded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 3
+  cellSize: 1
+  rayDistance: 1
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  nodeLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  startDirection: {x: 0, y: 0, z: 1}
+  gridOrigin: {x: 0, y: 0, z: 0}
+  goalNode: {fileID: 0}
+  nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
+  epsilon: 0.2
+  linkRayMaxSteps: 100
+  debugLog: 1
+  debugRay: 1
