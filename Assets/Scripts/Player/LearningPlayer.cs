@@ -18,7 +18,7 @@ public class LearningPlayer : MonoBehaviour
     public GameObject nodePrefab;
 
     [Header("探索設定")]
-    [Range(0f, 1f)] public float epsilon = 0.2f; // ランダム探索率
+    [Range(0f, 1f)] public float epsilon = 0.2f;
     public int linkRayMaxSteps = 100;
 
     [Header("デバッグ")]
@@ -49,11 +49,11 @@ public class LearningPlayer : MonoBehaviour
                 goalNode = goalObj.GetComponent<MapNode>();
         }
 
-        // ★ 初期Value計算（Goal距離ベース）
         if (goalNode != null && currentNode != null)
             currentNode.UpdateValueByGoal(goalNode);
 
-        if (debugLog) Debug.Log($"[LearningPlayer:{name}] Start @ {currentNode}");
+        if (debugLog)
+            Debug.Log($"[LearningPlayer:{name}] Start @ {currentNode}");
     }
 
     void Update()
@@ -86,49 +86,243 @@ public class LearningPlayer : MonoBehaviour
     }
 
     // ======================================================
-    // ε-greedy探索
-    // ======================================================
+    //void TryExploreMove()
+    //{
+    //    currentNode = TryPlaceNode(transform.position);
+
+    //    var dirs = ScanAroundDirections();
+    //    if (dirs.Count == 0)
+    //    {
+    //        Debug.Log("[EXP] dirs.Count == 0 (進行候補なし)");
+    //        return;
+    //    }
+
+    //    // 直前方向を計算
+    //    Vector3? backDirOpt = null;
+    //    if (prevNode != null && currentNode != null)
+    //    {
+    //        Vector3 fromPrev = (currentNode.transform.position - prevNode.transform.position);
+    //        if (Mathf.Abs(fromPrev.x) > Mathf.Abs(fromPrev.z))
+    //            backDirOpt = (fromPrev.x > 0f) ? Vector3.right : Vector3.left;
+    //        else if (Mathf.Abs(fromPrev.z) > 0f)
+    //            backDirOpt = (fromPrev.z > 0f) ? Vector3.forward : Vector3.back;
+    //    }
+
+    //    string N(MapNode n) => n != null ? $"{n.name}({n.cell.x},{n.cell.y})#{n.GetInstanceID()}" : "null";
+    //    Debug.Log($"[EXP] prev={N(prevNode)} curr={N(currentNode)} backDir={(backDirOpt.HasValue ? backDirOpt.Value.ToString() : "none")}");
+
+    //    foreach (var d in dirs)
+    //    {
+    //        if (d.node != null && goalNode != null)
+    //            d.node.UpdateValueByGoal(goalNode);
+    //    }
+
+    //    var unexplored = dirs.Where(d => d.node == null || !d.hasLink).ToList();
+    //    var known = dirs.Where(d => d.node != null && d.hasLink && d.node != prevNode).ToList();
+
+    //    // ★直前ベクトル方向の除外
+    //    if (backDirOpt.HasValue)
+    //    {
+    //        Vector3 backDir = backDirOpt.Value;
+    //        unexplored = unexplored.Where(d => d.dir != backDir).ToList();
+    //        known = known.Where(d => d.dir != backDir).ToList();
+    //    }
+
+    //    if (debugLog)
+    //    {
+    //        int knownBefore = dirs.Count(d => d.node != null && d.hasLink);
+    //        bool hasPrevObj = dirs.Any(d => d.node == prevNode);
+    //        bool hasBackDir = backDirOpt.HasValue && dirs.Any(d => d.dir == backDirOpt.Value);
+    //        Debug.Log($"[EXP] unexplored={unexplored.Count}, known(before)={knownBefore}, known(filtered)={known.Count}, hasPrevObj={hasPrevObj}, hasBackDir={hasBackDir}");
+    //    }
+
+    //    // ★デッドエンド時フォールバック
+    //    if (known.Count == 0 && unexplored.Count == 0 && backDirOpt.HasValue)
+    //    {
+    //        var back = dirs.FirstOrDefault(d => d.dir == backDirOpt.Value);
+    //        if (back.dir != Vector3.zero)
+    //        {
+    //            known.Add(back);
+    //            Debug.LogWarning($"[EXP] dead-end fallback: allow back to prev via dir={back.dir}");
+    //        }
+    //    }
+
+    //    (Vector3 dir, MapNode node, bool hasLink)? chosen = null;
+
+    //    float r = Random.value;
+    //    bool doExplore = (r < epsilon);
+    //    if (debugLog) Debug.Log($"[EXP] epsilon={epsilon:F3}, rand={r:F3} -> explore={doExplore}");
+
+    //    if (doExplore)
+    //    {
+    //        if (unexplored.Count > 0)
+    //            chosen = unexplored[Random.Range(0, unexplored.Count)];
+    //        else if (known.Count > 0)
+    //            chosen = known[Random.Range(0, known.Count)];
+    //    }
+    //    else
+    //    {
+    //        if (known.Count > 0)
+    //            chosen = known.OrderByDescending(d => d.node.value).First();
+    //        else if (unexplored.Count > 0)
+    //            chosen = unexplored.OrderByDescending(d => (d.node != null ? d.node.value : float.NegativeInfinity)).First();
+    //    }
+
+    //    if (chosen.HasValue)
+    //    {
+    //        string chosenStr = (chosen.Value.node != null)
+    //            ? $"{N(chosen.Value.node)} v={chosen.Value.node.value:F3}"
+    //            : "null";
+    //        if (debugLog)
+    //            Debug.Log($"[EXP] chosen dir={chosen.Value.dir} node={chosenStr} hasLink={chosen.Value.hasLink}");
+
+    //        moveDir = chosen.Value.dir;
+    //        MoveForward();
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("[EXP] chosen is null (移動候補なし)。prev除外/壁で詰んだ可能性。");
+    //    }
+    //}
     void TryExploreMove()
     {
+        // 現在位置にNodeを配置または取得
         currentNode = TryPlaceNode(transform.position);
-        var dirs = ScanAroundDirections();
-        if (dirs.Count == 0) return;
 
-        // 各候補ノードのValueをGoal距離から更新
-        foreach (var d in dirs)
+        string CurrCell(MapNode n) => n != null ? n.cell.ToString() : "null";
+        if (debugLog)
+            Debug.Log($"[EXP] === TryExploreMove Start === current={currentNode?.name ?? "null"}{CurrCell(currentNode)} prev={prevNode?.name ?? "null"}{CurrCell(prevNode)}");
+
+        // --------------------------------------------------
+        // 周囲方向のスキャン
+        // --------------------------------------------------
+        var dirs = ScanAroundDirections();
+        if (dirs.Count == 0)
         {
-            if (d.node != null && goalNode != null)
-                d.node.UpdateValueByGoal(goalNode);
+            Debug.Log("[EXP] dirs.Count == 0 (進行候補なし)");
+            return;
         }
 
+        // --------------------------------------------------
+        // 直前方向を推定（prevNodeがある場合）
+        // --------------------------------------------------
+        Vector3? backDirOpt = null;
+        if (prevNode != null && currentNode != null)
+        {
+            Vector3 fromPrev = (currentNode.transform.position - prevNode.transform.position);
+            if (Mathf.Abs(fromPrev.x) > Mathf.Abs(fromPrev.z))
+                backDirOpt = (fromPrev.x > 0f) ? Vector3.right : Vector3.left;
+            else if (Mathf.Abs(fromPrev.z) > 0f)
+                backDirOpt = (fromPrev.z > 0f) ? Vector3.forward : Vector3.back;
+        }
+
+        // --------------------------------------------------
+        // スキャン結果出力
+        // --------------------------------------------------
+        if (debugLog)
+        {
+            foreach (var d in dirs)
+            {
+                string n = d.node != null ? $"{d.node.name}{CurrCell(d.node)}" : "null";
+                Debug.Log($"[EXP] dir={d.dir} node={n} hasLink={d.hasLink}");
+            }
+        }
+
+        // --------------------------------------------------
+        // 候補を分類・prevNode除外
+        // --------------------------------------------------
         var unexplored = dirs.Where(d => d.node == null || !d.hasLink).ToList();
-        var known = dirs.Where(d => d.node != null && d.hasLink && d.node != prevNode).ToList();
+        var known = dirs.Where(d => d.node != null && d.hasLink && d.node != prevNode).ToList(); // ★ prevNode除外
+
+        // --------------------------------------------------
+        // 戻り方向(backDir)も除外
+        // --------------------------------------------------
+        if (backDirOpt.HasValue)
+        {
+            Vector3 backDir = backDirOpt.Value;
+            unexplored = unexplored.Where(d => d.dir != backDir).ToList();
+            known = known.Where(d => d.dir != backDir).ToList();
+
+            if (debugLog)
+                Debug.Log($"[EXP] backDir={backDir} を除外 (prevNode={prevNode?.name ?? "null"}{CurrCell(prevNode)})");
+        }
+
+        // --------------------------------------------------
+        // 現在の候補数を出力
+        // --------------------------------------------------
+        if (debugLog)
+            Debug.Log($"[EXP] unexplored.Count={unexplored.Count}, known.Count={known.Count} (current={CurrCell(currentNode)} prev={CurrCell(prevNode)})");
+
+        // --------------------------------------------------
+        // 袋小路対策：戻りを一時的に許可
+        // --------------------------------------------------
+        if (known.Count == 0 && unexplored.Count == 0 && backDirOpt.HasValue)
+        {
+            var back = dirs.FirstOrDefault(d => d.dir == backDirOpt.Value);
+            if (back.dir != Vector3.zero)
+            {
+                known.Add(back);
+                Debug.LogWarning($"[EXP] dead-end fallback: allow back to prev via dir={back.dir}");
+            }
+        }
+
+        // --------------------------------------------------
+        // ε-greedy探索方針決定
+        // --------------------------------------------------
+        float r = Random.value;
+        bool doExplore = (r < epsilon);
+        if (debugLog)
+            Debug.Log($"[EXP] epsilon={epsilon:F3}, rand={r:F3} → explore={doExplore}");
 
         (Vector3 dir, MapNode node, bool hasLink)? chosen = null;
 
-        // ε確率でランダム探索
-        if (Random.value < epsilon)
+        if (doExplore)
         {
             if (unexplored.Count > 0)
+            {
                 chosen = unexplored[Random.Range(0, unexplored.Count)];
+                if (debugLog) Debug.Log($"[EXP] [Explore] unexploredから選択 dir={chosen.Value.dir}");
+            }
             else if (known.Count > 0)
+            {
                 chosen = known[Random.Range(0, known.Count)];
+                if (debugLog) Debug.Log($"[EXP] [Explore] knownから代替選択 dir={chosen.Value.dir}");
+            }
         }
         else
         {
-            // Goalに近い（＝Valueが高い）ノードを優先
             if (known.Count > 0)
-                chosen = known.OrderByDescending(d => d.node.value).First();
+            {
+                chosen = known.OrderByDescending(d => d.node?.value ?? -9999f).First();
+                if (debugLog) Debug.Log($"[EXP] [Exploit] known中で最大value選択 dir={chosen.Value.dir}");
+            }
             else if (unexplored.Count > 0)
-                chosen = unexplored.OrderByDescending(d =>
-                    (d.node != null ? d.node.value : 0f)).First();
+            {
+                chosen = unexplored.OrderByDescending(d => d.node?.value ?? -9999f).First();
+                if (debugLog) Debug.Log($"[EXP] [Exploit] unexplored中で最大value選択 dir={chosen.Value.dir}");
+            }
         }
 
+        // --------------------------------------------------
+        // 結果適用
+        // --------------------------------------------------
         if (chosen.HasValue)
         {
+            string chosenStr = (chosen.Value.node != null)
+                ? $"{chosen.Value.node.name}{CurrCell(chosen.Value.node)}(v={chosen.Value.node.value:F3})"
+                : "null";
+
+            Debug.Log($"[EXP] chosen dir={chosen.Value.dir}, node={chosenStr}, hasLink={chosen.Value.hasLink}, current={CurrCell(currentNode)}, prev={CurrCell(prevNode)}");
+
             moveDir = chosen.Value.dir;
             MoveForward();
         }
+        else
+        {
+            Debug.LogWarning("[EXP] chosen is null (移動候補なし) → 停止");
+        }
+
+        Debug.Log("[EXP] === TryExploreMove End ===");
     }
 
     // ======================================================
@@ -146,8 +340,10 @@ public class LearningPlayer : MonoBehaviour
             Vector2Int nextCell = WorldToCell(nextPos);
             MapNode nextNode = MapNode.FindByCell(nextCell);
             bool linked = (currentNode != null && nextNode != null && currentNode.links.Contains(nextNode));
+
             found.Add((dir, nextNode, linked));
         }
+
         return found;
     }
 
@@ -158,9 +354,44 @@ public class LearningPlayer : MonoBehaviour
         isMoving = true;
     }
 
-    // ======================================================
-    // 移動完了後リンク形成とGoal判定
-    // ======================================================
+    //// ======================================================
+    //void MoveToTarget()
+    //{
+    //    transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+    //    if (Vector3.Distance(transform.position, targetPos) < EPS)
+    //    {
+    //        transform.position = targetPos;
+    //        isMoving = false;
+
+    //        Vector2Int cell = WorldToCell(SnapToGrid(transform.position));
+    //        MapNode nextNode = MapNode.FindByCell(cell);
+
+    //        if (currentNode != null && nextNode != null)
+    //        {
+    //            currentNode.AddLink(nextNode);
+    //            LinkBackWithRay(currentNode);
+    //            if (goalNode != null)
+    //                nextNode.UpdateValueByGoal(goalNode);
+    //        }
+
+    //        // prevNode の更新をここで確実に行う
+    //        prevNode = currentNode;
+    //        currentNode = nextNode;
+
+    //        if (!reachedGoal && goalNode != null)
+    //        {
+    //            Vector2Int playerCell = WorldToCell(SnapToGrid(transform.position));
+    //            Vector2Int goalCell = WorldToCell(SnapToGrid(goalNode.transform.position));
+    //            if (playerCell == goalCell)
+    //            {
+    //                reachedGoal = true;
+    //                LinkBackWithRay(currentNode);
+    //                RecalculateGoalDistance();
+    //                Destroy(gameObject);
+    //            }
+    //        }
+    //    }
+    //}
     void MoveToTarget()
     {
         transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
@@ -172,26 +403,29 @@ public class LearningPlayer : MonoBehaviour
             Vector2Int cell = WorldToCell(SnapToGrid(transform.position));
             MapNode nextNode = MapNode.FindByCell(cell);
 
+            // === リンク確立処理 ===
             if (currentNode != null && nextNode != null)
             {
-                // ノード間リンク形成
+                // 双方向リンクを張る
                 currentNode.AddLink(nextNode);
                 LinkBackWithRay(currentNode);
 
-                // Value更新（Goal距離ベース）
+                // 目標ノードへの距離更新
                 if (goalNode != null)
                     nextNode.UpdateValueByGoal(goalNode);
+
+                // ★ここがポイント：リンク確立後にprevNodeを更新
+                prevNode = currentNode;
             }
 
-            prevNode = currentNode;
+            // ★最後にcurrentNodeを切り替える
             currentNode = nextNode;
 
-            // Goal到達チェック
+            // === ゴール判定 ===
             if (!reachedGoal && goalNode != null)
             {
                 Vector2Int playerCell = WorldToCell(SnapToGrid(transform.position));
                 Vector2Int goalCell = WorldToCell(SnapToGrid(goalNode.transform.position));
-
                 if (playerCell == goalCell)
                 {
                     reachedGoal = true;
@@ -204,57 +438,49 @@ public class LearningPlayer : MonoBehaviour
     }
 
     // ======================================================
-    // Goal含むリンク形成処理（Player.csの方式）
-    // ======================================================
     private void LinkBackWithRay(MapNode node)
     {
         if (node == null) return;
 
         Vector3 origin = node.transform.position + Vector3.up * 0.1f;
-        Vector3[] dirs = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+        Vector3 backDir = -moveDir.normalized;
         LayerMask mask = wallLayer | nodeLayer;
 
-        foreach (var dir in dirs)
+        for (int step = 1; step <= linkRayMaxSteps; step++)
         {
-            for (int step = 1; step <= linkRayMaxSteps; step++)
+            float maxDist = cellSize * step;
+            if (debugRay)
+                Debug.DrawRay(origin, backDir * maxDist, Color.yellow, 0.25f);
+
+            if (Physics.Raycast(origin, backDir, out RaycastHit hit, maxDist, mask))
             {
-                float dist = cellSize * step;
-                if (Physics.Raycast(origin, dir, out RaycastHit hit, dist, mask))
+                int hitLayer = hit.collider.gameObject.layer;
+
+                // 壁なら打ち切り
+                if ((wallLayer.value & (1 << hitLayer)) != 0)
+                    return;
+
+                // Nodeなら接続
+                if ((nodeLayer.value & (1 << hitLayer)) != 0)
                 {
-                    int hitLayer = hit.collider.gameObject.layer;
-
-                    if ((wallLayer.value & (1 << hitLayer)) != 0)
-                        break;
-
-                    if ((nodeLayer.value & (1 << hitLayer)) != 0)
+                    MapNode hitNode = hit.collider.GetComponent<MapNode>();
+                    if (hitNode != null && hitNode != node)
                     {
-                        MapNode hitNode = hit.collider.GetComponent<MapNode>();
-                        if (hitNode != null && hitNode != node)
-                        {
-                            node.AddLink(hitNode);
-                            if (debugRay)
-                                Debug.DrawRay(origin, dir * dist, Color.yellow, 0.25f);
-                        }
-                        break;
+                        node.AddLink(hitNode);
+                        if (debugLog)
+                            Debug.Log($"[LINK-OK] {node.name} ↔ {hitNode.name}");
                     }
+                    return;
                 }
             }
         }
-
-        // GoalNodeがnodeLayerで検出されない場合、距離で直接リンク
-        if (goalNode != null && Vector3.Distance(node.transform.position, goalNode.transform.position) <= cellSize + 0.1f)
-        {
-            node.AddLink(goalNode);
-            if (debugLog)
-                Debug.Log($"[LINK-Goal] {node.name} ↔ {goalNode.name}");
-        }
     }
+
 
     // ======================================================
     void RecalculateGoalDistance()
     {
         if (goalNode == null) return;
-
         foreach (var n in FindObjectsOfType<MapNode>())
             n.DistanceFromGoal = Mathf.Infinity;
 
@@ -282,8 +508,6 @@ public class LearningPlayer : MonoBehaviour
     }
 
     // ======================================================
-    // ノード設置時リンク生成
-    // ======================================================
     MapNode TryPlaceNode(Vector3 pos)
     {
         Vector2Int cell = WorldToCell(SnapToGrid(pos));
@@ -296,6 +520,10 @@ public class LearningPlayer : MonoBehaviour
         }
         else
         {
+            // ★ prevNode をここで更新する
+            //if (currentNode != null)
+            //    prevNode = currentNode;
+
             GameObject obj = Instantiate(nodePrefab, CellToWorld(cell), Quaternion.identity);
             node = obj.GetComponent<MapNode>();
             node.cell = cell;
@@ -313,8 +541,6 @@ public class LearningPlayer : MonoBehaviour
         return node;
     }
 
-    // ======================================================
-    // 座標変換ユーティリティ
     // ======================================================
     Vector2Int WorldToCell(Vector3 worldPos)
     {
