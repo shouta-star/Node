@@ -123,13 +123,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cell: {x: 0, y: 0}
   links: []
-  value: 0
-  visits: 0
   DistanceFromGoal: 0
-  alpha: 0.3
-  gamma: 0.9
-  rho: 0.02
-  beta: 0.5
+  value: 0
+  unknownCount: 0
+  wallCount: 0
   cellSize: 1
   gridOrigin: {x: 0, y: 0, z: 0}
-  debugLog: 0
+  debugLog: 1
