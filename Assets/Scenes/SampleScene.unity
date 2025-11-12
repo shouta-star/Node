@@ -2517,7 +2517,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3154789635546984831, guid: 6e123b8a46865cd44b7c3be018715904, type: 3}
       propertyPath: debugLog
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7722438679952261210, guid: 6e123b8a46865cd44b7c3be018715904, type: 3}
       propertyPath: m_Name
@@ -5458,7 +5458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 7722438679952261210, guid: 6e123b8a46865cd44b7c3be018715904, type: 3}
   spawnPoint: {fileID: 1757142805}
-  spawnInterval: 5
+  spawnInterval: 3
   spawnCount: 1
   loop: 1
 --- !u!1001 &1794134151

@@ -140,7 +140,7 @@ public class MapNode : MonoBehaviour
     // ======================================================
     public void RecalculateUnknownAndWall()
     {
-        Debug.Log($"[MapNode] Recalc START name={name}, before U={unknownCount}, W={wallCount}, linkCount={links.Count}");
+        //Debug.Log($"[MapNode] Recalc START name={name}, before U={unknownCount}, W={wallCount}, linkCount={links.Count}");
 
         int prevU = unknownCount;
         int prevW = wallCount;
@@ -157,7 +157,7 @@ public class MapNode : MonoBehaviour
 
             bool linkedInDir = false;
 
-            // ✅ Linkから方向判定（角度許容を緩くする）
+            // Linkから方向判定（角度許容を緩くする）
             foreach (var link in links)
             {
                 Vector3 delta = (link.transform.position - transform.position).normalized;
@@ -189,10 +189,10 @@ public class MapNode : MonoBehaviour
             }
         }
 
-        if (prevU != unknownCount || prevW != wallCount)
-            Debug.Log($"[MapNode][U/W CHANGED] {name}  U: {prevU} -> {unknownCount},  W: {prevW} -> {wallCount}");
+        //if (prevU != unknownCount || prevW != wallCount)
+            //Debug.Log($"[MapNode][U/W CHANGED] {name}  U: {prevU} -> {unknownCount},  W: {prevW} -> {wallCount}");
 
-        Debug.Log($"[MapNode] Recalc END name={name}, after U={unknownCount}, W={wallCount}, linkCount={links.Count}");
+        //Debug.Log($"[MapNode] Recalc END name={name}, after U={unknownCount}, W={wallCount}, linkCount={links.Count}");
     }
 
     public float EdgeCost(MapNode other)

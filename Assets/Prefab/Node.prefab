@@ -129,4 +129,4 @@ MonoBehaviour:
   wallCount: 0
   cellSize: 1
   gridOrigin: {x: 0, y: 0, z: 0}
-  debugLog: 1
+  debugLog: 0
