@@ -1,19 +1,3 @@
-// ======================================================
-// Å’Z‹——£‚ÍƒXƒ^[ƒg’n“_‚©‚ç‚ÌƒZƒ‹”
-// ======================================================
-using UnityEngine;
-
-public class CellFromStart : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-}
+ï»¿//// ======================================================
+//// æœ€çŸ­è·é›¢ã¯ã‚¹ã‚¿ãƒ¼ãƒˆåœ°ç‚¹ã‹ã‚‰ã®ã‚»ãƒ«æ•°
+//// ======================================================

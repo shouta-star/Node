@@ -125,6 +125,7 @@ MonoBehaviour:
   links: []
   DistanceFromGoal: 0
   value: 0
+  distanceFromStart: 0
   unknownCount: 0
   wallCount: 0
   cellSize: 1
