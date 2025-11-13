@@ -136,6 +136,7 @@ MonoBehaviour:
   goalNode: {fileID: 0}
   nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
   exploreBias: 0.6
+  unknownReferenceDepth: 2
   linkRayMaxSteps: 100
   debugLog: 0
   debugRay: 1
