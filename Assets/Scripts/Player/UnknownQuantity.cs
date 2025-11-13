@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿// ======================================================
+// PlayerはNodeの未知数が多い方向へ進む。
+// 最短経路はGoalに到達した際、各NodeがGoalからどれだけ離れているかで決定。
+// ======================================================
+
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
