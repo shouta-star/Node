@@ -735,6 +735,14 @@ public class UnknownQuantity: MonoBehaviour
             if (debugLog) Debug.Log($"[Node] New Node placed @ {cell}");
         }
 
+        // StartNodeの初期設定 — ここだけが StartNode を決める
+        if (MapNode.StartNode == null)
+        {
+            MapNode.StartNode = node;
+            node.distanceFromStart = 0;
+            Debug.Log($"[StartNode] StartNode set to cell={node.cell}, pos={node.transform.position}");
+        }
+
         // 周囲とのリンクを更新
         if (node != null)
             LinkBackWithRay(node);

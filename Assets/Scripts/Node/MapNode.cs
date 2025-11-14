@@ -40,14 +40,16 @@ public class MapNode : MonoBehaviour
         if (!allNodes.Contains(this))
             allNodes.Add(this);
 
-        // ★ StartNode判定 ----------------------
-        if (StartNode == null)
-        {
-            // 最初に生成されたNodeをStartとして扱う
-            StartNode = this;
-            distanceFromStart = 0;
-        }
-        // ---------------------------------------------------
+        //// ★ StartNode判定 ----------------------
+        //if (StartNode == null)
+        //{
+        //    // 最初に生成されたNodeをStartとして扱う
+        //    StartNode = this;
+        //    distanceFromStart = 0;
+        //}
+        //// ---------------------------------------------------
+
+        //Debug.Log($"[StartNode Debug] cell={cell}, pos={transform.position}, links={links.Count}");
 
         RecalculateUnknownAndWall();
     }
@@ -91,12 +93,14 @@ public class MapNode : MonoBehaviour
         {
             links.Add(other);
             added = true;
+            Debug.Log($"[AddLink] Add {name} → {other.name}");
         }
 
         if (!other.links.Contains(this))
         {
             other.links.Add(this);
             added = true;
+            Debug.Log($"[AddLink] Add {name} → {other.name}");
         }
 
         if (debugLog && added)
@@ -322,6 +326,12 @@ public class MapNode : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (this == StartNode)
+        {
+            Debug.LogError("[ERROR] StartNode が Destroy されました。StartNode は絶対に破棄してはいけません。");
+            return;
+        }
+
         allNodeCells.Remove(cell);
         allNodes.Remove(this);
     }
