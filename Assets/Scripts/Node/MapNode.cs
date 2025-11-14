@@ -118,42 +118,171 @@ public class MapNode : MonoBehaviour
     // StartNode を起点に距離(distanceFromStart)を再計算
     // DistanceFromGoal と同じ Dijkstra 法
     // ======================================================
+    //public static void RecalculateStartDistance()
+    //{
+    //    if (StartNode == null) return;
+
+    //    // 全ノードの距離を初期化
+    //    foreach (var n in allNodes)
+    //        n.distanceFromStart = 0;
+
+    //    // Startノードの距離を0に
+    //    StartNode.distanceFromStart = 0;
+
+    //    Queue<MapNode> q = new Queue<MapNode>();
+    //    q.Enqueue(StartNode);
+
+    //    // BFSで最短歩数を計算（1リンク = 1歩）
+    //    while (q.Count > 0)
+    //    {
+    //        var node = q.Dequeue();
+
+    //        Debug.Log("AAA");
+
+    //        foreach (var link in node.links)
+    //        {
+    //            Debug.Log("BBB");
+    //            if (link == null) continue;
+    //            Debug.Log("CCC");
+    //            int newDist = node.distanceFromStart + 1; // ★ float → int に変更
+
+    //            if (newDist < link.distanceFromStart)
+    //            {
+    //                link.distanceFromStart = newDist;
+    //                q.Enqueue(link);
+    //            }
+    //        }
+    //    }
+    //}
+    //public static void RecalculateStartDistance()
+    //{
+    //    if (StartNode == null) return;
+
+    //    // ★ 全ノードの距離を「未訪問の最大値」に初期化
+    //    foreach (var n in allNodes)
+    //        n.distanceFromStart = int.MaxValue;
+
+    //    // ★ Startノードの距離を 0 に
+    //    StartNode.distanceFromStart = 0;
+
+    //    Queue<MapNode> q = new Queue<MapNode>();
+    //    q.Enqueue(StartNode);
+
+    //    // BFSで最短歩数を計算（1リンク = 1歩）
+    //    while (q.Count > 0)
+    //    {
+    //        var node = q.Dequeue();
+
+    //        Debug.Log("AAA");
+
+    //        foreach (var link in node.links)
+    //        {
+    //            Debug.Log("BBB");
+    //            if (link == null) continue;
+    //            Debug.Log("CCC");
+
+    //            int newDist = node.distanceFromStart + 1;
+
+    //            // ★ここが成立するようになる
+    //            if (newDist < link.distanceFromStart)
+    //            {
+    //                link.distanceFromStart = newDist;
+    //                q.Enqueue(link);
+    //            }
+    //        }
+    //    }
+    //}
+    //public static void RecalculateStartDistance()
+    //{
+    //    if (StartNode == null) return;
+
+    //    // StartNode のセル座標を取得
+    //    Vector2Int startCell = StartNode.cell;
+
+    //    // ★ 全ノードについてセル座標から距離を計算（マンハッタン距離）
+    //    foreach (var node in allNodes)
+    //    {
+    //        int dx = Mathf.Abs(node.cell.x - startCell.x);
+    //        int dz = Mathf.Abs(node.cell.y - startCell.y);
+    //        node.distanceFromStart = dx + dz;
+    //    }
+    //}
+    //public static void RecalculateStartDistance()
+    //{
+    //    if (StartNode == null) return;
+
+    //    // 全ノードの距離を最大値(未訪問)に
+    //    foreach (var n in allNodes)
+    //        n.distanceFromStart = int.MaxValue;
+
+    //    // Start は 0
+    //    StartNode.distanceFromStart = 0;
+
+    //    Queue<MapNode> q = new Queue<MapNode>();
+    //    q.Enqueue(StartNode);
+
+    //    while (q.Count > 0)
+    //    {
+    //        var node = q.Dequeue();
+
+    //        foreach (var link in node.links)
+    //        {
+    //            if (link == null) continue;
+
+    //            int newDist = node.distanceFromStart + 1;
+
+    //            // 短縮されたときのみ更新
+    //            if (newDist < link.distanceFromStart)
+    //            {
+    //                link.distanceFromStart = newDist;
+    //                q.Enqueue(link);
+    //            }
+    //        }
+    //    }
+    //}
     public static void RecalculateStartDistance()
     {
         if (StartNode == null) return;
 
-        // 全ノードの距離を初期化
+        // 全ノードの距離を未訪問に
         foreach (var n in allNodes)
-            n.distanceFromStart = 0;
+            n.distanceFromStart = int.MaxValue;
 
-        // Startノードの距離を0に
+        // StartNode は 0
         StartNode.distanceFromStart = 0;
 
-        Queue<MapNode> q = new Queue<MapNode>();
-        q.Enqueue(StartNode);
+        // 優先度キュー（最短距離の Node を優先して取り出す）
+        var pq = new List<MapNode>();
+        pq.Add(StartNode);
 
-        // BFSで最短歩数を計算（1リンク = 1歩）
-        while (q.Count > 0)
+        while (pq.Count > 0)
         {
-            var node = q.Dequeue();
-
-            Debug.Log("AAA");
+            // ★ 最小距離の Node を取得
+            pq = pq.OrderBy(n => n.distanceFromStart).ToList();
+            MapNode node = pq[0];
+            pq.RemoveAt(0);
 
             foreach (var link in node.links)
             {
-                Debug.Log("BBB");
                 if (link == null) continue;
-                Debug.Log("CCC");
-                int newDist = node.distanceFromStart + 1; // ★ float → int に変更
+
+                // ★ マス数（cell距離）をコストとする
+                int dx = Mathf.Abs(link.cell.x - node.cell.x);
+                int dz = Mathf.Abs(link.cell.y - node.cell.y);
+                int edgeCost = dx + dz;  // これが「マス数」
+
+                int newDist = node.distanceFromStart + edgeCost;
 
                 if (newDist < link.distanceFromStart)
                 {
                     link.distanceFromStart = newDist;
-                    q.Enqueue(link);
+                    pq.Add(link);
                 }
             }
         }
     }
+
+
 
     //    public void RecalculateUnknownAndWall()
     //    {
