@@ -740,7 +740,7 @@ public class UnknownQuantity: MonoBehaviour
         {
             MapNode.StartNode = node;
             node.distanceFromStart = 0;
-            Debug.Log($"[StartNode] StartNode set to cell={node.cell}, pos={node.transform.position}");
+            //Debug.Log($"[StartNode] StartNode set to cell={node.cell}, pos={node.transform.position}");
         }
 
         // 周囲とのリンクを更新
