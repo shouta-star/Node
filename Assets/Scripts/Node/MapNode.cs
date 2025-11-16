@@ -118,43 +118,76 @@ public class MapNode : MonoBehaviour
     // StartNode を起点に距離(distanceFromStart)を再計算
     // DistanceFromGoal と同じ Dijkstra 法
     // ======================================================
+    //public static void RecalculateStartDistance()
+    //{
+    //    if (StartNode == null) return;
+
+    //    // 全ノードの距離を未訪問に
+    //    foreach (var n in allNodes)
+    //        n.distanceFromStart = int.MaxValue;
+
+    //    // StartNode は 0
+    //    StartNode.distanceFromStart = 0;
+
+    //    // 優先度キュー（最短距離の Node を優先して取り出す）
+    //    var pq = new List<MapNode>();
+    //    pq.Add(StartNode);
+
+    //    while (pq.Count > 0)
+    //    {
+    //        // ★ 最小距離の Node を取得
+    //        pq = pq.OrderBy(n => n.distanceFromStart).ToList();
+    //        MapNode node = pq[0];
+    //        pq.RemoveAt(0);
+
+    //        foreach (var link in node.links)
+    //        {
+    //            if (link == null) continue;
+
+    //            // ★ マス数（cell距離）をコストとする
+    //            int dx = Mathf.Abs(link.cell.x - node.cell.x);
+    //            int dz = Mathf.Abs(link.cell.y - node.cell.y);
+    //            int edgeCost = dx + dz;  // これが「マス数」
+
+    //            int newDist = node.distanceFromStart + edgeCost;
+
+    //            if (newDist < link.distanceFromStart)
+    //            {
+    //                link.distanceFromStart = newDist;
+    //                pq.Add(link);
+    //            }
+    //        }
+    //    }
+    //}
     public static void RecalculateStartDistance()
     {
         if (StartNode == null) return;
 
-        // 全ノードの距離を未訪問に
-        foreach (var n in allNodes)
-            n.distanceFromStart = int.MaxValue;
+        // 全ノード距離の初期化
+        for (int i = 0; i < allNodes.Count; i++)
+            allNodes[i].distanceFromStart = int.MaxValue;
 
-        // StartNode は 0
         StartNode.distanceFromStart = 0;
 
-        // 優先度キュー（最短距離の Node を優先して取り出す）
-        var pq = new List<MapNode>();
-        pq.Add(StartNode);
+        // 手動キュー（List 再利用）
+        Queue<MapNode> q = new Queue<MapNode>();
+        q.Enqueue(StartNode);
 
-        while (pq.Count > 0)
+        while (q.Count > 0)
         {
-            // ★ 最小距離の Node を取得
-            pq = pq.OrderBy(n => n.distanceFromStart).ToList();
-            MapNode node = pq[0];
-            pq.RemoveAt(0);
+            MapNode node = q.Dequeue();
 
-            foreach (var link in node.links)
+            // 4方向にリンクしているノードへ
+            for (int i = 0; i < node.links.Count; i++)
             {
-                if (link == null) continue;
+                MapNode next = node.links[i];
 
-                // ★ マス数（cell距離）をコストとする
-                int dx = Mathf.Abs(link.cell.x - node.cell.x);
-                int dz = Mathf.Abs(link.cell.y - node.cell.y);
-                int edgeCost = dx + dz;  // これが「マス数」
+                int newDist = node.distanceFromStart + 1;
 
-                int newDist = node.distanceFromStart + edgeCost;
-
-                if (newDist < link.distanceFromStart)
+                if (newDist < next.distanceFromStart)
                 {
-                    link.distanceFromStart = newDist;
-                    pq.Add(link);
+                    next.distanceFromStart = newDist;
+                    q.Enqueue(next);
                 }
             }
         }
@@ -291,16 +324,49 @@ public class MapNode : MonoBehaviour
         return Vector3.Distance(transform.position, other.transform.position);
     }
 
+    //public static MapNode FindByCell(Vector2Int cell)
+    //{
+    //    return allNodes.FirstOrDefault(n => n.cell == cell);
+    //}
     public static MapNode FindByCell(Vector2Int cell)
     {
-        return allNodes.FirstOrDefault(n => n.cell == cell);
+        // LINQ撤廃：GC発生ゼロ
+        for (int i = 0; i < allNodes.Count; i++)
+        {
+            if (allNodes[i].cell == cell)
+                return allNodes[i];
+        }
+        return null;
     }
 
+
+    //public static MapNode FindNearest(Vector3 pos)
+    //{
+    //    if (allNodes.Count == 0) return null;
+    //    return allNodes.OrderBy(n => Vector3.Distance(n.transform.position, pos)).FirstOrDefault();
+    //}
     public static MapNode FindNearest(Vector3 pos)
     {
         if (allNodes.Count == 0) return null;
-        return allNodes.OrderBy(n => Vector3.Distance(n.transform.position, pos)).FirstOrDefault();
+
+        MapNode nearest = allNodes[0];
+        float bestDist = (nearest.transform.position - pos).sqrMagnitude;
+
+        // LINQ撤廃：手動で最小距離探索
+        for (int i = 1; i < allNodes.Count; i++)
+        {
+            MapNode n = allNodes[i];
+            float dist = (n.transform.position - pos).sqrMagnitude;
+            if (dist < bestDist)
+            {
+                bestDist = dist;
+                nearest = n;
+            }
+        }
+
+        return nearest;
     }
+
 
     public Vector2Int WorldToCell(Vector3 worldPos)
     {

@@ -118,7 +118,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7722438679952261210}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5d6336b9fc68ed4c96e965702b0377e, type: 3}
   m_Name: 
@@ -150,12 +150,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7722438679952261210}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fa970f044eea104a9f73c4f26d1db62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 2
   cellSize: 1
   rayDistance: 1
   wallLayer:
@@ -167,12 +167,11 @@ MonoBehaviour:
   startDirection: {x: 0, y: 0, z: 1}
   gridOrigin: {x: 0, y: 0, z: 0}
   nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
-  exploreBias: 0.6
   unknownReferenceDepth: 2
-  linkRayMaxSteps: 100
   weightUnknown: 1
-  weightDistance: 1
-  debugLog: 1
+  weightDistance: 0.5
+  linkRayMaxSteps: 100
+  debugLog: 0
   debugRay: 1
   bodyRenderer: {fileID: 3303906976382372999}
   exploreMaterial: {fileID: 2100000, guid: acf7ff37ebb90214cb86cbf4c62185b3, type: 2}
