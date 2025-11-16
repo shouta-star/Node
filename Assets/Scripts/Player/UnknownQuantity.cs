@@ -442,305 +442,6 @@ public class UnknownQuantity: MonoBehaviour
         MoveForward();
     }
 
-    // ======================================================
-    // ChooseNextNodeByUnknown：未知数Uに基づいて最適ノードを選択
-    // ------------------------------------------------------
-    // ・recentNodes（直近 unknownReferenceDepth 個）の中で
-    //   unknownCount(U) が最大のノードを「開拓優先ノード」とみなす
-    // ・現在ノード ≠ 開拓優先ノード のとき：
-    //     → 履歴を1ノード分だけ巻き戻す（過去方向へ戻る）
-    // ・現在ノード ＝ 開拓優先ノード のとき：
-    //     → ここで新規方向を開拓したいので null を返し、
-    //        呼び出し側で TryMoveToUnlinkedDirection() を呼ぶ
-    // ======================================================
-    //private MapNode ChooseNextNodeByUnknown(MapNode current)
-    //{
-    //    if (current == null || current.links == null || current.links.Count == 0)
-    //        return null;
-
-    //    // 履歴や depth が無効なら、単純にリンク先の U が高いものを選択
-    //    if (unknownReferenceDepth <= 0 || recentNodes.Count == 0)
-    //    {
-    //        return current.links
-    //            .OrderByDescending(n => n != null ? n.unknownCount : 0)
-    //            .ThenBy(_ => Random.value)
-    //            .FirstOrDefault();
-    //    }
-
-    //    // 履歴から「未知度が最も高いノード」を探す
-    //    MapNode bestNode = null;
-    //    int bestU = -1;
-    //    foreach (var n in recentNodes)
-    //    {
-    //        if (n == null) continue;
-    //        if (n.unknownCount > bestU)
-    //        {
-    //            bestU = n.unknownCount;
-    //            bestNode = n;
-    //        }
-    //    }
-
-    //    // 履歴上で有望なノードが無ければ、単純にリンク先Uで選ぶ
-    //    if (bestNode == null || bestU <= 0)
-    //    {
-    //        return current.links
-    //            .OrderByDescending(n => n != null ? n.unknownCount : 0)
-    //            .ThenBy(_ => Random.value)
-    //            .FirstOrDefault();
-    //    }
-
-    //    // 現在ノードが履歴のどこにいるか
-    //    int curIndex = recentNodes.LastIndexOf(current);
-
-    //    if (curIndex <= 0)
-    //    {
-    //        // 履歴上で位置が特定できない/先頭の場合はローカル判定にフォールバック
-    //        return current.links
-    //            .OrderByDescending(n => n != null ? n.unknownCount : 0)
-    //            .ThenBy(_ => Random.value)
-    //            .FirstOrDefault();
-    //    }
-
-    //    // 「開拓優先ノード」が今いるノードなら、ここで新規方向を開拓したい
-    //    if (bestNode == current)
-    //    {
-    //        if (debugLog)
-    //            Debug.Log($"[EXP-HIST] Reached best node {current.name} (U={bestU}) → will try new direction");
-    //        // 呼び出し側で TryMoveToUnlinkedDirection() を呼ばせるため null
-    //        return null;
-    //    }
-
-    //    // bestNode に近づくため、「1ノード分だけ過去へ」戻る
-    //    MapNode prevNode = recentNodes[curIndex - 1];
-
-    //    // そのノードが現在ノードのリンクとして存在していれば、そこへ戻る
-    //    if (prevNode != null && current.links.Contains(prevNode))
-    //    {
-    //        if (debugLog)
-    //            Debug.Log($"[EXP-HIST] Backtrack {current.name} → {prevNode.name} (best={bestNode.name}, U={bestU})");
-    //        return prevNode;
-    //    }
-
-    //    // もし履歴上の1つ前がリンクしていなければ、ローカルな U 判定にフォールバック
-    //    return current.links
-    //        .OrderByDescending(n => n != null ? n.unknownCount : 0)
-    //        .ThenBy(_ => Random.value)
-    //        .FirstOrDefault();
-    //}
-    //private MapNode ChooseNextNodeByUnknown(MapNode current)
-    //{
-    //    if (current == null || current.links == null || current.links.Count == 0)
-    //        return null;
-
-    //    // ------------------------------------------------------
-    //    // 1. 従来の履歴ベース（unknownReferenceDepth）の優先ルート探し
-    //    // ------------------------------------------------------
-    //    if (unknownReferenceDepth > 0 && recentNodes.Count > 0)
-    //    {
-    //        MapNode bestHistNode = null;
-    //        int bestU = -1;
-
-    //        foreach (var n in recentNodes)
-    //        {
-    //            if (n == null) continue;
-    //            if (n.unknownCount > bestU)
-    //            {
-    //                bestU = n.unknownCount;
-    //                bestHistNode = n;
-    //            }
-    //        }
-
-    //        // 履歴中に「未知が残っているノード」が存在する場合
-    //        if (bestHistNode != null && bestU > 0)
-    //        {
-    //            // 今いるノード = best → 新しい分岐方向へ
-    //            if (bestHistNode == current)
-    //                return null;
-
-    //            // 履歴を1ノードだけ巻き戻す
-    //            int curIndex = recentNodes.LastIndexOf(current);
-    //            if (curIndex > 0)
-    //            {
-    //                MapNode prevNode = recentNodes[curIndex - 1];
-    //                if (prevNode != null && current.links.Contains(prevNode))
-    //                {
-    //                    if (debugLog)
-    //                        Debug.Log($"[EXP-HIST] Backtrack {current.name} → {prevNode.name} (U={bestU})");
-    //                    return prevNode;
-    //                }
-    //            }
-    //        }
-    //    }
-
-    //    // ------------------------------------------------------
-    //    // 2. ここから新方式：未知が0でも「その先のリンク」まで無制限BFS
-    //    // ------------------------------------------------------
-
-    //    // 距離による減衰。お好みに応じてカスタマイズ可能。
-    //    float Weight(int depth)
-    //    {
-    //        if (depth <= 1) return 1.0f;
-    //        if (depth == 2) return 0.7f;
-    //        if (depth == 3) return 0.5f;
-    //        if (depth == 4) return 0.3f;
-    //        return 0.1f; // 深いほど減衰（ここは固定）
-    //    }
-
-    //    float Evaluate(MapNode start)
-    //    {
-    //        if (start == null)
-    //        {
-    //            Debug.Log("[U-BFS] Evaluate(start=null) → 0");
-    //            return 0f;
-    //        }
-
-    //        Debug.Log($"[U-BFS] === Evaluate START from {start.name} (cell={start.cell}) ===");
-
-    //        Queue<(MapNode node, int depth)> q = new();
-    //        HashSet<MapNode> visited = new();
-
-    //        q.Enqueue((start, 1));
-    //        visited.Add(start);
-
-    //        // ★ unknown ノード候補一覧
-    //        List<(MapNode node, int depth)> unknownNodes = new();
-
-    //        while (q.Count > 0)
-    //        {
-    //            var (node, depth) = q.Dequeue();
-
-    //            Debug.Log($"[U-BFS] Visiting {node.name} (cell={node.cell}) depth={depth}  U={node.unknownCount}");
-
-    //            // --- 未知ノード候補に追加 ---
-    //            if (node.unknownCount > 0)
-    //            {
-    //                unknownNodes.Add((node, depth));
-    //            }
-
-    //            // --- 奥をさらに探索 ---
-    //            foreach (var link in node.links)
-    //            {
-    //                if (link == null)
-    //                {
-    //                    Debug.Log($"[U-BFS]  Skip null link");
-    //                    continue;
-    //                }
-
-    //                if (visited.Contains(link))
-    //                {
-    //                    Debug.Log($"[U-BFS]  Skip visited {link.cell}");
-    //                    continue;
-    //                }
-
-    //                visited.Add(link);
-    //                Debug.Log($"[U-BFS]  Enqueue {link.cell} depth={depth + 1}");
-    //                q.Enqueue((link, depth + 1));
-    //            }
-    //        }
-
-    //        // --------------------------------------------------
-    //        // ★ BFS 完了 → 未知ノードが1つも無い場合
-    //        // --------------------------------------------------
-    //        if (unknownNodes.Count == 0)
-    //        {
-    //            Debug.Log("[U-BFS] BFS END：未知ノードなし → score=0");
-    //            Debug.Log("[U-BFS] === Evaluate END ===");
-    //            return 0f;
-    //        }
-
-    //        // --------------------------------------------------
-    //        // ★ 最短セル距離の未知ノードを選ぶ
-    //        // --------------------------------------------------
-    //        int CellDist(MapNode a, MapNode b)
-    //            => Mathf.Abs(a.cell.x - b.cell.x) + Mathf.Abs(a.cell.y - b.cell.y);
-
-    //        int bestCellDist = int.MaxValue;
-    //        float bestScore = 0f;
-
-    //        foreach (var (unk, depth) in unknownNodes)
-    //        {
-    //            int dist = CellDist(currentNode, unk); // ← current からのセル距離
-
-    //            Debug.Log($"[U-BFS] UNKNOWN candidate {unk.cell} depth={depth}, cellDist={dist}");
-
-    //            // 最短セル距離を優先
-    //            if (dist < bestCellDist)
-    //            {
-    //                bestCellDist = dist;
-
-    //                float baseScore = Weight(depth);
-
-    //                Debug.Log($"[U-BFS]   → new BEST (cellDist={dist}) score={baseScore}");
-
-    //                bestScore = baseScore;
-    //            }
-    //        }
-
-    //        Debug.Log($"[U-BFS] FINAL score={bestScore}, bestCellDist={bestCellDist}");
-    //        Debug.Log("[U-BFS] === Evaluate END ===");
-
-    //        return bestScore;
-    //    }
-
-
-    //    // ------------------------------------------------------
-    //    // 3. current.links の中で最も「未知に近い」方向を選ぶ
-    //    // ------------------------------------------------------
-    //    MapNode bestNode = null;
-    //    float bestScore = -1f;
-
-    //    foreach (var next in current.links)
-    //    {
-    //        if (next == null) continue;
-
-    //        float s = Evaluate(next);
-
-    //        //if (debugLog)
-    //            Debug.Log($"[U-BFS] {current.name} → {next.name}: score={s:0.00}");
-
-    //        if (s > bestScore)
-    //        {
-    //            bestScore = s;
-    //            bestNode = next;
-    //        }
-    //    }
-
-    //    // ------------------------------------------------------
-    //    // 4. 未探索が本当にどこにも存在しない（全score=0）
-    //    // ------------------------------------------------------
-    //    if (bestScore <= 0)
-    //    {
-    //        // fallback：unknownCount 最大のものへ（同値ならランダム）
-    //        return current.links
-    //            .OrderByDescending(n => n != null ? n.unknownCount : 0)
-    //            .ThenBy(_ => Random.value)
-    //            .FirstOrDefault();
-    //    }
-
-    //    //if (debugLog)
-    //        Debug.Log($"[U-BFS] SELECT {current.name} → {bestNode.name} (score={bestScore})");
-
-    //    //return bestNode;
-    //    return GetFirstStepToward(current, bestNode);
-    //}
-    //private MapNode GetFirstStepToward(MapNode start, MapNode target)
-    //{
-    //    MapNode result = null;
-    //    int best = int.MaxValue;
-
-    //    foreach (var link in start.links)
-    //    {
-    //        int dist = Mathf.Abs(link.cell.x - target.cell.x)
-    //                 + Mathf.Abs(link.cell.y - target.cell.y);
-
-    //        if (dist < best)
-    //        {
-    //            best = dist;
-    //            result = link;
-    //        }
-    //    }
-    //    return result;
-    //}
     private MapNode ChooseNextNodeByUnknown(MapNode current)
     {
         if (current == null || current.links == null || current.links.Count == 0)
@@ -883,7 +584,46 @@ public class UnknownQuantity: MonoBehaviour
         //if (debugLog)
         Debug.Log($"[U] Next Step = {bestNext.cell} (toward {targetUnknown.cell})");
 
-        return bestNext;
+        //return bestNext;
+        return GetNextByLinkBFS(current, targetUnknown);
+    }
+    private MapNode GetNextByLinkBFS(MapNode start, MapNode target)
+    {
+        if (start == null || target == null) return null;
+        if (start == target) return null;
+
+        Queue<MapNode> q = new();
+        Dictionary<MapNode, MapNode> parent = new();
+        q.Enqueue(start);
+        parent[start] = null;
+
+        while (q.Count > 0)
+        {
+            var node = q.Dequeue();
+            foreach (var link in node.links)
+            {
+                if (link == null) continue;
+                if (parent.ContainsKey(link)) continue;
+
+                parent[link] = node;
+                q.Enqueue(link);
+
+                // target に到達したら BFS を終了
+                if (link == target)
+                    return BacktrackFirstStep(start, target, parent);
+            }
+        }
+
+        return null; // 到達できない
+    }
+    private MapNode BacktrackFirstStep(MapNode start, MapNode target, Dictionary<MapNode, MapNode> parent)
+    {
+        MapNode cur = target;
+
+        while (parent[cur] != start)
+            cur = parent[cur];
+
+        return cur; // start から見た最初の一歩
     }
 
 
