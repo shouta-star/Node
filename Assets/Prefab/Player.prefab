@@ -169,7 +169,7 @@ MonoBehaviour:
   nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
   unknownReferenceDepth: 2
   weightUnknown: 1
-  weightDistance: 0.5
+  weightDistance: 1
   linkRayMaxSteps: 100
   debugLog: 0
   debugRay: 1

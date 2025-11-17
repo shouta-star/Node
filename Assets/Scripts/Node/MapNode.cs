@@ -7,6 +7,8 @@ public class MapNode : MonoBehaviour
     public static HashSet<Vector2Int> allNodeCells = new HashSet<Vector2Int>();
     public static List<MapNode> allNodes = new List<MapNode>();
 
+    private static int nodeCreateCount = 0;  // ★ 追加：生成カウンタ
+
     [Header("基本情報")]
     public Vector2Int cell;
     public List<MapNode> links = new List<MapNode>();
@@ -32,6 +34,10 @@ public class MapNode : MonoBehaviour
 
     private void Awake()
     {
+        // ★ 追加：生成順で名前を設定
+        nodeCreateCount++;
+        this.name = "Node_" + nodeCreateCount;
+
         cell = WorldToCell(transform.position);
 
         if (!allNodeCells.Contains(cell))
@@ -70,6 +76,7 @@ public class MapNode : MonoBehaviour
     {
         foreach (var n in allNodes)
             n.distanceFromStart = int.MaxValue;
+        //n.distanceFromStart = 0;
 
         if (start != null)
             start.distanceFromStart = 0;
@@ -159,35 +166,69 @@ public class MapNode : MonoBehaviour
     //        }
     //    }
     //}
+    //public static void RecalculateStartDistance()
+    //{
+    //    if (StartNode == null) return;
+
+    //    // 全ノード距離の初期化
+    //    for (int i = 0; i < allNodes.Count; i++)
+    //        allNodes[i].distanceFromStart = int.MaxValue;
+
+    //    StartNode.distanceFromStart = 0;
+
+    //    // 手動キュー（List 再利用）
+    //    Queue<MapNode> q = new Queue<MapNode>();
+    //    q.Enqueue(StartNode);
+
+    //    while (q.Count > 0)
+    //    {
+    //        MapNode node = q.Dequeue();
+
+    //        // 4方向にリンクしているノードへ
+    //        for (int i = 0; i < node.links.Count; i++)
+    //        {
+    //            MapNode next = node.links[i];
+
+    //            int newDist = node.distanceFromStart + 1;
+
+    //            if (newDist < next.distanceFromStart)
+    //            {
+    //                next.distanceFromStart = newDist;
+    //                q.Enqueue(next);
+    //            }
+    //        }
+    //    }
+    //}
     public static void RecalculateStartDistance()
     {
         if (StartNode == null) return;
 
-        // 全ノード距離の初期化
-        for (int i = 0; i < allNodes.Count; i++)
-            allNodes[i].distanceFromStart = int.MaxValue;
+        // 全ノード初期化
+        foreach (var n in allNodes)
+            n.distanceFromStart = int.MaxValue;
 
         StartNode.distanceFromStart = 0;
 
-        // 手動キュー（List 再利用）
         Queue<MapNode> q = new Queue<MapNode>();
         q.Enqueue(StartNode);
 
         while (q.Count > 0)
         {
-            MapNode node = q.Dequeue();
+            var node = q.Dequeue();
 
-            // 4方向にリンクしているノードへ
-            for (int i = 0; i < node.links.Count; i++)
+            foreach (var link in node.links)
             {
-                MapNode next = node.links[i];
+                // ★ セル距離（マンハッタン距離）
+                int dx = Mathf.Abs(node.cell.x - link.cell.x);
+                int dy = Mathf.Abs(node.cell.y - link.cell.y);
+                int cost = dx + dy;   // ← これが加算距離
 
-                int newDist = node.distanceFromStart + 1;
+                int newDist = node.distanceFromStart + cost;
 
-                if (newDist < next.distanceFromStart)
+                if (newDist < link.distanceFromStart)
                 {
-                    next.distanceFromStart = newDist;
-                    q.Enqueue(next);
+                    link.distanceFromStart = newDist;
+                    q.Enqueue(link);
                 }
             }
         }
@@ -255,7 +296,7 @@ public class MapNode : MonoBehaviour
     //        Debug.Log($"[MapNode] Recalc END name={name}, after U={unknownCount}, W={wallCount}, linkCount={links.Count}");
 
     //#if UNITY_EDITOR
-    //        UnityEditor.SceneView.RepaintAll();
+    //            UnityEditor.SceneView.RepaintAll();
     //#endif
     //    }
     // ======================================================
