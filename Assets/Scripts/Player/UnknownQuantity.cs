@@ -330,6 +330,117 @@ public class UnknownQuantity: MonoBehaviour
     // ・リンク済み・壁方向は除外
     // ・候補が無い場合はback方向を避けて停止（往復防止）
     // ======================================================
+    //private void TryMoveToUnlinkedDirection()
+    //{
+    //    // 現在Nodeが存在しない場合は前進
+    //    if (currentNode == null)
+    //    {
+    //        if (debugLog) Debug.Log("[EXP-DBG] currentNode=null → MoveForward()");
+    //        MoveForward();
+    //        return;
+    //    }
+
+    //    // ① 全方向初期化
+    //    List<Vector3> allDirs = new List<Vector3>
+    //    {
+    //        Vector3.forward,
+    //        Vector3.back,
+    //        Vector3.left,
+    //        Vector3.right
+    //    };
+    //    if (debugLog) Debug.Log($"[EXP-DBG] All dirs: {DirListToString(allDirs)}");
+
+    //    Vector3 backDir = (-moveDir).normalized;
+
+    //    // ② 戻る(back)方向を除外
+    //    List<Vector3> afterBack = new List<Vector3>();
+    //    foreach (var d in allDirs)
+    //    {
+    //        if (Vector3.Dot(d.normalized, backDir) > 0.7f) continue;
+    //        afterBack.Add(d);
+    //    }
+    //    if (debugLog) Debug.Log($"[EXP-DBG] After remove BACK ({DirToName(backDir)}): {DirListToString(afterBack)}");
+
+    //    // ③ 既にリンク済みの方向を除外
+    //    List<Vector3> afterLinked = new List<Vector3>();
+    //    foreach (var d in afterBack)
+    //    {
+    //        bool linked = false;
+    //        foreach (var link in currentNode.links)
+    //        {
+    //            Vector3 diff = (link.transform.position - currentNode.transform.position).normalized;
+    //            if (Vector3.Dot(diff, d.normalized) > 0.7f)
+    //            {
+    //                linked = true;
+    //                if (debugLog) Debug.Log($"[EXP-DBG] LINKED dir removed: {DirToName(d)} (→ {link.name})");
+    //                break;
+    //            }
+    //        }
+    //        if (!linked) afterLinked.Add(d);
+    //    }
+    //    if (debugLog) Debug.Log($"[EXP-DBG] After remove LINKED: {DirListToString(afterLinked)}");
+
+    //    // ④ 壁方向を除外（Raycastで壁チェック）
+    //    List<Vector3> validDirs = new List<Vector3>();
+    //    Vector3 origin = currentNode.transform.position + Vector3.up * 0.1f;
+    //    foreach (var d in afterLinked)
+    //    {
+    //        if (Physics.Raycast(origin, d, out RaycastHit hit, cellSize, wallLayer))
+    //        {
+    //            if (debugLog) Debug.Log($"[EXP-DBG] BLOCKED by Wall: {DirToName(d)} ({hit.collider.name})");
+    //            continue;
+    //        }
+    //        validDirs.Add(d);
+    //    }
+    //    if (debugLog) Debug.Log($"[EXP-DBG] Final candidates: {DirListToString(validDirs)}");
+
+    //    // ⑤ 候補が無い場合（往復防止処理）
+    //    if (validDirs.Count == 0)
+    //    {
+    //        bool canContinue = false;
+    //        Vector3 nextDir = Vector3.zero;
+
+    //        // 現Nodeのリンク情報からback以外を探す
+    //        foreach (var link in currentNode.links)
+    //        {
+    //            Vector3 diff = (link.transform.position - currentNode.transform.position).normalized;
+    //            if (Vector3.Dot(diff, backDir) < 0.7f) // back方向ではない
+    //            {
+    //                canContinue = true;
+    //                nextDir = diff;
+    //                break;
+    //            }
+    //        }
+
+    //        if (canContinue)
+    //        {
+    //            moveDir = nextDir;
+    //            if (debugLog) Debug.Log($"[EXP-RESULT] No unlinked dirs → Follow existing link {DirToName(moveDir)}");
+    //            MoveForward();
+    //        }
+    //        else
+    //        {
+    //            if (debugLog) Debug.Log("[EXP-RESULT] Only back dir left → Stop to avoid loop");
+    //            // 往復防止のため停止
+    //            return;
+    //        }
+
+    //        return;
+    //    }
+
+    //    // ⑥ 候補からランダムに選択
+    //    moveDir = validDirs[UnityEngine.Random.Range(0, validDirs.Count)];
+
+    //    if (debugLog)
+    //    {
+    //        string all = DirListToString(validDirs);
+    //        string chosen = DirToName(moveDir);
+    //        Debug.Log($"[EXP-RESULT] Selected direction: {chosen}  /  Candidates: {all}  /  Node={currentNode.name}");
+    //    }
+
+    //    // ⑦ 実際に前進
+    //    MoveForward();
+    //}
     private void TryMoveToUnlinkedDirection()
     {
         // 現在Nodeが存在しない場合は前進
@@ -342,33 +453,44 @@ public class UnknownQuantity: MonoBehaviour
 
         // ① 全方向初期化
         List<Vector3> allDirs = new List<Vector3>
-        {
-            Vector3.forward,
-            Vector3.back,
-            Vector3.left,
-            Vector3.right
-        };
+    {
+        Vector3.forward,
+        Vector3.back,
+        Vector3.left,
+        Vector3.right
+    };
         if (debugLog) Debug.Log($"[EXP-DBG] All dirs: {DirListToString(allDirs)}");
 
         Vector3 backDir = (-moveDir).normalized;
 
-        // ② 戻る(back)方向を除外
+        // 🔵 行き止まり判定（リンクが1つだけ）
+        bool isDeadEnd = (currentNode.links.Count == 1);
+
+        // ② 戻る(back)方向を除外（※行き止まりなら除外しない）
         List<Vector3> afterBack = new List<Vector3>();
         foreach (var d in allDirs)
         {
-            if (Vector3.Dot(d.normalized, backDir) > 0.7f) continue;
+            if (!isDeadEnd && Vector3.Dot(d.normalized, backDir) > 0.7f)
+                continue;
+
             afterBack.Add(d);
         }
         if (debugLog) Debug.Log($"[EXP-DBG] After remove BACK ({DirToName(backDir)}): {DirListToString(afterBack)}");
 
-        // ③ 既にリンク済みの方向を除外
+        // ③ 既にリンク済みの方向を除外（※行き止まりなら back は除外しない）
         List<Vector3> afterLinked = new List<Vector3>();
         foreach (var d in afterBack)
         {
             bool linked = false;
+
             foreach (var link in currentNode.links)
             {
                 Vector3 diff = (link.transform.position - currentNode.transform.position).normalized;
+
+                // 🔵 行き止まりなら back 方向はリンク除外の対象にしない
+                if (isDeadEnd && Vector3.Dot(d.normalized, backDir) > 0.7f)
+                    continue;
+
                 if (Vector3.Dot(diff, d.normalized) > 0.7f)
                 {
                     linked = true;
@@ -376,13 +498,16 @@ public class UnknownQuantity: MonoBehaviour
                     break;
                 }
             }
-            if (!linked) afterLinked.Add(d);
+
+            if (!linked)
+                afterLinked.Add(d);
         }
         if (debugLog) Debug.Log($"[EXP-DBG] After remove LINKED: {DirListToString(afterLinked)}");
 
         // ④ 壁方向を除外（Raycastで壁チェック）
         List<Vector3> validDirs = new List<Vector3>();
         Vector3 origin = currentNode.transform.position + Vector3.up * 0.1f;
+
         foreach (var d in afterLinked)
         {
             if (Physics.Raycast(origin, d, out RaycastHit hit, cellSize, wallLayer))
@@ -394,17 +519,17 @@ public class UnknownQuantity: MonoBehaviour
         }
         if (debugLog) Debug.Log($"[EXP-DBG] Final candidates: {DirListToString(validDirs)}");
 
-        // ⑤ 候補が無い場合（往復防止処理）
+        // ⑤ 候補が無い場合
         if (validDirs.Count == 0)
         {
             bool canContinue = false;
             Vector3 nextDir = Vector3.zero;
 
-            // 現Nodeのリンク情報からback以外を探す
             foreach (var link in currentNode.links)
             {
                 Vector3 diff = (link.transform.position - currentNode.transform.position).normalized;
-                if (Vector3.Dot(diff, backDir) < 0.7f) // back方向ではない
+
+                if (Vector3.Dot(diff, backDir) < 0.7f)
                 {
                     canContinue = true;
                     nextDir = diff;
@@ -420,8 +545,16 @@ public class UnknownQuantity: MonoBehaviour
             }
             else
             {
+                // 🔵 行き止まりでは back が最終手段 → back で進む
+                if (isDeadEnd)
+                {
+                    moveDir = backDir;
+                    if (debugLog) Debug.Log("[EXP-RESULT] DeadEnd: back is only direction → Move back");
+                    MoveForward();
+                    return;
+                }
+
                 if (debugLog) Debug.Log("[EXP-RESULT] Only back dir left → Stop to avoid loop");
-                // 往復防止のため停止
                 return;
             }
 
@@ -441,6 +574,7 @@ public class UnknownQuantity: MonoBehaviour
         // ⑦ 実際に前進
         MoveForward();
     }
+
 
     private MapNode ChooseNextNodeByUnknown(MapNode current)
     {
