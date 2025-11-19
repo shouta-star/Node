@@ -14,7 +14,7 @@ public class ShortestPathJudge : MonoBehaviour
 
     // ======== 設定値 ========
     private const int DistanceStableCount = 3;
-    private const float NoNodeIncreaseTime = 120f; // 2分
+    private const float NoNodeIncreaseTime = 3f; // 2分
 
     // ======== 距離管理 ========
     private List<int> lastDistances = new List<int>(); // 距離の履歴
@@ -119,4 +119,25 @@ public class ShortestPathJudge : MonoBehaviour
     {
         return (Time.time - lastNodeIncreaseTime) >= NoNodeIncreaseTime;
     }
+
+    /// <summary>
+    /// 直近の安定した距離（lastDistances の最後の値）を返す
+    /// 安定していない場合は -1 を返す
+    /// </summary>
+    public int GetLastStableDistance()
+    {
+        if (lastDistances.Count < DistanceStableCount)
+            return -1;
+
+        // 3回連続同じだった時だけ安定と認める
+        int d0 = lastDistances[0];
+        for (int i = 1; i < lastDistances.Count; i++)
+        {
+            if (lastDistances[i] != d0)
+                return -1;
+        }
+
+        return d0;  // 安定した距離を返す
+    }
+
 }

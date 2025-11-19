@@ -1,35 +1,88 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class RestartManager : MonoBehaviour
 {
     private bool hasRestarted = false;
 
+    // å®Ÿè¡Œé–‹å§‹æ™‚é–“
+    private float runStartTime = 0f;
+
+    void Start()
+    {
+        // å®Ÿé¨“é–‹å§‹ã®æ™‚åˆ»
+        runStartTime = Time.time;
+    }
+
     private void Update()
     {
-        // ‚·‚Å‚ÉÄÀs‚µ‚Ä‚¢‚½‚ç‰½‚à‚µ‚È‚¢
         if (hasRestarted) return;
 
-        // Å’ZŒo˜HŠm’è‚µ‚½H
+        // æœ€çŸ­çµŒè·¯ç¢ºå®šã—ãŸï¼Ÿ
         if (ShortestPathJudge.Instance != null &&
             ShortestPathJudge.Instance.IsShortestConfirmed)
         {
             hasRestarted = true;
-
-            Debug.Log("=== Å’ZŒo˜HŠm’èFÄÀs€”õ‚Ö ===");
-
-            // CSVo—Í‚µ‚Ä ¨ ­‚µ‘Ò‚Á‚Ä ¨ ƒV[ƒ“Ä“Ç‚İ‚İ
             StartCoroutine(RestartFlow());
         }
     }
 
+    // -------------------------------------------------------
+    // â˜… CSVã« UnknownQuantity ã®å®Ÿé¨“ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãå‡ºã™
+    // -------------------------------------------------------
+    private void RecordEvaluation()
+    {
+        // â‘  ScriptName
+        string scriptName = "UnknownQuantity";
+
+        // â‘¡ NodesCreatedï¼ˆMapNodeç·æ•°ï¼‰
+        int nodesCreated = MapNode.allNodeCells.Count;
+
+        // â‘¢ æœ€çŸ­è·é›¢
+        int shortestDist = ShortestPathJudge.Instance.GetLastStableDistance();
+        if (shortestDist < 0) shortestDist = -1;
+
+        // â‘£ TimeToGoalï¼ˆï¼æœ€çŸ­çµŒè·¯ç¢ºå®šã¾ã§ã®æ™‚é–“ï¼‰
+        float timeToGoal = Time.time - runStartTime;
+
+        // â‘¤ TotalNodeVisitsï¼ˆç¾çŠ¶ã¯æœªå®Ÿè£…ãªã®ã§0ï¼‰
+        int totalNodeVisits = 0;
+
+        // â‘¥ HeavyFrameCount / AvgFrame / WorstFrameï¼ˆç¾çŠ¶0ï¼‰
+        int heavyFrameCount = 0;
+        float avgFrame = 0f;
+        float worstFrame = 0f;
+
+        // â˜… EvaluationLogger ã«è¨˜éŒ²
+        EvaluationLogger.Record(
+            scriptName,
+            nodesCreated,
+            shortestDist,
+            timeToGoal,
+            totalNodeVisits,
+            heavyFrameCount,
+            avgFrame,
+            worstFrame
+        );
+
+        Debug.Log("=== CSV å‡ºåŠ›å®Œäº† ===");
+    }
+
+    // -------------------------------------------------------
+    // â˜… ã‚·ãƒ¼ãƒ³å†èª­ã¿è¾¼ã¿ãƒ•ãƒ­ãƒ¼
+    // -------------------------------------------------------
     private System.Collections.IEnumerator RestartFlow()
     {
-        // š CSVo—Íi•K—v‚È‚ç‚±‚±‚É“ü‚ê‚éj
-        // EvaluationLogger.Record(...)
+        Debug.Log("=== â˜… æœ€çŸ­çµŒè·¯ç¢ºå®šï¼šCSVè¨˜éŒ² & å†å®Ÿè¡Œæº–å‚™ä¸­ â˜… ===");
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
+        // CSVå‡ºåŠ›
+        RecordEvaluation();
+
+        yield return new WaitForSeconds(1f);
+
+        // ã‚·ãƒ¼ãƒ³å†èª­ã¿è¾¼ã¿
         string sceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(sceneName);
     }

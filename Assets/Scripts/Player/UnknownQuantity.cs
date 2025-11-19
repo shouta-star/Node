@@ -76,7 +76,7 @@ public class UnknownQuantity: MonoBehaviour
         // ゴールノードが未設定なら自動検索
         if (goalNode == null)
         {
-            GameObject goalObj = GameObject.Find("Goal");
+            GameObject goalObj = GameObject.Find("Node_1");
             if (goalObj != null)
                 goalNode = goalObj.GetComponent<MapNode>();
         }
@@ -230,6 +230,10 @@ public class UnknownQuantity: MonoBehaviour
         {
             reachedGoal = true;
             if (debugLog) Debug.Log("[GOAL] Player reached GoalNode. Recalculate distances & follow shortest path.");
+
+            // ★Goal到達距離を ShortestPathJudge に通知
+            int dist = currentNode.distanceFromStart;   // または DistanceFromGoal のほうが正確
+            ShortestPathJudge.Instance?.OnGoalReached(dist);
 
             // 現在の向きの逆方向でリンクを補完
             if (currentNode != null)
@@ -463,7 +467,7 @@ public class UnknownQuantity: MonoBehaviour
 
         Vector3 backDir = (-moveDir).normalized;
 
-        // 🔵 行き止まり判定（リンクが1つだけ）
+        // 行き止まり判定（リンクが1つだけ）
         bool isDeadEnd = (currentNode.links.Count == 1);
 
         // ② 戻る(back)方向を除外（※行き止まりなら除外しない）
@@ -503,6 +507,41 @@ public class UnknownQuantity: MonoBehaviour
                 afterLinked.Add(d);
         }
         if (debugLog) Debug.Log($"[EXP-DBG] After remove LINKED: {DirListToString(afterLinked)}");
+
+        // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+        // ★ 追加：recentNodes に含まれるノード方向を除外
+        // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+        List<Vector3> afterRecent = new List<Vector3>();
+
+        foreach (var d in afterLinked)
+        {
+            MapNode next = null;
+
+            // d 方向のリンクノードを取得
+            foreach (var link in currentNode.links)
+            {
+                Vector3 diff = (link.transform.position - currentNode.transform.position).normalized;
+                if (Vector3.Dot(diff, d.normalized) > 0.7f)
+                {
+                    next = link;
+                    break;
+                }
+            }
+
+            // recentNodes に含まれるノード方向 → 除外（行き止まりは除外しない）
+            if (next != null && recentNodes.Contains(next) && !isDeadEnd)
+            {
+                if (debugLog)
+                    Debug.Log($"[EXP-DBG] RECENT removed: {DirToName(d)} ({next?.name})");
+                continue; // ★追加
+            }
+
+            afterRecent.Add(d);
+        }
+
+        if (debugLog) Debug.Log($"[EXP-DBG] After remove RECENT: {DirListToString(afterRecent)}");
+        // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+
 
         // ④ 壁方向を除外（Raycastで壁チェック）
         List<Vector3> validDirs = new List<Vector3>();
@@ -614,7 +653,8 @@ public class UnknownQuantity: MonoBehaviour
                     {
                         //if (debugLog)
                         Debug.Log($"[EXP-HIST] Backtrack {current.cell} → {prevNode.cell}");
-                        return prevNode;
+                        //return prevNode;
+                        return null;
                     }
                 }
             }
@@ -705,6 +745,14 @@ public class UnknownQuantity: MonoBehaviour
         foreach (var link in current.links)
         {
             if (link == null) continue;
+
+            // ★ recentNodes に含まれる方向は除外（行き止まりの場合は許可）
+            if (!IsTerminalNode(current) && recentNodes.Contains(link))
+            {
+                if (debugLog)
+                    Debug.Log($"[U] Skip recent direction: {link.cell}");
+                continue;
+            }
 
             int dist = CellDist(link, targetUnknown);
 
@@ -966,6 +1014,9 @@ public class UnknownQuantity: MonoBehaviour
             node.cell = cell;
             MapNode.allNodeCells.Add(cell);
             if (debugLog) Debug.Log($"[Node] New Node placed @ {cell}");
+
+            // ★ ShortestPathJudge に「新規Node追加」を通知（ここ！）
+            ShortestPathJudge.Instance?.OnNodeAdded();
         }
 
         // StartNodeの初期設定 — ここだけが StartNode を決める
