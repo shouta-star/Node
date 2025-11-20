@@ -30,7 +30,19 @@ public class PlayerSpawner : MonoBehaviour
             for (int i = 0; i < spawnCount; i++)
             {
                 Vector3 pos = new Vector3(-10f, 0f, -5f);
-                Instantiate(playerPrefab, pos, Quaternion.identity);
+
+                // ★ Instantiate の戻り値を受け取る
+                GameObject obj = Instantiate(playerPrefab, pos, Quaternion.identity);
+
+                // ★ UnknownQuantity を取得
+                UnknownQuantity uq = obj.GetComponent<UnknownQuantity>();
+                Debug.Log($"[Spawner] Player spawned at {pos}, uq={uq}");
+
+                if (uq != null)
+                {
+                    Debug.Log($"[Spawner] uq.CurrentNode = {uq.CurrentNode}");
+                    Debug.Log($"[Spawner] MapNode.StartNode = {MapNode.StartNode}");
+                }
             }
 
             yield return new WaitForSeconds(spawnInterval);
@@ -38,36 +50,3 @@ public class PlayerSpawner : MonoBehaviour
         } while (loop);
     }
 }
-
-//using UnityEngine;
-//using System.Collections;
-
-//public class PlayerSpawner : MonoBehaviour
-//{
-//    [SerializeField] private GameObject playerPrefab; // 生成するプレイヤーのPrefab
-//    [SerializeField] private Transform spawnPoint;    // 生成位置（指定しなければ(0,0,0)）
-//    [SerializeField] private float spawnInterval = 5f; // 5秒ごと
-//    [SerializeField] private int spawnCount = 1;      // 一度に10体
-//    [SerializeField] private bool loop = true;         // 無限に繰り返すか
-
-//    private void Start()
-//    {
-//        StartCoroutine(SpawnPlayers());
-//    }
-
-//    private IEnumerator SpawnPlayers()
-//    {
-//        do
-//        {
-//            for (int i = 0; i < spawnCount; i++)
-//            {
-//                Vector3 pos = new Vector3(-10f, 0f, -5f);
-
-//                Instantiate(playerPrefab, pos, Quaternion.identity);
-//            }
-
-//            yield return new WaitForSeconds(spawnInterval);
-
-//        } while (loop);
-//    }
-//}

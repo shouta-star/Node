@@ -58,6 +58,8 @@ public class MapNode : MonoBehaviour
         //Debug.Log($"[StartNode Debug] cell={cell}, pos={transform.position}, links={links.Count}");
 
         RecalculateUnknownAndWall();
+
+        Debug.Log($"[DEBUG-STARTNODE] Awake(): StartNode={MapNode.StartNode?.name}");
     }
 
     // ======================================================
@@ -122,83 +124,49 @@ public class MapNode : MonoBehaviour
     }
 
     // ======================================================
+    // Goal を起点に DistanceFromGoal を全 Node に再計算
+    // ======================================================
+    public static void RecalculateGoalDistance(MapNode goal)
+    {
+        if (goal == null) return;
+
+        // 全ノード初期化
+        foreach (var n in allNodes)
+            n.DistanceFromGoal = float.PositiveInfinity;
+
+        goal.DistanceFromGoal = 0f;
+
+        // BFS
+        Queue<MapNode> q = new Queue<MapNode>();
+        q.Enqueue(goal);
+
+        while (q.Count > 0)
+        {
+            MapNode node = q.Dequeue();
+
+            foreach (var link in node.links)
+            {
+                // コスト = セル距離（マンハッタン距離）
+                int dx = Mathf.Abs(node.cell.x - link.cell.x);
+                int dy = Mathf.Abs(node.cell.y - link.cell.y);
+                float cost = dx + dy;
+
+                float newDist = node.DistanceFromGoal + cost;
+
+                if (newDist < link.DistanceFromGoal)
+                {
+                    link.DistanceFromGoal = newDist;
+                    q.Enqueue(link);
+                }
+            }
+        }
+    }
+
+
+    // ======================================================
     // StartNode を起点に距離(distanceFromStart)を再計算
     // DistanceFromGoal と同じ Dijkstra 法
     // ======================================================
-    //public static void RecalculateStartDistance()
-    //{
-    //    if (StartNode == null) return;
-
-    //    // 全ノードの距離を未訪問に
-    //    foreach (var n in allNodes)
-    //        n.distanceFromStart = int.MaxValue;
-
-    //    // StartNode は 0
-    //    StartNode.distanceFromStart = 0;
-
-    //    // 優先度キュー（最短距離の Node を優先して取り出す）
-    //    var pq = new List<MapNode>();
-    //    pq.Add(StartNode);
-
-    //    while (pq.Count > 0)
-    //    {
-    //        // ★ 最小距離の Node を取得
-    //        pq = pq.OrderBy(n => n.distanceFromStart).ToList();
-    //        MapNode node = pq[0];
-    //        pq.RemoveAt(0);
-
-    //        foreach (var link in node.links)
-    //        {
-    //            if (link == null) continue;
-
-    //            // ★ マス数（cell距離）をコストとする
-    //            int dx = Mathf.Abs(link.cell.x - node.cell.x);
-    //            int dz = Mathf.Abs(link.cell.y - node.cell.y);
-    //            int edgeCost = dx + dz;  // これが「マス数」
-
-    //            int newDist = node.distanceFromStart + edgeCost;
-
-    //            if (newDist < link.distanceFromStart)
-    //            {
-    //                link.distanceFromStart = newDist;
-    //                pq.Add(link);
-    //            }
-    //        }
-    //    }
-    //}
-    //public static void RecalculateStartDistance()
-    //{
-    //    if (StartNode == null) return;
-
-    //    // 全ノード距離の初期化
-    //    for (int i = 0; i < allNodes.Count; i++)
-    //        allNodes[i].distanceFromStart = int.MaxValue;
-
-    //    StartNode.distanceFromStart = 0;
-
-    //    // 手動キュー（List 再利用）
-    //    Queue<MapNode> q = new Queue<MapNode>();
-    //    q.Enqueue(StartNode);
-
-    //    while (q.Count > 0)
-    //    {
-    //        MapNode node = q.Dequeue();
-
-    //        // 4方向にリンクしているノードへ
-    //        for (int i = 0; i < node.links.Count; i++)
-    //        {
-    //            MapNode next = node.links[i];
-
-    //            int newDist = node.distanceFromStart + 1;
-
-    //            if (newDist < next.distanceFromStart)
-    //            {
-    //                next.distanceFromStart = newDist;
-    //                q.Enqueue(next);
-    //            }
-    //        }
-    //    }
-    //}
     public static void RecalculateStartDistance()
     {
         if (StartNode == null) return;
@@ -234,71 +202,6 @@ public class MapNode : MonoBehaviour
         }
     }
 
-
-
-    //    public void RecalculateUnknownAndWall()
-    //    {
-    //        int oldUnknown = unknownCount;
-    //        int oldWall = wallCount;
-
-    //        Debug.Log($"[MapNode] Recalc START name={name}, before U={unknownCount}, W={wallCount}, linkCount={links.Count}");
-
-    //        Vector3[] dirs = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
-    //        int newWall = 0;
-    //        int newUnknown = 0;
-
-    //        foreach (var dir in dirs)
-    //        {
-    //            Vector3 origin = transform.position + Vector3.up * 0.1f;
-    //            string dirName = dir == Vector3.forward ? "F" :
-    //                             dir == Vector3.back ? "B" :
-    //                             dir == Vector3.left ? "L" : "R";
-
-    //            Vector3 nextPos = transform.position + dir * cellSize;
-    //            Vector2Int nextCell = WorldToCell(nextPos);
-    //            MapNode neighbor = FindByCell(nextCell);
-
-    //            // 🔹既にリンク済みならスキップ（U/W変化に影響させない）
-    //            if (neighbor != null && links.Contains(neighbor))
-    //            {
-    //                Debug.Log($"[MapNode] {name} dir={dirName}: Linked to {neighbor.name} (existing link)");
-    //                continue;
-    //            }
-
-    //            // ノードがあるが未リンクなら未知扱い
-    //            if (neighbor != null && !links.Contains(neighbor))
-    //            {
-    //                Debug.Log($"[MapNode] {name} dir={dirName}: Found neighbor (unlinked)");
-    //                newUnknown++;
-    //                continue;
-    //            }
-
-    //            // 壁チェック
-    //            bool wallHit = Physics.Raycast(origin, dir, cellSize, LayerMask.GetMask("Wall"));
-    //            if (wallHit)
-    //            {
-    //                Debug.Log($"[MapNode] {name} dir={dirName}: HIT Wall");
-    //                newWall++;
-    //                continue;
-    //            }
-
-    //            // 未知領域
-    //            Debug.Log($"[MapNode] {name} dir={dirName}: Unknown (no node)");
-    //            newUnknown++;
-    //        }
-
-    //        wallCount = newWall;
-    //        unknownCount = newUnknown;
-
-    //        if (debugLog && (oldUnknown != newUnknown || oldWall != newWall))
-    //            Debug.Log($"[MapNode][U/W CHANGED] {name}  U: {oldUnknown} -> {newUnknown},  W: {oldWall} -> {newWall}");
-
-    //        Debug.Log($"[MapNode] Recalc END name={name}, after U={unknownCount}, W={wallCount}, linkCount={links.Count}");
-
-    //#if UNITY_EDITOR
-    //            UnityEditor.SceneView.RepaintAll();
-    //#endif
-    //    }
     // ======================================================
     // Linkベースでの未知数・壁数再計算
     // ======================================================
@@ -380,12 +283,6 @@ public class MapNode : MonoBehaviour
         return null;
     }
 
-
-    //public static MapNode FindNearest(Vector3 pos)
-    //{
-    //    if (allNodes.Count == 0) return null;
-    //    return allNodes.OrderBy(n => Vector3.Distance(n.transform.position, pos)).FirstOrDefault();
-    //}
     public static MapNode FindNearest(Vector3 pos)
     {
         if (allNodes.Count == 0) return null;
@@ -448,5 +345,12 @@ public class MapNode : MonoBehaviour
 
         allNodeCells.Remove(cell);
         allNodes.Remove(this);
+    }
+
+    public static void ClearAllNodes()
+    {
+        allNodes.Clear();
+        allNodeCells.Clear();
+        StartNode = null;
     }
 }

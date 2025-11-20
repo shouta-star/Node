@@ -60,18 +60,35 @@ public class UnknownQuantity: MonoBehaviour
     // 直近の通過ノード履歴（最大 unknownReferenceDepth 個）
     private List<MapNode> recentNodes = new List<MapNode>();
 
+    bool canMove;
+    public MapNode CurrentNode => currentNode;
+
     // ======================================================
     // Start：初期化処理
     // ======================================================
     void Start()
     {
-        moveDir = startDirection.normalized;         // 初期移動方向設定
-        targetPos = transform.position = SnapToGrid(transform.position); // グリッド位置にスナップ
-        ApplyVisual();                               // プレイヤーの見た目設定
-        currentNode = TryPlaceNode(transform.position); // 現在位置にノード設置 or 取得
+        Debug.Log($"[Start] Player Start() called. frame={Time.frameCount} name={name}");
 
-        // 履歴に現在ノードを登録
+        // ★最優先：ノード設置
+        Vector3 snappedPos = SnapToGrid(transform.position);
+        currentNode = TryPlaceNode(snappedPos);
+
+        // ここで StartNode が必ず設定される
         RegisterCurrentNode(currentNode);
+
+        // --- 以下は後でOK ---
+        moveDir = startDirection.normalized;
+        targetPos = transform.position = snappedPos;
+        ApplyVisual();
+
+        //// 履歴に現在ノードを登録
+        //RegisterCurrentNode(currentNode);
+
+        //moveDir = startDirection.normalized;         // 初期移動方向設定
+        //targetPos = transform.position = SnapToGrid(transform.position); // グリッド位置にスナップ
+        ////currentNode = TryPlaceNode(transform.position); // 現在位置にノード設置 or 取得
+        //ApplyVisual();                               // プレイヤーの見た目設定
 
         // ゴールノードが未設定なら自動検索
         if (goalNode == null)
@@ -83,6 +100,15 @@ public class UnknownQuantity: MonoBehaviour
             Debug.Log("[INIT] Goal re-found: " + goalNode);
         }
 
+        Debug.Log($"[DEBUG-STARTNODE] UnknownQuantity.Start(): StartNode = {MapNode.StartNode?.name}");
+
+        // ★★★ 最重要 ★★★
+        // Goal に向かうための距離を全 Node に再計算する
+        if (goalNode != null)
+        {
+            MapNode.RecalculateGoalDistance(goalNode);
+            Debug.Log("[INIT] RecalculateGoalDistance DONE");
+        }
 
         // ゴール学習済みなら最短経路追従を開始
         if (hasLearnedGoal)
@@ -93,7 +119,24 @@ public class UnknownQuantity: MonoBehaviour
             return;
         }
 
+        // ★ Start直後だけ壁チェック → 壁なら前進を停止（初期壁抜け防止）
+        Vector3 origin = transform.position + Vector3.up;
+        if (Physics.Raycast(origin, moveDir, rayDistance, wallLayer))
+        {
+            Debug.Log("[INIT] Front is WALL → Stop first move");
+            moveDir = Vector3.zero;     // ← ここが最重要
+        }
+
         if (debugLog) Debug.Log($"[Player:{name}] Start @ {currentNode}");
+
+        canMove = false;
+        StartCoroutine(EnableMoveNextFrame());
+
+        Debug.Log("=== [DEBUG-U] Start 時点 全Node unknownCount ===");
+        foreach (var n in MapNode.allNodes)
+        {
+            Debug.Log($"[DEBUG-U] {n.name} U={n.unknownCount} W={n.wallCount} links={n.links.Count}");
+        }
     }
 
     // ======================================================
@@ -120,6 +163,14 @@ public class UnknownQuantity: MonoBehaviour
         {
             MoveToTarget();
         }
+
+        if (!canMove) return;
+    }
+
+    private IEnumerator EnableMoveNextFrame()
+    {
+        yield return null; // 1フレーム待つ
+        canMove = true;
     }
 
     // ======================================================
