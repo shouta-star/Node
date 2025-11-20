@@ -116,6 +116,7 @@ public class RestartManager : MonoBehaviour
         // フラグリセット ←★ これが無いと2回目以降動かない
         isRestarting = false;
         hasRestarted = false;
+        UnknownQuantity.hasLearnedGoal = false;
 
         // ⑤ シーン再読み込み
         string sceneName = SceneManager.GetActiveScene().name;

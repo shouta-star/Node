@@ -68,7 +68,8 @@ public class UnknownQuantity: MonoBehaviour
     // ======================================================
     void Start()
     {
-        Debug.Log($"[Start] Player Start() called. frame={Time.frameCount} name={name}");
+        Debug.Log($"[CHECK] hasLearnedGoal={hasLearnedGoal} isFollowingShortest={isFollowingShortest}");
+        //Debug.Log($"[Start] Player Start() called. frame={Time.frameCount} name={name}");
 
         // ★最優先：ノード設置
         Vector3 snappedPos = SnapToGrid(transform.position);
