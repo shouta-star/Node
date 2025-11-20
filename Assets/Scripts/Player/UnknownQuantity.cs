@@ -76,10 +76,13 @@ public class UnknownQuantity: MonoBehaviour
         // ゴールノードが未設定なら自動検索
         if (goalNode == null)
         {
-            GameObject goalObj = GameObject.Find("Node_1");
+            GameObject goalObj = GameObject.FindGameObjectWithTag("Goal");
             if (goalObj != null)
                 goalNode = goalObj.GetComponent<MapNode>();
+
+            Debug.Log("[INIT] Goal re-found: " + goalNode);
         }
+
 
         // ゴール学習済みなら最短経路追従を開始
         if (hasLearnedGoal)
