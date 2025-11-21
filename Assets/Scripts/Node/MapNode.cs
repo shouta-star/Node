@@ -94,7 +94,11 @@ public class MapNode : MonoBehaviour
 
     public void AddLink(MapNode other)
     {
-        if (other == null || other == this) return;
+        if (other == null || other == this)
+        {
+            Debug.LogError($"[MN-AddLink ERROR] other == null");
+            return;
+        }
 
         bool added = false;
 
@@ -102,14 +106,14 @@ public class MapNode : MonoBehaviour
         {
             links.Add(other);
             added = true;
-            //Debug.Log($"[AddLink] Add {name} → {other.name}");
+           Debug.Log($"[AddLink] Add {name} → {other.name}");
         }
 
         if (!other.links.Contains(this))
         {
             other.links.Add(this);
             added = true;
-            //Debug.Log($"[AddLink] Add {name} → {other.name}");
+            Debug.Log($"[AddLink] Add {name} → {other.name}");
         }
 
         if (debugLog && added)
@@ -229,10 +233,10 @@ public class MapNode : MonoBehaviour
             {
                 Vector3 delta = (link.transform.position - transform.position).normalized;
                 float dot = Vector3.Dot(delta, dir);
-                if (dot > 0.7f)  // ← 0.9 → 0.7 に緩和
+                if (dot > 0.95f)  // ← 0.9 → 0.7 に緩和
                 {
                     linkedInDir = true;
-                    if (debugLog)
+                    //if (debugLog)
                         Debug.Log($"[MapNode] {name} dir={dirName}: Linked with {link.name} (dot={dot:F2})");
                     break;
                 }
@@ -243,15 +247,17 @@ public class MapNode : MonoBehaviour
 
             // リンクなし方向 → 壁 or Unknown
             if (Physics.Raycast(transform.position + Vector3.up * 0.1f, dir, cellSize, LayerMask.GetMask("Wall")))
+            //if (Physics.Raycast(transform.position + Vector3.up * 0.1f, dir, cellSize, wallLayer))
+
             {
                 wallCount++;
-                if (debugLog)
+                //if (debugLog)
                     Debug.Log($"[MapNode] {name} dir={dirName}: HIT Wall");
             }
             else
             {
                 unknownCount++;
-                if (debugLog)
+                //if (debugLog)
                     Debug.Log($"[MapNode] {name} dir={dirName}: Unknown (no link)");
             }
         }

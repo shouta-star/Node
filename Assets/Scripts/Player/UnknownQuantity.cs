@@ -3,6 +3,26 @@
 // 最短経路はGoalに到達した際、各NodeがGoalからどれだけ離れているかで決定。
 // ======================================================
 
+//毎フレーム Update
+//↓
+//isMoving=false ?
+//↓ YES
+//    CanPlaceNodeHere？
+//      ↓NO → MoveForward（直進）
+//      ↓YES → TryExploreMove（方向選択）
+
+//TryExploreMove の中
+//↓
+//① Node を置く
+//② Goal 到達？ → 最短経路モードへ移行
+//③ 終端？ → 未知方向探索
+//④ unknown を BFS で探し最寄り Unknown へ向かう
+//⑤ fallback（unknownなし）→ランダムリンク
+//↓
+//MoveForward
+//↓
+//MoveToTarget（1マス進む）
+
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;

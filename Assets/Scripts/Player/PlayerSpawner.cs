@@ -40,8 +40,8 @@ public class PlayerSpawner : MonoBehaviour
 
                 if (uq != null)
                 {
-                    Debug.Log($"[Spawner] uq.CurrentNode = {uq.CurrentNode}");
-                    Debug.Log($"[Spawner] MapNode.StartNode = {MapNode.StartNode}");
+                    //Debug.Log($"[Spawner] uq.CurrentNode = {uq.CurrentNode}");
+                    //Debug.Log($"[Spawner] MapNode.StartNode = {MapNode.StartNode}");
                 }
             }
 
