@@ -166,7 +166,7 @@ MonoBehaviour:
   startDirection: {x: 0, y: 0, z: 1}
   gridOrigin: {x: 0, y: 0, z: 0}
   nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
-  unknownReferenceDepth: 3
+  unknownReferenceDepth: 5
   weightUnknown: 1
   weightDistance: 1
   linkRayMaxSteps: 100

@@ -209,10 +209,66 @@ public class MapNode : MonoBehaviour
     // ======================================================
     // Linkベースでの未知数・壁数再計算
     // ======================================================
+    //public void RecalculateUnknownAndWall()
+    //{
+    //    //Debug.Log($"[MapNode] Recalc START name={name}, before U={unknownCount}, W={wallCount}, linkCount={links.Count}");
+
+    //    int prevU = unknownCount;
+    //    int prevW = wallCount;
+    //    unknownCount = 0;
+    //    wallCount = 0;
+
+    //    Vector3[] dirs = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+    //    string[] dirNames = { "F", "B", "L", "R" };
+
+    //    for (int i = 0; i < dirs.Length; i++)
+    //    {
+    //        Vector3 dir = dirs[i];
+    //        string dirName = dirNames[i];
+
+    //        bool linkedInDir = false;
+
+    //        // Linkから方向判定（角度許容を緩くする）
+    //        foreach (var link in links)
+    //        {
+    //            Vector3 delta = (link.transform.position - transform.position).normalized;
+    //            float dot = Vector3.Dot(delta, dir);
+    //            if (dot > 0.95f)  // ← 0.9 → 0.7 に緩和
+    //            {
+    //                linkedInDir = true;
+    //                //if (debugLog)
+    //                    Debug.Log($"[MapNode] {name} dir={dirName}: Linked with {link.name} (dot={dot:F2})");
+    //                break;
+    //            }
+    //        }
+
+    //        if (linkedInDir)
+    //            continue; // 既知方向（リンク済み）
+
+    //        // リンクなし方向 → 壁 or Unknown
+    //        if (Physics.Raycast(transform.position + Vector3.up * 0.1f, dir, cellSize, LayerMask.GetMask("Wall")))
+    //        //if (Physics.Raycast(transform.position + Vector3.up * 0.1f, dir, cellSize, wallLayer))
+
+    //        {
+    //            wallCount++;
+    //            //if (debugLog)
+    //                Debug.Log($"[MapNode] {name} dir={dirName}: HIT Wall");
+    //        }
+    //        else
+    //        {
+    //            unknownCount++;
+    //            //if (debugLog)
+    //                Debug.Log($"[MapNode] {name} dir={dirName}: Unknown (no link)");
+    //        }
+    //    }
+
+    //    //if (prevU != unknownCount || prevW != wallCount)
+    //    //Debug.Log($"[MapNode][U/W CHANGED] {name}  U: {prevU} -> {unknownCount},  W: {prevW} -> {wallCount}");
+
+    //    //Debug.Log($"[MapNode] Recalc END name={name}, after U={unknownCount}, W={wallCount}, linkCount={links.Count}");
+    //}
     public void RecalculateUnknownAndWall()
     {
-        //Debug.Log($"[MapNode] Recalc START name={name}, before U={unknownCount}, W={wallCount}, linkCount={links.Count}");
-
         int prevU = unknownCount;
         int prevW = wallCount;
         unknownCount = 0;
@@ -228,45 +284,59 @@ public class MapNode : MonoBehaviour
 
             bool linkedInDir = false;
 
-            // Linkから方向判定（角度許容を緩くする）
+            // ---- 方向にリンクしているか（角度チェック）----
             foreach (var link in links)
             {
                 Vector3 delta = (link.transform.position - transform.position).normalized;
                 float dot = Vector3.Dot(delta, dir);
-                if (dot > 0.95f)  // ← 0.9 → 0.7 に緩和
+                if (dot > 0.95f)
                 {
                     linkedInDir = true;
-                    //if (debugLog)
-                        Debug.Log($"[MapNode] {name} dir={dirName}: Linked with {link.name} (dot={dot:F2})");
+                    Debug.Log($"[MapNode] {name} dir={dirName}: Linked with {link.name} (dot={dot:F2})");
                     break;
                 }
             }
 
             if (linkedInDir)
-                continue; // 既知方向（リンク済み）
+                continue; // 既にリンク済み方向は Unknown/WALL の対象外
 
-            // リンクなし方向 → 壁 or Unknown
-            if (Physics.Raycast(transform.position + Vector3.up * 0.1f, dir, cellSize, LayerMask.GetMask("Wall")))
-            //if (Physics.Raycast(transform.position + Vector3.up * 0.1f, dir, cellSize, wallLayer))
+            // ---- 壁チェック ----
+            bool hitWall = Physics.Raycast(
+                transform.position + Vector3.up * 0.1f,
+                dir,
+                cellSize,
+                LayerMask.GetMask("Wall")
+            );
 
+            if (hitWall)
             {
                 wallCount++;
-                //if (debugLog)
-                    Debug.Log($"[MapNode] {name} dir={dirName}: HIT Wall");
+                Debug.Log($"[MapNode] {name} dir={dirName}: HIT Wall");
+                continue;
             }
-            else
+
+            // ---- ★ Node がその方向に存在するかチェック ----
+            bool hitNode = Physics.Raycast(
+                transform.position + Vector3.up * 0.1f,
+                dir,
+                cellSize,
+                LayerMask.GetMask("Node")
+            );
+
+            if (hitNode)
             {
-                unknownCount++;
-                //if (debugLog)
-                    Debug.Log($"[MapNode] {name} dir={dirName}: Unknown (no link)");
+                // 壁ではないし Node でもある → これは Unknown ではない
+                // 未リンク方向だが「進めない Unknown 」なので無視
+                Debug.Log($"[MapNode] {name} dir={dirName}: Found Node but not linked");
+                continue;
             }
+
+            // ---- ★ 本当に進める Unknown ----
+            unknownCount++;
+            Debug.Log($"[MapNode] {name} dir={dirName}: Valid Unknown");
         }
-
-        //if (prevU != unknownCount || prevW != wallCount)
-        //Debug.Log($"[MapNode][U/W CHANGED] {name}  U: {prevU} -> {unknownCount},  W: {prevW} -> {wallCount}");
-
-        //Debug.Log($"[MapNode] Recalc END name={name}, after U={unknownCount}, W={wallCount}, linkCount={links.Count}");
     }
+
 
     public float EdgeCost(MapNode other)
     {
@@ -351,6 +421,41 @@ public class MapNode : MonoBehaviour
 
         allNodeCells.Remove(cell);
         allNodes.Remove(this);
+    }
+
+    // ======================================================
+    // ★ Unknown 方向（リンクなし & 壁なし）を返す
+    // ======================================================
+    public Vector3? GetUnknownDirection()
+    {
+        Vector3[] dirs = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+
+        foreach (var dir in dirs)
+        {
+            // すでにリンク済み方向は除外
+            bool linked = false;
+            foreach (var link in links)
+            {
+                Vector3 delta = (link.transform.position - transform.position).normalized;
+                if (Vector3.Dot(delta, dir) > 0.95f)
+                {
+                    linked = true;
+                    break;
+                }
+            }
+            if (linked) continue;
+
+            // 壁方向は除外
+            if (Physics.Raycast(transform.position + Vector3.up * 0.1f,
+                dir, cellSize, LayerMask.GetMask("Wall")))
+                continue;
+
+            // → Unknown 方向
+            return dir;
+        }
+
+        // Unknown 無し
+        return null;
     }
 
     public static void ClearAllNodes()
