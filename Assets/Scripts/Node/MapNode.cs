@@ -267,6 +267,75 @@ public class MapNode : MonoBehaviour
 
     //    //Debug.Log($"[MapNode] Recalc END name={name}, after U={unknownCount}, W={wallCount}, linkCount={links.Count}");
     //}
+    //public void RecalculateUnknownAndWall()
+    //{
+    //    int prevU = unknownCount;
+    //    int prevW = wallCount;
+    //    unknownCount = 0;
+    //    wallCount = 0;
+
+    //    Vector3[] dirs = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+    //    string[] dirNames = { "F", "B", "L", "R" };
+
+    //    for (int i = 0; i < dirs.Length; i++)
+    //    {
+    //        Vector3 dir = dirs[i];
+    //        string dirName = dirNames[i];
+
+    //        bool linkedInDir = false;
+
+    //        // ---- 方向にリンクしているか（角度チェック）----
+    //        foreach (var link in links)
+    //        {
+    //            Vector3 delta = (link.transform.position - transform.position).normalized;
+    //            float dot = Vector3.Dot(delta, dir);
+    //            if (dot > 0.95f)
+    //            {
+    //                linkedInDir = true;
+    //                Debug.Log($"[MapNode] {name} dir={dirName}: Linked with {link.name} (dot={dot:F2})");
+    //                break;
+    //            }
+    //        }
+
+    //        if (linkedInDir)
+    //            continue; // 既にリンク済み方向は Unknown/WALL の対象外
+
+    //        // ---- 壁チェック ----
+    //        bool hitWall = Physics.Raycast(
+    //            transform.position + Vector3.up * 0.1f,
+    //            dir,
+    //            cellSize,
+    //            LayerMask.GetMask("Wall")
+    //        );
+
+    //        if (hitWall)
+    //        {
+    //            wallCount++;
+    //            Debug.Log($"[MapNode] {name} dir={dirName}: HIT Wall");
+    //            continue;
+    //        }
+
+    //        // ---- ★ Node がその方向に存在するかチェック ----
+    //        bool hitNode = Physics.Raycast(
+    //            transform.position + Vector3.up * 0.1f,
+    //            dir,
+    //            cellSize,
+    //            LayerMask.GetMask("Node")
+    //        );
+
+    //        if (hitNode)
+    //        {
+    //            // 壁ではないし Node でもある → これは Unknown ではない
+    //            // 未リンク方向だが「進めない Unknown 」なので無視
+    //            Debug.Log($"[MapNode] {name} dir={dirName}: Found Node but not linked");
+    //            continue;
+    //        }
+
+    //        // ---- ★ 本当に進める Unknown ----
+    //        unknownCount++;
+    //        Debug.Log($"[MapNode] {name} dir={dirName}: Valid Unknown");
+    //    }
+    //}
     public void RecalculateUnknownAndWall()
     {
         int prevU = unknownCount;
@@ -298,13 +367,13 @@ public class MapNode : MonoBehaviour
             }
 
             if (linkedInDir)
-                continue; // 既にリンク済み方向は Unknown/WALL の対象外
+                continue;
 
-            // ---- 壁チェック ----
+            // ---- 壁チェック（距離を少し伸ばす）----
             bool hitWall = Physics.Raycast(
-                transform.position + Vector3.up * 0.1f,
+                transform.position + Vector3.up * 0.05f,
                 dir,
-                cellSize,
+                cellSize * 1.2f,
                 LayerMask.GetMask("Wall")
             );
 
@@ -315,23 +384,21 @@ public class MapNode : MonoBehaviour
                 continue;
             }
 
-            // ---- ★ Node がその方向に存在するかチェック ----
+            // ---- Node チェック（短めの距離で誤検知を防ぐ）----
             bool hitNode = Physics.Raycast(
-                transform.position + Vector3.up * 0.1f,
+                transform.position + Vector3.up * 0.05f,
                 dir,
-                cellSize,
+                cellSize * 0.6f,
                 LayerMask.GetMask("Node")
             );
 
             if (hitNode)
             {
-                // 壁ではないし Node でもある → これは Unknown ではない
-                // 未リンク方向だが「進めない Unknown 」なので無視
                 Debug.Log($"[MapNode] {name} dir={dirName}: Found Node but not linked");
                 continue;
             }
 
-            // ---- ★ 本当に進める Unknown ----
+            // ---- 有効な Unknown ----
             unknownCount++;
             Debug.Log($"[MapNode] {name} dir={dirName}: Valid Unknown");
         }
