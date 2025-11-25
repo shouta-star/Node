@@ -27,6 +27,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using System.Diagnostics;
 
 public class UnknownQuantity: MonoBehaviour
 {
@@ -85,12 +86,21 @@ public class UnknownQuantity: MonoBehaviour
     bool canMove;
     public MapNode CurrentNode => currentNode;
 
+    // ★ CPU負荷測定
+    private static float algTotalMs = 0f;
+    private static float algMaxMs = 0f;
+    private static int algFrameCount = 0;
+    public static float AlgTotalMs => algTotalMs;
+    public static int AlgFrameCount => algFrameCount;
+    public static float AlgMaxMs => algMaxMs;
+
+
     // ======================================================
     // Start：初期化処理
     // ======================================================
     void Start()
     {
-        Debug.Log($"[CHECK] hasLearnedGoal={hasLearnedGoal} isFollowingShortest={isFollowingShortest}");
+        UnityEngine.Debug.Log($"[CHECK] hasLearnedGoal={hasLearnedGoal} isFollowingShortest={isFollowingShortest}");
         //Debug.Log($"[Start] Player Start() called. frame={Time.frameCount} name={name}");
 
         // ★最優先：ノード設置
@@ -112,17 +122,17 @@ public class UnknownQuantity: MonoBehaviour
             if (goalObj != null)
                 goalNode = goalObj.GetComponent<MapNode>();
 
-            Debug.Log("[INIT] Goal re-found: " + goalNode);
+            UnityEngine.Debug.Log("[INIT] Goal re-found: " + goalNode);
         }
 
-        Debug.Log($"[DEBUG-STARTNODE] UnknownQuantity.Start(): StartNode = {MapNode.StartNode?.name}");
+        UnityEngine.Debug.Log($"[DEBUG-STARTNODE] UnknownQuantity.Start(): StartNode = {MapNode.StartNode?.name}");
 
         // ★★★ 最重要 ★★★
         // Goal に向かうための距離を全 Node に再計算する
         if (goalNode != null)
         {
             MapNode.RecalculateGoalDistance(goalNode);
-            Debug.Log("[INIT] RecalculateGoalDistance DONE");
+            UnityEngine.Debug.Log("[INIT] RecalculateGoalDistance DONE");
         }
 
         // ゴール学習済みなら最短経路追従を開始
@@ -139,19 +149,19 @@ public class UnknownQuantity: MonoBehaviour
         Vector3 origin = transform.position + Vector3.up;
         if (Physics.Raycast(origin, moveDir, rayDistance, wallLayer))
         {
-            Debug.Log("[INIT] Front is WALL → Stop first move");
+            UnityEngine.Debug.Log("[INIT] Front is WALL → Stop first move");
             moveDir = Vector3.zero;     // ← ここが最重要
         }
 
-        if (debugLog) Debug.Log($"[Player:{name}] Start @ {currentNode}");
+        if (debugLog) UnityEngine.Debug.Log($"[Player:{name}] Start @ {currentNode}");
 
         canMove = false;
         StartCoroutine(EnableMoveNextFrame());
 
-        Debug.Log("=== [DEBUG-U] Start 時点 全Node unknownCount ===");
+        UnityEngine.Debug.Log("=== [DEBUG-U] Start 時点 全Node unknownCount ===");
         foreach (var n in MapNode.allNodes)
         {
-            Debug.Log($"[DEBUG-U] {n.name} U={n.unknownCount} W={n.wallCount} links={n.links.Count}");
+            UnityEngine.Debug.Log($"[DEBUG-U] {n.name} U={n.unknownCount} W={n.wallCount} links={n.links.Count}");
         }
     }
 
@@ -160,6 +170,8 @@ public class UnknownQuantity: MonoBehaviour
     // ======================================================
     void Update()
     {
+        Stopwatch sw = Stopwatch.StartNew();
+
         // 最短経路追従中は移動処理のみ
         if (isFollowingShortest)
         {
@@ -181,6 +193,21 @@ public class UnknownQuantity: MonoBehaviour
         }
 
         if (!canMove) return;
+
+        sw.Stop();
+        float ms = sw.ElapsedMilliseconds;
+
+        algTotalMs += ms;
+        algMaxMs = Mathf.Max(algMaxMs, ms);
+        algFrameCount++;
+    }
+
+    // 再スタート時初期化用（RestartManager から呼ぶ）
+    public static void ResetAlgorithmMetrics()
+    {
+        algTotalMs = 0f;
+        algMaxMs = 0f;
+        algFrameCount = 0;
     }
 
     private IEnumerator EnableMoveNextFrame()
@@ -278,7 +305,7 @@ public class UnknownQuantity: MonoBehaviour
         if (debugLog)
         {
             string hist = string.Join(" -> ", recentNodes.Select(n => n != null ? n.name : "null"));
-            Debug.Log($"[HIST] {hist}");
+            UnityEngine.Debug.Log($"[HIST] {hist}");
         }
     }
 
@@ -290,7 +317,7 @@ public class UnknownQuantity: MonoBehaviour
         if (isFollowingShortest) return;
 
         currentNode = TryPlaceNode(transform.position);
-        if (debugLog) Debug.Log("[Player] Node placed → decide next direction");
+        if (debugLog) UnityEngine.Debug.Log("[Player] Node placed → decide next direction");
 
         // 履歴に現在ノードを登録
         RegisterCurrentNode(currentNode);
@@ -299,7 +326,7 @@ public class UnknownQuantity: MonoBehaviour
         if (goalNode != null && currentNode == goalNode)
         {
             reachedGoal = true;
-            if (debugLog) Debug.Log("[GOAL] Player reached GoalNode. Recalculate distances & follow shortest path.");
+            if (debugLog) UnityEngine.Debug.Log("[GOAL] Player reached GoalNode. Recalculate distances & follow shortest path.");
 
             // ★Goal到達距離を ShortestPathJudge に通知
             int dist = currentNode.distanceFromStart;   // または DistanceFromGoal のほうが正確
@@ -325,7 +352,7 @@ public class UnknownQuantity: MonoBehaviour
         // 終端ノード（リンクが1つだけ）なら新しい方向を探索
         if (IsTerminalNode(currentNode))
         {
-            if (debugLog) Debug.Log($"[EXP] Terminal node detected ({currentNode.name}) → TryMoveToUnlinkedDirection()");
+            if (debugLog) UnityEngine.Debug.Log($"[EXP] Terminal node detected ({currentNode.name}) → TryMoveToUnlinkedDirection()");
             TryMoveToUnlinkedDirection();
             return;
         }
@@ -347,14 +374,14 @@ public class UnknownQuantity: MonoBehaviour
             MoveForward();
 
             if (debugLog)
-                Debug.Log($"[EXP-SELECT] {currentNode.name} → {next.name} (U={next.unknownCount})");
+                UnityEngine.Debug.Log($"[EXP-SELECT] {currentNode.name} → {next.name} (U={next.unknownCount})");
         }
         else
         {
             // ベストなノードが「現在ノード自身」だった場合など：
             // ここで新しい未リンク方向へ進む（結果的に新規Node開拓へ）
             if (debugLog)
-                Debug.Log("[EXP-SELECT] best node is current → TryMoveToUnlinkedDirection()");
+                UnityEngine.Debug.Log("[EXP-SELECT] best node is current → TryMoveToUnlinkedDirection()");
             TryMoveToUnlinkedDirection();
         }
     }
@@ -520,7 +547,7 @@ public class UnknownQuantity: MonoBehaviour
         // 現在Nodeが存在しない場合は前進
         if (currentNode == null)
         {
-            if (debugLog) Debug.Log("[EXP-DBG] currentNode=null → MoveForward()");
+            if (debugLog) UnityEngine.Debug.Log("[EXP-DBG] currentNode=null → MoveForward()");
             MoveForward();
             return;
         }
@@ -533,7 +560,7 @@ public class UnknownQuantity: MonoBehaviour
         Vector3.left,
         Vector3.right
     };
-        if (debugLog) Debug.Log($"[EXP-DBG] All dirs: {DirListToString(allDirs)}");
+        if (debugLog) UnityEngine.Debug.Log($"[EXP-DBG] All dirs: {DirListToString(allDirs)}");
 
         Vector3 backDir = (-moveDir).normalized;
 
@@ -549,7 +576,7 @@ public class UnknownQuantity: MonoBehaviour
 
             afterBack.Add(d);
         }
-        if (debugLog) Debug.Log($"[EXP-DBG] After remove BACK ({DirToName(backDir)}): {DirListToString(afterBack)}");
+        if (debugLog) UnityEngine.Debug.Log($"[EXP-DBG] After remove BACK ({DirToName(backDir)}): {DirListToString(afterBack)}");
 
         // ③ 既にリンク済みの方向を除外（※行き止まりなら back は除外しない）
         List<Vector3> afterLinked = new List<Vector3>();
@@ -568,7 +595,7 @@ public class UnknownQuantity: MonoBehaviour
                 if (Vector3.Dot(diff, d.normalized) > 0.7f)
                 {
                     linked = true;
-                    if (debugLog) Debug.Log($"[EXP-DBG] LINKED dir removed: {DirToName(d)} (→ {link.name})");
+                    if (debugLog) UnityEngine.Debug.Log($"[EXP-DBG] LINKED dir removed: {DirToName(d)} (→ {link.name})");
                     break;
                 }
             }
@@ -576,7 +603,7 @@ public class UnknownQuantity: MonoBehaviour
             if (!linked)
                 afterLinked.Add(d);
         }
-        if (debugLog) Debug.Log($"[EXP-DBG] After remove LINKED: {DirListToString(afterLinked)}");
+        if (debugLog) UnityEngine.Debug.Log($"[EXP-DBG] After remove LINKED: {DirListToString(afterLinked)}");
 
         // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
         // ★ 追加：recentNodes に含まれるノード方向を除外
@@ -602,14 +629,14 @@ public class UnknownQuantity: MonoBehaviour
             if (next != null && recentNodes.Contains(next) && !isDeadEnd)
             {
                 if (debugLog)
-                    Debug.Log($"[EXP-DBG] RECENT removed: {DirToName(d)} ({next?.name})");
+                    UnityEngine.Debug.Log($"[EXP-DBG] RECENT removed: {DirToName(d)} ({next?.name})");
                 continue; // ★追加
             }
 
             afterRecent.Add(d);
         }
 
-        if (debugLog) Debug.Log($"[EXP-DBG] After remove RECENT: {DirListToString(afterRecent)}");
+        if (debugLog) UnityEngine.Debug.Log($"[EXP-DBG] After remove RECENT: {DirListToString(afterRecent)}");
         // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 
 
@@ -621,12 +648,12 @@ public class UnknownQuantity: MonoBehaviour
         {
             if (Physics.Raycast(origin, d, out RaycastHit hit, cellSize, wallLayer))
             {
-                if (debugLog) Debug.Log($"[EXP-DBG] BLOCKED by Wall: {DirToName(d)} ({hit.collider.name})");
+                if (debugLog) UnityEngine.Debug.Log($"[EXP-DBG] BLOCKED by Wall: {DirToName(d)} ({hit.collider.name})");
                 continue;
             }
             validDirs.Add(d);
         }
-        if (debugLog) Debug.Log($"[EXP-DBG] Final candidates: {DirListToString(validDirs)}");
+        if (debugLog) UnityEngine.Debug.Log($"[EXP-DBG] Final candidates: {DirListToString(validDirs)}");
 
         // ⑤ 候補が無い場合
         if (validDirs.Count == 0)
@@ -649,7 +676,7 @@ public class UnknownQuantity: MonoBehaviour
             if (canContinue)
             {
                 moveDir = nextDir;
-                if (debugLog) Debug.Log($"[EXP-RESULT] No unlinked dirs → Follow existing link {DirToName(moveDir)}");
+                if (debugLog) UnityEngine.Debug.Log($"[EXP-RESULT] No unlinked dirs → Follow existing link {DirToName(moveDir)}");
                 MoveForward();
             }
             else
@@ -658,12 +685,12 @@ public class UnknownQuantity: MonoBehaviour
                 if (isDeadEnd)
                 {
                     moveDir = backDir;
-                    if (debugLog) Debug.Log("[EXP-RESULT] DeadEnd: back is only direction → Move back");
+                    if (debugLog) UnityEngine.Debug.Log("[EXP-RESULT] DeadEnd: back is only direction → Move back");
                     MoveForward();
                     return;
                 }
 
-                if (debugLog) Debug.Log("[EXP-RESULT] Only back dir left → Stop to avoid loop");
+                if (debugLog) UnityEngine.Debug.Log("[EXP-RESULT] Only back dir left → Stop to avoid loop");
                 return;
             }
 
@@ -677,7 +704,7 @@ public class UnknownQuantity: MonoBehaviour
         {
             string all = DirListToString(validDirs);
             string chosen = DirToName(moveDir);
-            Debug.Log($"[EXP-RESULT] Selected direction: {chosen}  /  Candidates: {all}  /  Node={currentNode.name}");
+            UnityEngine.Debug.Log($"[EXP-RESULT] Selected direction: {chosen}  /  Candidates: {all}  /  Node={currentNode.name}");
         }
 
         // ⑦ 実際に前進
@@ -722,7 +749,7 @@ public class UnknownQuantity: MonoBehaviour
                     if (prevNode != null && current.links.Contains(prevNode))
                     {
                         //if (debugLog)
-                        Debug.Log($"[EXP-HIST] Backtrack {current.cell} → {prevNode.cell}");
+                        UnityEngine.Debug.Log($"[EXP-HIST] Backtrack {current.cell} → {prevNode.cell}");
                         //return prevNode;
                         return null;
                     }
@@ -763,7 +790,7 @@ public class UnknownQuantity: MonoBehaviour
         if (unknownList.Count == 0)
         {
             //if (debugLog)
-            Debug.Log("[U] No unknown anywhere → fallback");
+            UnityEngine.Debug.Log("[U] No unknown anywhere → fallback");
 
             return current.links
                 .OrderByDescending(n => n.unknownCount)
@@ -802,7 +829,7 @@ public class UnknownQuantity: MonoBehaviour
         MapNode targetUnknown = bestUnknowns[Random.Range(0, bestUnknowns.Count)];
 
         //if (debugLog)
-        Debug.Log($"[U] Target UNKNOWN = {targetUnknown.cell}  dist={bestDist}");
+        UnityEngine.Debug.Log($"[U] Target UNKNOWN = {targetUnknown.cell}  dist={bestDist}");
 
 
         // ======================================================
@@ -820,7 +847,7 @@ public class UnknownQuantity: MonoBehaviour
             if (!IsTerminalNode(current) && recentNodes.Contains(link))
             {
                 if (debugLog)
-                    Debug.Log($"[U] Skip recent direction: {link.cell}");
+                    UnityEngine.Debug.Log($"[U] Skip recent direction: {link.cell}");
                 continue;
             }
 
@@ -837,12 +864,12 @@ public class UnknownQuantity: MonoBehaviour
         if (bestNext == null)
         {
             if (debugLog)
-                Debug.Log("[U] bestNext is null → return null (fallback)");
+                UnityEngine.Debug.Log("[U] bestNext is null → return null (fallback)");
             return null;
         }
 
         //if (debugLog)
-        Debug.Log($"[U] Next Step = {bestNext.cell} (toward {targetUnknown.cell})");
+        UnityEngine.Debug.Log($"[U] Next Step = {bestNext.cell} (toward {targetUnknown.cell})");
 
         //return bestNext;
         return GetNextByLinkBFS(current, targetUnknown);
@@ -927,14 +954,14 @@ public class UnknownQuantity: MonoBehaviour
     {
         if (currentNode == null)
         {
-            Debug.LogWarning("[FollowSP] currentNode is null → 経路追従不可");
+            UnityEngine.Debug.LogWarning("[FollowSP] currentNode is null → 経路追従不可");
             isFollowingShortest = false;
             yield break;
         }
 
         // 見た目を赤に変更（防衛モード／最短経路モード）
         if (bodyRenderer != null) bodyRenderer.material.color = Color.red;
-        if (debugLog) Debug.Log($"[FollowSP] === Start === current={currentNode.name}, Dist={currentNode.DistanceFromGoal}");
+        if (debugLog) UnityEngine.Debug.Log($"[FollowSP] === Start === current={currentNode.name}, Dist={currentNode.DistanceFromGoal}");
 
         isFollowingShortest = true;
         int stepCount = 0;
@@ -979,7 +1006,7 @@ public class UnknownQuantity: MonoBehaviour
                 if (spawnedAsShortest)
                 {
                     UnknownQuantity.shortestModeArrivalCount++;
-                    Debug.Log($"[COUNT] shortest-mode arrived = {UnknownQuantity.shortestModeArrivalCount}");
+                    UnityEngine.Debug.Log($"[COUNT] shortest-mode arrived = {UnknownQuantity.shortestModeArrivalCount}");
                 }
 
                 isFollowingShortest = false;
@@ -1006,7 +1033,7 @@ public class UnknownQuantity: MonoBehaviour
         {
             float maxDist = cellSize * step;
             if (debugRay)
-                Debug.DrawRay(origin, backDir * maxDist, Color.yellow, 0.25f);
+                UnityEngine.Debug.DrawRay(origin, backDir * maxDist, Color.yellow, 0.25f);
 
             if (Physics.Raycast(origin, backDir, out RaycastHit hit, maxDist, mask))
             {
@@ -1025,7 +1052,7 @@ public class UnknownQuantity: MonoBehaviour
                         hitNode.RecalculateUnknownAndWall();
 
                         if (debugLog)
-                            Debug.Log($"[LINK-OK] {node.name} ↔ {hitNode.name}");
+                            UnityEngine.Debug.Log($"[LINK-OK] {node.name} ↔ {hitNode.name}");
                     }
                     return;
                 }
@@ -1088,7 +1115,7 @@ public class UnknownQuantity: MonoBehaviour
         if (MapNode.allNodeCells.Contains(cell))
         {
             node = MapNode.FindByCell(cell);
-            if (debugLog) Debug.Log($"[Node] Reuse existing Node @ {cell}");
+            if (debugLog) UnityEngine.Debug.Log($"[Node] Reuse existing Node @ {cell}");
         }
         else
         {
@@ -1097,7 +1124,7 @@ public class UnknownQuantity: MonoBehaviour
             node = obj.GetComponent<MapNode>();
             node.cell = cell;
             MapNode.allNodeCells.Add(cell);
-            if (debugLog) Debug.Log($"[Node] New Node placed @ {cell}");
+            if (debugLog) UnityEngine.Debug.Log($"[Node] New Node placed @ {cell}");
 
             // ★ ShortestPathJudge に「新規Node追加」を通知（ここ！）
             ShortestPathJudge.Instance?.OnNodeAdded();

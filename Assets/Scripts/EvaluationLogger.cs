@@ -22,9 +22,12 @@ public static class EvaluationLogger
         int shortestPathLen,
         float timeToGoal,
         int totalNodeVisits,
-        int heavyFrameCount,
-        float avgFrameTime,
-        float worstFrameTime
+        int totalProcessMs,
+        float avgProcessMs,
+        float maxProcessMs
+    //int heavyFrameCount,
+    //float avgFrameTime,
+    //float worstFrameTime
     )
     {
         // RunID Çâ¡éZ
@@ -45,9 +48,12 @@ public static class EvaluationLogger
                 "ShortestPathLen," +
                 "TimeToGoal," +
                 "TotalNodeVisits," +
-                "HeavyFrameCount," +
-                "AvgFrame," +
-                "WorstFrame";
+                "TotalProcessMs," +
+                "AvgProcessMs," +
+                "MaxProcessMs";
+                //"HeavyFrameCount," +
+                //"AvgFrame," +
+                //"WorstFrame";
 
             File.AppendAllText(path, header + "\n");
         }
@@ -59,9 +65,12 @@ public static class EvaluationLogger
             shortestPathLen + "," +
             timeToGoal.ToString("F3") + "," +
             totalNodeVisits + "," +
-            heavyFrameCount + "," +
-            avgFrameTime.ToString("F3") + "," +
-            worstFrameTime.ToString("F3");
+            totalProcessMs + "," +            // Åö èCê≥çœ
+            avgProcessMs.ToString("F3") + "," +  // Åö èCê≥çœ
+            maxProcessMs.ToString("F3");         // Åö èCê≥çœ
+                                             //heavyFrameCount + "," +
+                                             //avgFrameTime.ToString("F3") + "," +
+                                             //worstFrameTime.ToString("F3");
 
         // Å• í«ãL
         File.AppendAllText(path, line + "\n");

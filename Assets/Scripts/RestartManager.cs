@@ -82,9 +82,20 @@ public class RestartManager : MonoBehaviour
         int totalNodeVisits = 0;
 
         // ⑥ HeavyFrameCount / AvgFrame / WorstFrame（現状0）
-        int heavyFrameCount = 0;
-        float avgFrame = 0f;
-        float worstFrame = 0f;
+        //int heavyFrameCount = 0;
+        //float avgFrame = 0f;
+        //float worstFrame = 0f;
+        //int heavyFrameCount = Mathf.RoundToInt(UnknownQuantity.AlgTotalMs);
+        //float avgFrame = UnknownQuantity.AlgFrameCount > 0
+        //    ? UnknownQuantity.AlgTotalMs / UnknownQuantity.AlgFrameCount
+        //    : 0f;
+        //float worstFrame = UnknownQuantity.AlgMaxMs;
+        int totalProcessMs = Mathf.RoundToInt(UnknownQuantity.AlgTotalMs);
+        float avgProcessMs = UnknownQuantity.AlgFrameCount > 0
+            ? UnknownQuantity.AlgTotalMs / UnknownQuantity.AlgFrameCount
+            : 0f;
+        float maxProcessMs = UnknownQuantity.AlgMaxMs;
+
 
         // ★ EvaluationLogger に記録
         EvaluationLogger.Record(
@@ -93,9 +104,12 @@ public class RestartManager : MonoBehaviour
             shortestDist,
             timeToGoal,
             totalNodeVisits,
-            heavyFrameCount,
-            avgFrame,
-            worstFrame
+            totalProcessMs,
+            avgProcessMs,
+            maxProcessMs
+        //heavyFrameCount,
+        //avgFrame,
+        //worstFrame
         );
 
         Debug.Log("=== CSV 出力完了 ===");
@@ -119,6 +133,8 @@ public class RestartManager : MonoBehaviour
 
         // ④ Nodeデータクリア
         MapNode.ClearAllNodes();
+
+        UnknownQuantity.ResetAlgorithmMetrics();
 
         UnknownQuantity.shortestModeArrivalCount = 0;
 
