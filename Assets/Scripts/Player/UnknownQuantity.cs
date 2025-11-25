@@ -63,6 +63,8 @@ public class UnknownQuantity: MonoBehaviour
     [SerializeField] private Material exploreMaterial; // 探索時マテリアル
 
     public static bool hasLearnedGoal = false; // ゴール情報を学習済みかどうか
+    public static int shortestModeArrivalCount = 0;
+    private bool spawnedAsShortest = false;
 
     // ======================================================
     // 内部状態変数
@@ -103,14 +105,6 @@ public class UnknownQuantity: MonoBehaviour
         targetPos = transform.position = snappedPos;
         ApplyVisual();
 
-        //// 履歴に現在ノードを登録
-        //RegisterCurrentNode(currentNode);
-
-        //moveDir = startDirection.normalized;         // 初期移動方向設定
-        //targetPos = transform.position = SnapToGrid(transform.position); // グリッド位置にスナップ
-        ////currentNode = TryPlaceNode(transform.position); // 現在位置にノード設置 or 取得
-        //ApplyVisual();                               // プレイヤーの見た目設定
-
         // ゴールノードが未設定なら自動検索
         if (goalNode == null)
         {
@@ -134,6 +128,7 @@ public class UnknownQuantity: MonoBehaviour
         // ゴール学習済みなら最短経路追従を開始
         if (hasLearnedGoal)
         {
+            spawnedAsShortest = true;
             isFollowingShortest = true;
             StopAllCoroutines();
             StartCoroutine(FollowShortestPath());
@@ -838,6 +833,14 @@ public class UnknownQuantity: MonoBehaviour
             }
         }
 
+        // ★★★ Nullチェックを追加（ここ必須）★★★
+        if (bestNext == null)
+        {
+            if (debugLog)
+                Debug.Log("[U] bestNext is null → return null (fallback)");
+            return null;
+        }
+
         //if (debugLog)
         Debug.Log($"[U] Next Step = {bestNext.cell} (toward {targetUnknown.cell})");
 
@@ -972,6 +975,12 @@ public class UnknownQuantity: MonoBehaviour
 
                 RecalculateGoalDistance();
                 hasLearnedGoal = true;
+
+                if (spawnedAsShortest)
+                {
+                    UnknownQuantity.shortestModeArrivalCount++;
+                    Debug.Log($"[COUNT] shortest-mode arrived = {UnknownQuantity.shortestModeArrivalCount}");
+                }
 
                 isFollowingShortest = false;
                 Destroy(gameObject); // 自身を削除
