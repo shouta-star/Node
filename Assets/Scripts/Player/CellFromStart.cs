@@ -42,6 +42,17 @@ public class CellFromStart : MonoBehaviour
 
     private MapNode lastBestTarget = null;
 
+    public enum UnknownSelectMode
+    {
+        Random,
+        Nearest,
+        Farthest,
+        MostUnknown
+    }
+
+    [Header("探索方針①：Unknownの選択方式")]
+    public UnknownSelectMode unknownSelectMode = UnknownSelectMode.Farthest;
+
     //void Start()
     //{
     //    moveDir = startDirection.normalized;
@@ -1895,15 +1906,24 @@ public class CellFromStart : MonoBehaviour
         //------------------------------------------------------
         // ④-1 探索範囲内 Unknown の current 最遠ノード
         //------------------------------------------------------
-        MapNode unknownFarthest = null;
+        //MapNode unknownFarthest = null;
+        //if (unknownNodes.Count > 0)
+        //{
+        //    unknownFarthest = unknownNodes
+        //        .OrderByDescending(n => Distance(currentNode, n))
+        //        .First();
+
+        //    Debug.Log($"[UN-CUR] farthest Unknown in range = {unknownFarthest.name}");
+        //}
+        // === Unknown 選択切り替え対応 ===
+        MapNode unknownTarget = null;
         if (unknownNodes.Count > 0)
         {
-            unknownFarthest = unknownNodes
-                .OrderByDescending(n => Distance(currentNode, n))
-                .First();
+            unknownTarget = SelectUnknownNode(unknownNodes, currentNode);
 
-            Debug.Log($"[UN-CUR] farthest Unknown in range = {unknownFarthest.name}");
+            Debug.Log($"[UN-CUR] Selected Unknown = {unknownTarget.name}  mode={unknownSelectMode}");
         }
+
 
         //------------------------------------------------------
         // ④-2 探索範囲内 StartNode から最遠ノード
@@ -1925,14 +1945,14 @@ public class CellFromStart : MonoBehaviour
         if (existsStartFarthestInRange)
         {
             // Start最遠が探索範囲に存在する時 → Unknown と Start最遠 の current距離で比較
-            if (unknownFarthest != null)
+            if (unknownTarget != null)
             {
-                float dU = Distance(currentNode, unknownFarthest);
+                float dU = Distance(currentNode, unknownTarget);
                 float dS = Distance(currentNode, localFarthestFromStart);
 
                 Debug.Log($"[COMPARE] distToUnknown={dU}, distToStartFar={dS}");
 
-                bestTarget = (dU > dS) ? unknownFarthest : localFarthestFromStart;
+                bestTarget = (dU > dS) ? unknownTarget : localFarthestFromStart;
             }
             else
             {
@@ -1943,7 +1963,7 @@ public class CellFromStart : MonoBehaviour
         else
         {
             // Start最遠が探索範囲にいない → Unknown最遠のみを採用
-            bestTarget = unknownFarthest;
+            bestTarget = unknownTarget;
         }
 
         //------------------------------------------------------
@@ -1994,6 +2014,31 @@ public class CellFromStart : MonoBehaviour
         MoveForward();
     }
 
+    private MapNode SelectUnknownNode(List<MapNode> unknownNodes, MapNode current)
+    {
+        switch (unknownSelectMode)
+        {
+            case UnknownSelectMode.Random:
+                return unknownNodes[Random.Range(0, unknownNodes.Count)];
+
+            case UnknownSelectMode.Nearest:
+                return unknownNodes
+                    .OrderBy(n => Distance(current, n))
+                    .First();
+
+            case UnknownSelectMode.Farthest:
+                return unknownNodes
+                    .OrderByDescending(n => Distance(current, n))
+                    .First();
+
+            case UnknownSelectMode.MostUnknown:
+                return unknownNodes
+                    .OrderByDescending(n => n.unknownCount)
+                    .First();
+        }
+
+        return unknownNodes[0];
+    }
 
 
 
