@@ -37,13 +37,20 @@ public class RestartManager : MonoBehaviour
     {
         if (hasRestarted) return;
 
-        // 最短経路確定した？
-        if (ShortestPathJudge.Instance != null &&
-            ShortestPathJudge.Instance.IsShortestConfirmed)
+        //// 最短経路確定した？
+        //if (ShortestPathJudge.Instance != null &&
+        //    ShortestPathJudge.Instance.IsShortestConfirmed)
+        //{
+        //    hasRestarted = true;
+        //    StartCoroutine(RestartFlow());
+        //}
+
+        if (UnknownQuantity.shortestModeArrivalCount >= 10)
         {
             hasRestarted = true;
             StartCoroutine(RestartFlow());
         }
+
     }
 
     public void StartRestart()
@@ -112,6 +119,8 @@ public class RestartManager : MonoBehaviour
 
         // ④ Nodeデータクリア
         MapNode.ClearAllNodes();
+
+        UnknownQuantity.shortestModeArrivalCount = 0;
 
         // フラグリセット ←★ これが無いと2回目以降動かない
         isRestarting = false;
