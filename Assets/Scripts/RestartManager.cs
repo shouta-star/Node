@@ -127,6 +127,9 @@ public class RestartManager : MonoBehaviour
         hasRestarted = false;
         UnknownQuantity.hasLearnedGoal = false;
 
+        // TImeToGoalを毎回リセット
+        runStartTime = Time.time;
+
         // ⑤ シーン再読み込み
         string sceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(sceneName);
