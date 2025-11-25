@@ -392,11 +392,43 @@ public class MapNode : MonoBehaviour
                 LayerMask.GetMask("Node")
             );
 
+            //if (hitNode)
+            //{
+            //    Debug.Log($"[MapNode] {name} dir={dirName}: Found Node but not linked");
+            //    continue;
+            //}
             if (hitNode)
             {
+                // ★ hit した Node を取得
+                RaycastHit hitInfo;
+                Physics.Raycast(
+                    transform.position + Vector3.up * 0.05f,
+                    dir,
+                    out hitInfo,
+                    cellSize * 0.6f,
+                    LayerMask.GetMask("Node")
+                );
+
+                MapNode hitNodeObj = hitInfo.collider.GetComponent<MapNode>();
+
+                // ★ GoalNode の場合だけ “未リンクなら Unknown 扱い”
+                if (hitNodeObj != null && hitNodeObj.CompareTag("Goal"))
+                {
+                    bool linkedToGoal = links.Contains(hitNodeObj);
+
+                    if (!linkedToGoal)
+                    {
+                        unknownCount++;
+                        Debug.Log($"[MapNode] {name} dir={dirName}: Unknown (Goal not linked)");
+                        continue; // ← Unknown 扱いして次へ
+                    }
+                }
+
+                // ★ 通常の Node は Unknown にしない（現状のまま）
                 Debug.Log($"[MapNode] {name} dir={dirName}: Found Node but not linked");
                 continue;
             }
+
 
             // ---- 有効な Unknown ----
             unknownCount++;
