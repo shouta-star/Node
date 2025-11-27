@@ -159,7 +159,7 @@ public class CellFromStart : MonoBehaviour
         //------------------------------------------------------
         if (isMoving)
         {
-            Debug.Log("[UPDATE] isMoving → MoveToTarget()");
+            //Debug.Log("[UPDATE] isMoving → MoveToTarget()");
             MoveToTarget();
             return; // ← TryExploreMove を先に呼ばないため必須
         }
@@ -178,17 +178,37 @@ public class CellFromStart : MonoBehaviour
         // ③ Node設置 or 通路進行
         //------------------------------------------------------
         if (CanPlaceNodeHere())
+        // ★ Node 中心にいるかどうかを判定してから TryExploreMove を呼ぶ
+        //if (IsExactlyOnNodeCenter())
         {
-            Debug.Log("[UPDATE] CanPlaceNodeHere()=true → TryExploreMove()");
-            TryExploreMove();
+            //Debug.Log("[UPDATE] CanPlaceNodeHere()=true → TryExploreMove()");
+            //TryExploreMove();
+            if (arrivedThisNode)
+            {
+                Debug.Log("[UPDATE] Node到達直後 → TryExploreMove()");
+                arrivedThisNode = false;
+                TryExploreMove();
+                return;
+            }
+            else
+            {
+                Debug.Log("[UPDATE] Node中心だが到達直後でない → MoveForward()");
+                MoveForward();
+                return;
+            }
         }
-        else
+        //else
         {
             Debug.Log("[UPDATE] CanPlaceNodeHere()=false → MoveForward()");
             MoveForward();
         }
     }
 
+    //private bool IsExactlyOnNodeCenter()
+    //{
+    //    Vector3 snapped = SnapToGrid(transform.position);
+    //    return Vector3.Distance(transform.position, snapped) < 0.05f;
+    //}
 
     private void ApplyVisual()
     {
@@ -215,7 +235,7 @@ public class CellFromStart : MonoBehaviour
         Vector3 snapped = SnapToGrid(transform.position);
         float dist = Vector3.Distance(transform.position, snapped);
 
-        if (dist > 0.1f)
+        if (dist > 0.2f)
             return false;  // 中心にいない → Node置けない
 
         // ★ 壁・開放方向の判定（既存ロジックをそのまま使用）
@@ -445,12 +465,15 @@ public class CellFromStart : MonoBehaviour
         {
             arrivedThisNode = true;  // 次フレーム以降は無効
 
+            // ★ここが今回の追加ポイント
+            currentNode = MapNode.FindByCell(WorldToCell(targetPos));
+
             // ★ EveryNode：Nodeに到達した瞬間だけ bestTarget をクリア
-            if (targetUpdateMode == TargetUpdateMode.EveryNode)
-            {
-                lastBestTarget = null;
-                Debug.Log("[EVERY NODE] Node 到達 → bestTarget をクリアします");
-            }
+            //if (targetUpdateMode == TargetUpdateMode.EveryNode)
+            //{
+            //    lastBestTarget = null;
+            //    Debug.Log("[EVERY NODE] Node 到達 → bestTarget をクリアします");
+            //}
         }
 
         //------------------------------------------------------
@@ -458,8 +481,6 @@ public class CellFromStart : MonoBehaviour
         //------------------------------------------------------
         blockTryExploreThisFrame = true;
     }
-
-
 
     private void RegisterCurrentNode(MapNode node)
     {
@@ -1180,11 +1201,19 @@ public class CellFromStart : MonoBehaviour
         //------------------------------------------------------
         MapNode oldNode = currentNode;
 
+        //Debug.Log(
+        //    $"[CHECK-NODE] oldNode={oldNode?.name} ({oldNode?.transform.position}) | " +
+        //    $"currentNode={currentNode?.name} ({currentNode?.transform.position}) | " +
+        //    $"nodeJustArrived={(oldNode != currentNode)}"
+        //);
         Debug.Log(
-            $"[CHECK-NODE] oldNode={oldNode?.name} ({oldNode?.transform.position}) | " +
-            $"currentNode={currentNode?.name} ({currentNode?.transform.position}) | " +
+            $"[CHECK-NODE] oldNode={(oldNode ? oldNode.name : "null")}, " +
+            $"oldPos={(oldNode ? oldNode.transform.position.ToString() : "null")}, " +
+            $"currentNode={(currentNode ? currentNode.name : "null")}, " +
+            $"currentPos={(currentNode ? currentNode.transform.position.ToString() : "null")}, " +
             $"nodeJustArrived={(oldNode != currentNode)}"
         );
+
 
 
         currentNode = TryPlaceNode(transform.position);
@@ -1196,11 +1225,11 @@ public class CellFromStart : MonoBehaviour
         //------------------------------------------------------
         bool nodeJustArrived = (oldNode != currentNode);
 
-        if (targetUpdateMode == TargetUpdateMode.EveryNode && nodeJustArrived)
-        {
-            lastBestTarget = null;
-            Debug.Log("[EVERY NODE] Node 到達 → bestTarget クリア");
-        }
+        //if (targetUpdateMode == TargetUpdateMode.EveryNode && nodeJustArrived)
+        //{
+        //    lastBestTarget = null;
+        //    Debug.Log("[EVERY NODE] Node 到達 → bestTarget クリア");
+        //}
 
         //------------------------------------------------------
         // ③ FOLLOW（OnArrival 専用）
@@ -1238,6 +1267,7 @@ public class CellFromStart : MonoBehaviour
         // ④ bestTarget に到達したか（OnArrival 用）
         //------------------------------------------------------
         if (currentNode == lastBestTarget)
+        //if (targetUpdateMode == TargetUpdateMode.OnArrival && currentNode == lastBestTarget)
         {
             Debug.Log($"[REACHED] Target reached={lastBestTarget.name}");
 

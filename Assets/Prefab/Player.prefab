@@ -174,5 +174,5 @@ MonoBehaviour:
   debugRay: 1
   bodyRenderer: {fileID: 3303906976382372999}
   exploreMaterial: {fileID: 2100000, guid: acf7ff37ebb90214cb86cbf4c62185b3, type: 2}
-  unknownSelectMode: 2
+  unknownSelectMode: 0
   targetUpdateMode: 0

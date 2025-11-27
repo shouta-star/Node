@@ -13027,6 +13027,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6566390003674606108, guid: 6e123b8a46865cd44b7c3be018715904, type: 3}
+      propertyPath: targetUpdateMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6566390003674606108, guid: 6e123b8a46865cd44b7c3be018715904, type: 3}
       propertyPath: unknownSelectMode
       value: 0
       objectReference: {fileID: 0}
