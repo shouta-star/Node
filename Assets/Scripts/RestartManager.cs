@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.IO;
 
 public class RestartManager : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class RestartManager : MonoBehaviour
     private float runStartTime = 0f;
 
     bool isRestarting = false;
+
+    // ★ CellFromStart 実験用：何回目の実行か
+    private static int runIndex = 0;
 
     // ★ Awake 追加：永続化 & シングルトン構築
     void Awake()
@@ -45,11 +49,11 @@ public class RestartManager : MonoBehaviour
         //    StartCoroutine(RestartFlow());
         //}
 
-        if (UnknownQuantity.shortestModeArrivalCount >= 10)
-        {
-            hasRestarted = true;
-            StartCoroutine(RestartFlow());
-        }
+        //if (UnknownQuantity.shortestModeArrivalCount >= 10)
+        //{
+        //    hasRestarted = true;
+        //    StartCoroutine(RestartFlow());
+        //}
 
     }
 
@@ -60,11 +64,129 @@ public class RestartManager : MonoBehaviour
         StartCoroutine(RestartFlow());
     }
 
+    // =============================================================
+    // CellFromStart 用 Player.csv 出力
+    // =============================================================
+    //private void WriteCellFromStartPlayerCsv()
+    //{
+    //    // ★ シーン内の CellFromStart プレイヤーを全部取得
+    //    var players = FindObjectsOfType<CellFromStart>();
+    //    if (players == null || players.Length == 0)
+    //    {
+    //        Debug.LogWarning("[RestartManager] CellFromStart が見つからないので Player.csv は出力しません。");
+    //        return;
+    //    }
+
+    //    // ★ モード情報は 1Run 中では全Player共通の前提
+    //    var first = players[0];
+    //    string u = first.unknownSelectMode.ToString();
+    //    string t = first.targetUpdateMode.ToString();
+
+    //    // ★ ファイル名の共通プレフィックス
+    //    //    例: CFS_UNearest_TFarthest_Run01_Player.csv
+    //    string prefix = $"CFS_U{u}_T{t}_Run{runIndex:00}";
+
+    //    //string dir = Application.persistentDataPath;
+    //    string dir = @"D:\GitHub\NodeGitHub\CSV";
+    //    string path = Path.Combine(dir, prefix + "_Player.csv");
+
+    //    // ★ ディレクトリ存在チェック
+    //    if (!Directory.Exists(dir))
+    //    {
+    //        Directory.CreateDirectory(dir);
+    //    }
+
+    //    // ★ ヘッダー行（ファイルがまだ無ければ書く）
+    //    if (!File.Exists(path))
+    //    {
+    //        string header =
+    //            "RunIndex," +
+    //            "UnknownSelectMode," +
+    //            "TargetUpdateMode," +
+    //            "PlayerSessionId," +
+    //            "GoalReached," +
+    //            "FrameToGoal," +
+    //            "StepsWalked," +
+    //            "UniqueNodesVisited," +
+    //            "DeadEndEnterCount";
+
+    //        File.WriteAllText(path, header + "\n");
+    //    }
+
+    //    // ★ 各 Player 1行ずつ追記
+    //    for (int i = 0; i < players.Length; i++)
+    //    {
+    //        var p = players[i];
+
+    //        int goal = p.goalReached ? 1 : 0;
+
+    //        string line = string.Join(",",
+    //            runIndex,
+    //            u,
+    //            t,
+    //            i,                      // PlayerSessionId として一旦 index を使用
+    //            goal,
+    //            p.frameToGoal,
+    //            p.stepsWalked,
+    //            p.uniqueNodesVisited,
+    //            p.deadEndEnterCount
+    //        );
+
+    //        File.AppendAllText(path, line + "\n");
+    //    }
+
+    //    Debug.Log($"[RestartManager] Player.csv 出力完了 → {path}");
+    //}
+    public void WriteCellFromStartPlayerCsv(CellFromStart player)
+    {
+        if (player == null)
+        {
+            Debug.LogWarning("[RestartManager] CellFromStart が null なので Player.csv は出力しません。");
+            return;
+        }
+
+        // ★ 保存先フォルダ（今の Evaluation と同じ所）
+        string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+        if (!Directory.Exists(baseDir))
+        {
+            Directory.CreateDirectory(baseDir);
+        }
+
+        // ★ ファイル名（UnknownSelectMode / TargetUpdateMode 付き）
+        //   例: CFS_UFarthest_TEveryNode_Player.csv
+        string prefix = $"CFS_U{player.unknownSelectMode}_T{player.targetUpdateMode}";
+        string path = Path.Combine(baseDir, prefix + "_Player.csv");
+
+        // ★ ヘッダ行（ファイルが無いときだけ書く）
+        if (!File.Exists(path))
+        {
+            File.AppendAllText(path,
+                "RunIndex,StepsWalked,UniqueNodesVisited,DeadEndEnterCount,FrameToGoal\n");
+        }
+
+        // ★ 1行分のデータ（RunIndex は RestartManager 側で管理してるならそれを使う）
+        int runIndex = 0; // もし RestartManager に runIndex フィールドがあるならそれを使う
+        string line = string.Format(
+            "{0},{1},{2},{3},{4}\n",
+            runIndex,
+            player.stepsWalked,
+            player.uniqueNodesVisited,
+            player.deadEndEnterCount,
+            player.frameToGoal
+        );
+
+        File.AppendAllText(path, line);
+
+        Debug.Log($"[RestartManager] Player.csv 追記 → {path}");
+    }
+
     // -------------------------------------------------------
     // ★ CSVに UnknownQuantity の実験データを書き出す
     // -------------------------------------------------------
     private void RecordEvaluation()
     {
+        Debug.Log("[RestartManager] RecordEvaluation START");
+
         // ① ScriptName
         string scriptName = "UnknownQuantity";
 
@@ -112,7 +234,8 @@ public class RestartManager : MonoBehaviour
         //worstFrame
         );
 
-        Debug.Log("=== CSV 出力完了 ===");
+        Debug.Log("[RestartManager] RecordEvaluation END");
+        //Debug.Log("=== CSV 出力完了 ===");
     }
 
     private IEnumerator RestartFlow()
@@ -123,12 +246,22 @@ public class RestartManager : MonoBehaviour
         var players = FindObjectsOfType<UnknownQuantity>();
         foreach (var p in players)
             Destroy(p.gameObject);
+        // ★ CellFromStart プレイヤーも全部消す
+        var cfsPlayers = FindObjectsOfType<CellFromStart>();
+        foreach (var p in cfsPlayers)
+            Destroy(p.gameObject);
 
         // ② 旧プレイヤーの Update が走らないよう 1フレーム待つ
         yield return null;
 
+        // ★ 何回目のRunかをインクリメント
+        runIndex++;
+
+        // ★ CFS用 Player.csv を出力
+        //WriteCellFromStartPlayerCsv();
+
         // ③ CSV出力
-        RecordEvaluation();
+        //RecordEvaluation();
         yield return new WaitForSeconds(1f);
 
         // ④ Nodeデータクリア

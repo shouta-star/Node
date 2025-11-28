@@ -35,8 +35,8 @@ public static class EvaluationLogger
 
         // ▼ 保存先パス
         string fileName = $"Evaluation_{scriptName}.csv";
-        //string baseDir = @"D:\GitHub\NodeGitHub\CSV";
-        string baseDir = @"D:\GitHub\Node\CSV";
+        string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+        //string baseDir = @"D:\GitHub\Node\CSV";
         string path = Path.Combine(baseDir, fileName);
 
         // ▼ CSV が無ければヘッダ行を書く
