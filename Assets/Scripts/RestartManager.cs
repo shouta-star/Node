@@ -166,6 +166,12 @@ public class RestartManager : MonoBehaviour
 
         // ★ 1行分のデータ（RunIndex は RestartManager 側で管理してるならそれを使う）
         int runIndex = 0; // もし RestartManager に runIndex フィールドがあるならそれを使う
+        if (File.Exists(path))
+        {
+            int lineCount = File.ReadAllLines(path).Length; // ヘッダ含む行数
+            runIndex = Mathf.Max(0, lineCount - 1);        // データ行数
+        }
+
         string line = string.Format(
             "{0},{1},{2},{3},{4}\n",
             runIndex,

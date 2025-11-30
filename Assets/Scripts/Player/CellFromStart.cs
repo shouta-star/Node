@@ -752,7 +752,7 @@ public class CellFromStart : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"[GOAL-DEBUG] currentNode が null です。targetPos={targetPos}");
+            //Debug.LogWarning($"[GOAL-DEBUG] currentNode が null です。targetPos={targetPos}");
         }
         // ===== 評価ログ更新ここまで =====
 
