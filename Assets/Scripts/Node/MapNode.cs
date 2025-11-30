@@ -25,6 +25,8 @@ public class MapNode : MonoBehaviour
     public int unknownCount = 0;
     public int wallCount = 0;
 
+    public int passCount = 0;
+
     [Header("グリッド設定")]
     public float cellSize = 1f;
     public Vector3 gridOrigin = Vector3.zero;

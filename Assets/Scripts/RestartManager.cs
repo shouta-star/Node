@@ -2,6 +2,8 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.IO;
+using System.Text;
+using System.Globalization;
 
 public class RestartManager : MonoBehaviour
 {
@@ -186,6 +188,237 @@ public class RestartManager : MonoBehaviour
         Debug.Log($"[RestartManager] Player.csv 追記 → {path}");
     }
 
+    public void WriteNodeCsv()
+    {
+        // ① 保存先フォルダ
+        string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+        if (!Directory.Exists(baseDir))
+        {
+            Directory.CreateDirectory(baseDir);
+        }
+
+        // ② いまの CellFromStart からモード名を拾って prefix 化
+        var player = FindObjectOfType<CellFromStart>();
+        string prefix = "CFS";
+        if (player != null)
+        {
+            prefix = $"CFS_U{player.unknownSelectMode}_T{player.targetUpdateMode}";
+        }
+
+        string path = Path.Combine(baseDir, prefix + "_Node.csv");
+
+        // ③ ヘッダ（ファイルが無いときだけ）
+        if (!File.Exists(path))
+        {
+            File.AppendAllText(path,
+                "RunIndex,NodeName,PosX,PosZ," +
+                "DistanceFromStart,DistanceFromGoal," +
+                "UnknownCount,WallCount,LinkCount,PassCount," +
+                "IsDeadEnd,IsBranch\n");
+        }
+
+        // ④ RunIndex を決める
+        //    既存ファイルの「最後の行」の RunIndex を見て +1 する
+        int runIndex = 0;
+        if (File.Exists(path))
+        {
+            var lines = File.ReadAllLines(path);
+            if (lines.Length > 1)
+            {
+                var last = lines[lines.Length - 1];
+                var cols = last.Split(',');
+                if (cols.Length > 0 && int.TryParse(cols[0], out var lastIndex))
+                {
+                    runIndex = lastIndex + 1;
+                }
+            }
+        }
+
+        // ⑤ すべての MapNode を列挙して1行ずつ書き出す
+        var nodes = FindObjectsOfType<MapNode>();
+        var sb = new StringBuilder();
+
+        foreach (var n in nodes)
+        {
+            int linkCount = (n.links != null) ? n.links.Count : 0;
+            bool isDeadEnd = (linkCount == 1);
+            bool isBranch = (linkCount >= 3);
+
+            sb.AppendFormat(
+                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}\n",
+                runIndex,
+                n.name,
+                n.transform.position.x,
+                n.transform.position.z,
+                n.distanceFromStart,
+                n.DistanceFromGoal,
+                n.unknownCount,
+                n.wallCount,
+                linkCount,
+                n.passCount,
+                isDeadEnd ? 1 : 0,
+                isBranch ? 1 : 0
+            );
+        }
+
+        File.AppendAllText(path, sb.ToString());
+        Debug.Log($"[RestartManager] Node.csv 追記 → {path}");
+    }
+    //private void WriteNodeCsv()
+    //{
+    //    // ★ 保存先フォルダ（Player.csv と同じ場所）
+    //    string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+    //    if (!Directory.Exists(baseDir))
+    //    {
+    //        Directory.CreateDirectory(baseDir);
+    //    }
+
+    //    // ★ とりあえず固定ファイル名（必要になったら U/T も付けよう）
+    //    string path = Path.Combine(baseDir, "CFS_Node.csv");
+
+    //    // ★ ヘッダ行（ファイルが無いときだけ）
+    //    if (!File.Exists(path))
+    //    {
+    //        File.AppendAllText(path,
+    //            "RunIndex,NodeName,PosX,PosZ," +
+    //            "DistanceFromStart,DistanceFromGoal," +
+    //            "UnknownCount,WallCount,LinkCount,PassCount," +
+    //            "IsDeadEnd,IsBranch\n");
+    //    }
+
+    //    // ★ RunIndex を決める（最後の行の RunIndex を見て +1）
+    //    int runIndex = 0;
+    //    var lines = File.ReadAllLines(path);
+    //    if (lines.Length > 1)
+    //    {
+    //        int idx = lines.Length - 1;
+    //        while (idx > 0 && string.IsNullOrWhiteSpace(lines[idx]))
+    //            idx--;
+
+    //        var last = lines[idx];
+    //        var cols = last.Split(',');
+    //        if (cols.Length > 0 && int.TryParse(cols[0], out var lastIndex))
+    //        {
+    //            runIndex = lastIndex + 1;
+    //        }
+    //    }
+
+    //    // ★ すべての MapNode を列挙して、1行ずつ書き出す
+    //    var nodes = FindObjectsOfType<MapNode>();
+    //    var sb = new StringBuilder();
+
+    //    foreach (var n in nodes)
+    //    {
+    //        int linkCount = (n.links != null) ? n.links.Count : 0;
+    //        bool isDeadEnd = (linkCount == 1);
+    //        bool isBranch = (linkCount >= 3);
+
+    //        // ★ まだ MapNode に distanceFromGoal / passCount を実装していないので仮値
+    //        int distanceFromGoal = 0; // TODO: MapNode に実装したら n.distanceFromGoal に差し替え
+    //        int passCount = 0; // TODO: MapNode に実装したら n.passCount に差し替え
+
+    //        sb.AppendFormat(
+    //            "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}\n",
+    //            runIndex,
+    //            n.name,
+    //            n.transform.position.x,
+    //            n.transform.position.z,
+    //            n.distanceFromStart, // ★ ここは今も MapNode にある想定
+    //            distanceFromGoal,
+    //            n.unknownCount,
+    //            n.wallCount,
+    //            linkCount,
+    //            passCount,
+    //            isDeadEnd ? 1 : 0,
+    //            isBranch ? 1 : 0
+    //        );
+    //    }
+
+    //    File.AppendAllText(path, sb.ToString());
+    //    Debug.Log($"[RestartManager] Node.csv 追記 → {path}");
+    //}
+
+    public void WriteRunSummaryCsv(CellFromStart player)
+    {
+        if (player == null)
+        {
+            Debug.LogWarning("[RestartManager] CellFromStart が null なので RunSummary.csv は出力しません。");
+            return;
+        }
+
+        // ★ 保存先フォルダ（Player.csv と同じ場所）
+        string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+        if (!Directory.Exists(baseDir))
+        {
+            Directory.CreateDirectory(baseDir);
+        }
+
+        // ★ ファイル名（モード別に分ける）
+        //   例: CFS_UFarthest_TEveryNode_RunSummary.csv
+        string prefix = $"CFS_U{player.unknownSelectMode}_T{player.targetUpdateMode}";
+        string path = Path.Combine(baseDir, prefix + "_RunSummary.csv");
+
+        // ★ ヘッダ行（ファイルが無いときだけ書く）
+        if (!File.Exists(path))
+        {
+            File.AppendAllText(path,
+                "RunIndex,FrameToGoal,StepsWalked," +
+                "TotalNodeCount,DeadEndNodeCount,BranchNodeCount," +
+                "AvgPassCount,MaxPassCount,EndReason\n");
+        }
+
+        // ★ RunIndex を決める（既存行数から決定）
+        int runIndex = 0;
+        if (File.Exists(path))
+        {
+            int lineCount = File.ReadAllLines(path).Length; // ヘッダ込み
+            runIndex = Mathf.Max(0, lineCount - 1);         // データ行数 = RunIndex
+        }
+
+        // ★ Node 情報を集計
+        var nodes = FindObjectsOfType<MapNode>();
+        int totalNodeCount = nodes.Length;
+        int deadEndCount = 0;
+        int branchCount = 0;
+        int passSum = 0;
+        int maxPass = 0;
+
+        foreach (var n in nodes)
+        {
+            int linkCount = (n.links != null) ? n.links.Count : 0;
+            if (linkCount == 1) deadEndCount++;
+            if (linkCount >= 3) branchCount++;
+
+            int pc = n.passCount;
+            passSum += pc;
+            if (pc > maxPass) maxPass = pc;
+        }
+
+        float avgPass = (totalNodeCount > 0) ? (float)passSum / totalNodeCount : 0f;
+
+        // ★ 終了理由（今は Goal 到達でしか呼ばない想定）
+        string endReason = "GoalReached";
+
+        // ★ 1 行分を組み立てて追記
+        string line = string.Format(
+            CultureInfo.InvariantCulture,
+            "{0},{1},{2},{3},{4},{5},{6},{7},{8}\n",
+            runIndex,
+            player.frameToGoal,
+            player.stepsWalked,
+            totalNodeCount,
+            deadEndCount,
+            branchCount,
+            avgPass,
+            maxPass,
+            endReason
+        );
+
+        File.AppendAllText(path, line);
+
+        Debug.Log($"[RestartManager] RunSummary.csv 追記 → {path}");
+    }
+
     // -------------------------------------------------------
     // ★ CSVに UnknownQuantity の実験データを書き出す
     // -------------------------------------------------------
@@ -265,6 +498,8 @@ public class RestartManager : MonoBehaviour
 
         // ★ CFS用 Player.csv を出力
         //WriteCellFromStartPlayerCsv();
+
+        WriteNodeCsv();
 
         // ③ CSV出力
         //RecordEvaluation();

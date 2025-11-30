@@ -746,6 +746,8 @@ public class CellFromStart : MonoBehaviour
                 if (RestartManager.Instance != null)
                 {
                     RestartManager.Instance.WriteCellFromStartPlayerCsv(this);
+                    RestartManager.Instance.WriteRunSummaryCsv(this);
+
                     RestartManager.Instance.StartRestart();
                 }
             }

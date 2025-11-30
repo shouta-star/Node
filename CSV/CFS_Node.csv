@@ -1,0 +1,11 @@
+RunIndex,NodeName,PosX,PosZ,DistanceFromStart,DistanceFromGoal,UnknownCount,WallCount,LinkCount,PassCount,IsDeadEnd,IsBranch
+0,Node_2,-10,-5,0,0,2,2,0,0,0,0
+0,Node_1,-10,-1,0,0,3,1,0,0,0,0
+1,Node_4,-10,-5,0,0,2,2,0,0,0,0
+1,Node_3,-10,-1,0,0,3,1,0,0,0,0
+2,Node_2,-10,-5,0,0,2,2,0,0,0,0
+2,Node_1,-10,-1,0,0,3,1,0,0,0,0
+3,Node_2,-10,-5,0,0,2,2,0,0,0,0
+3,Node_1,-10,-1,0,0,3,1,0,0,0,0
+4,Node_4,-10,-5,0,0,2,2,0,0,0,0
+4,Node_3,-10,-1,0,0,3,1,0,0,0,0
