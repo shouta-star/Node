@@ -18,3 +18,4 @@ RunIndex,FrameToGoal,StepsWalked,TotalNodeCount,DeadEndNodeCount,BranchNodeCount
 16,11053,34,9,3,1,0,0,GoalReached
 17,5813,34,9,3,1,0,0,GoalReached
 18,11392,30,8,3,1,0,0,GoalReached
+19,6323,30,8,3,1,0,0,GoalReached

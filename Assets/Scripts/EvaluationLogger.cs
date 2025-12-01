@@ -21,6 +21,13 @@ public static class EvaluationLogger
 
     private static int nodeVisitFrameBase = 0;
 
+    // このRunのID（1,2,3,...）
+    private static int currentRunId = 0;
+
+    // 最後に記録されたモード（SUMMARY行に使いたい場合）
+    private static string lastUnknownSelectMode = "";
+    private static string lastTargetUpdateMode = "";
+
     /// <summary>
     /// 評価結果を CSV に追記する
     /// </summary>
@@ -195,7 +202,8 @@ public static class EvaluationLogger
     int frame,
     MapNode node,
     string unknownSelectMode,
-    string targetUpdateMode)
+    string targetUpdateMode,
+    int stepIndex)
     {
         if (node == null)
         {
@@ -229,7 +237,29 @@ public static class EvaluationLogger
             // ★ ファイルがまだ無い or ヘッダ未書き込みならヘッダ行を書く
             if (!nodeVisitHeaderWritten || !File.Exists(nodeVisitFilePath))
             {
-                string header = "PlayerId,Frame,NodeName,NodePosX,NodePosY,NodePosZ";
+                //string header = "PlayerId,Frame,NodeName,NodePosX,NodePosY,NodePosZ";
+                string header =
+                    "RunID," +
+                    "RowType," +
+                    "PlayerID," +
+                    "UnknownSelectMode," +
+                    "TargetUpdateMode," +
+                    "StepIndex," +
+                    "Frame," +
+                    "NodeName," +
+                    "NodePosX," +
+                    "NodePosY," +
+                    "NodePosZ," +
+                    "CellX," +
+                    "CellZ," +
+                    "NodesCreated," +
+                    "ShortestPathLen," +
+                    "TimeToGoal," +
+                    "TotalNodeVisits," +
+                    "TotalProcessMs," +
+                    "AvgProcessMs," +
+                    "MaxProcessMs";
+
                 File.AppendAllText(nodeVisitFilePath, header + System.Environment.NewLine);
                 nodeVisitHeaderWritten = true;
             }
@@ -237,22 +267,58 @@ public static class EvaluationLogger
             // ★ Node の座標を取得
             Vector3 nodePos = node.transform.position;
 
+            // グリッド座標（MapNode 側で持っている cell）
+            int cellX = node.cell.x;
+            int cellZ = node.cell.y;
+
             // 小数点のフォーマット（カンマと衝突しないように）
             var ci = System.Globalization.CultureInfo.InvariantCulture;
 
+            // Run内フレーム
             int localFrame = frame - nodeVisitFrameBase;
 
+            // RowType は VISIT 固定
+            string rowType = "VISIT";
+
+            // モード名は後でSUMMARY行にも使いたいので保存
+            lastUnknownSelectMode = unknownSelectMode;
+            lastTargetUpdateMode = targetUpdateMode;
+
             // ★ 1行ぶんを組み立て
+            //string line = string.Format(
+            //    ci,
+            //    "{0},{1},{2},{3},{4},{5}",
+            //    playerId,
+            //    //frame,
+            //    localFrame,
+            //    node.name,
+            //    nodePos.x,
+            //    nodePos.y,
+            //    nodePos.z
+            //);
             string line = string.Format(
                 ci,
-                "{0},{1},{2},{3},{4},{5}",
-                playerId,
-                //frame,
-                localFrame,
-                node.name,
-                nodePos.x,
-                nodePos.y,
-                nodePos.z
+                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19}",
+                currentRunId,          // RunID
+                rowType,               // RowType = VISIT
+                playerId,              // PlayerID
+                unknownSelectMode,     // UnknownSelectMode
+                targetUpdateMode,      // TargetUpdateMode
+                stepIndex,             // StepIndex
+                localFrame,            // Frame
+                node.name,             // NodeName
+                nodePos.x,             // NodePosX
+                nodePos.y,             // NodePosY
+                nodePos.z,             // NodePosZ
+                cellX,                 // CellX
+                cellZ,                 // CellZ
+                "",                    // NodesCreated (VISIT行なので空)
+                "",                    // ShortestPathLen
+                "",                    // TimeToGoal
+                "",                    // TotalNodeVisits
+                "",                    // TotalProcessMs
+                "",                    // AvgProcessMs
+                ""                     // MaxProcessMs
             );
 
             // ★ 追記
@@ -269,6 +335,10 @@ public static class EvaluationLogger
         nodeVisitFilePath = null;
         nodeVisitHeaderWritten = false;
 
+        // ★ このタイミングを Run の開始とみなす
         nodeVisitFrameBase = Time.frameCount;
+
+        // ★ RunID をインクリメント
+        currentRunId++;
     }
 }

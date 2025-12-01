@@ -63,6 +63,8 @@ public class CellFromStart : MonoBehaviour
     // 内部管理用：訪問済み Node 集合
     private HashSet<MapNode> visitedNodes = new HashSet<MapNode>();
 
+    private int stepIndex = 0;  // このPlayerが何回目のNode到達か
+
     public enum UnknownSelectMode
     {
         Random,
@@ -768,9 +770,12 @@ public class CellFromStart : MonoBehaviour
                 Time.frameCount,
                 currentNode,
                 unknownSelectMode.ToString(),
-                targetUpdateMode.ToString()
+                targetUpdateMode.ToString(),
+                stepIndex
             );
 
+            // この行のあとでインクリメント
+            stepIndex++;
         }
         else
         {
