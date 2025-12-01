@@ -32,6 +32,12 @@ public class CellFromStart : MonoBehaviour
     public Renderer bodyRenderer;
     public Material exploreMaterial;
 
+    // =============================
+    // ★ Player ID（CellFromStart 用）
+    // =============================
+    private static int nextPlayerId = 1;  // 全 CellFromStart 共通のカウンタ
+    public int playerId;                  // このインスタンス固有の ID
+
     // 内部状態
     private Vector3 moveDir;
     private bool isMoving = false;
@@ -98,6 +104,10 @@ public class CellFromStart : MonoBehaviour
     //}
     void Start()
     {
+        playerId = nextPlayerId;
+        nextPlayerId++;
+        gameObject.name = $"Player_{playerId}";
+
         moveDir = startDirection.normalized;
 
         // プレイヤー座標をスナップ
@@ -735,6 +745,8 @@ public class CellFromStart : MonoBehaviour
             {
                 deadEndEnterCount++;
             }
+
+            EvaluationLogger.LogNodeVisit(playerId, currentNode);
 
             // ③ Goal 到達判定：Tag が "Goal" の Node に来たら
             if (!goalReached && currentNode.gameObject.CompareTag("Goal"))
