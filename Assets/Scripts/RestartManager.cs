@@ -473,6 +473,31 @@ public class RestartManager : MonoBehaviour
         //worstFrame
         );
 
+        // ★ UnknownSelectMode / TargetUpdateMode を UnknownQuantity から取得
+        string uMode = "Unknown";
+        string tMode = "None";
+
+        //var uq = FindObjectOfType<UnknownQuantity>();
+        var cfs = FindObjectOfType<CellFromStart>();
+        if (cfs != null)
+        {
+            uMode = cfs.unknownSelectMode.ToString();
+            tMode = cfs.targetUpdateMode.ToString();
+        }
+
+        // ★ NodeVisit 用 CSV に RowType=SUMMARY の 1 行を追記
+        EvaluationLogger.LogSummaryRowForCurrentRun(
+            uMode,
+            tMode,
+            nodesCreated,       // NodesCreated
+            shortestDist,       // ShortestPathLen
+            timeToGoal,         // TimeToGoal
+            totalNodeVisits,    // TotalNodeVisits
+            totalProcessMs,     // TotalProcessMs
+            avgProcessMs,       // AvgProcessMs
+            maxProcessMs        // MaxProcessMs
+        );
+
         Debug.Log("[RestartManager] RecordEvaluation END");
         //Debug.Log("=== CSV 出力完了 ===");
     }
@@ -502,7 +527,7 @@ public class RestartManager : MonoBehaviour
         WriteNodeCsv();
 
         // ③ CSV出力
-        //RecordEvaluation();
+        RecordEvaluation();
         yield return new WaitForSeconds(1f);
 
         // ④ Nodeデータクリア

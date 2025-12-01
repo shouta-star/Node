@@ -330,6 +330,108 @@ public static class EvaluationLogger
         }
     }
 
+    /// <summary>
+    /// この Run のサマリ情報を「RowType=SUMMARY」として
+    /// NodeVisit 用 CSV に 1 行だけ追記する
+    /// </summary>
+    public static void LogSummaryRowForCurrentRun(
+        string unknownSelectMode,
+        string targetUpdateMode,
+        int nodesCreated,
+        int shortestPathLen,
+        float timeToGoal,
+        int totalNodeVisits,
+        int totalProcessMs,
+        float avgProcessMs,
+        float maxProcessMs)
+    {
+        try
+        {
+            // ★ 出力先フォルダ（他のCSVと揃える）
+            string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+            if (!Directory.Exists(baseDir))
+            {
+                Directory.CreateDirectory(baseDir);
+            }
+
+            // ★ ファイルパスがまだ決まっていなければ、ここで決める
+            // （このRunで VISIT 行が 1 回も出ていないケースもカバー）
+            if (string.IsNullOrEmpty(nodeVisitFilePath))
+            {
+                string timestamp = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                string safeUnknown = (unknownSelectMode ?? "Unknown").Replace(",", "_").Replace(" ", "");
+                string safeTarget = (targetUpdateMode ?? "None").Replace(",", "_").Replace(" ", "");
+                string fileName = $"{timestamp}_{safeUnknown}_{safeTarget}.csv";
+                nodeVisitFilePath = Path.Combine(baseDir, fileName);
+            }
+
+            // ★ ヘッダがまだ書かれていないなら、ここで書く
+            if (!nodeVisitHeaderWritten || !File.Exists(nodeVisitFilePath))
+            {
+                string header =
+                    "RunID," +
+                    "RowType," +
+                    "PlayerID," +
+                    "UnknownSelectMode," +
+                    "TargetUpdateMode," +
+                    "StepIndex," +
+                    "Frame," +
+                    "NodeName," +
+                    "NodePosX," +
+                    "NodePosY," +
+                    "NodePosZ," +
+                    "CellX," +
+                    "CellZ," +
+                    "NodesCreated," +
+                    "ShortestPathLen," +
+                    "TimeToGoal," +
+                    "TotalNodeVisits," +
+                    "TotalProcessMs," +
+                    "AvgProcessMs," +
+                    "MaxProcessMs";
+
+                File.AppendAllText(nodeVisitFilePath, header + System.Environment.NewLine);
+                nodeVisitHeaderWritten = true;
+            }
+
+            var ci = System.Globalization.CultureInfo.InvariantCulture;
+
+            // ★ RowType = SUMMARY の 1 行を組み立てる
+            // 先頭 13 列（PlayerID, StepIndex, Frame, NodeName, ... CellZ）は空欄にしておく
+            string line = string.Format(
+                ci,
+                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19}",
+                currentRunId,          // RunID
+                "SUMMARY",             // RowType
+                "",                    // PlayerID（Run全体なので空欄）
+                unknownSelectMode,     // UnknownSelectMode
+                targetUpdateMode,      // TargetUpdateMode
+                "",                    // StepIndex
+                "",                    // Frame
+                "",                    // NodeName
+                "",                    // NodePosX
+                "",                    // NodePosY
+                "",                    // NodePosZ
+                "",                    // CellX
+                "",                    // CellZ
+                nodesCreated,          // NodesCreated
+                shortestPathLen,       // ShortestPathLen
+                timeToGoal.ToString("F3", ci),   // TimeToGoal
+                totalNodeVisits,       // TotalNodeVisits
+                totalProcessMs,        // TotalProcessMs
+                avgProcessMs.ToString("F3", ci), // AvgProcessMs
+                maxProcessMs.ToString("F3", ci)  // MaxProcessMs
+            );
+
+            File.AppendAllText(nodeVisitFilePath, line + System.Environment.NewLine);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[EvaluationLogger] LogSummaryRowForCurrentRun failed: {ex}");
+        }
+    }
+
+
     public static void ResetNodeVisitLog()
     {
         nodeVisitFilePath = null;
