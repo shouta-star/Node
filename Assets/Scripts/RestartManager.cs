@@ -520,6 +520,9 @@ public class RestartManager : MonoBehaviour
         // TImeToGoalを毎回リセット
         runStartTime = Time.time;
 
+        // ▼ 次のRun用に Node到達ログCSV を切り替える（ここを追加）
+        EvaluationLogger.ResetNodeVisitLog();
+
         // ⑤ シーン再読み込み
         string sceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(sceneName);

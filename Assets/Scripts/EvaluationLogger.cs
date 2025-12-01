@@ -16,6 +16,11 @@ public static class EvaluationLogger
     // ★ Player が通過した Node を記録する CSV 用（ヘッダ書き込み済みフラグ）
     private static bool nodeVisitHeaderWritten = false;
 
+    // Node到達ログ用のファイルパス（1Runで1つ）
+    private static string nodeVisitFilePath = null;
+
+    private static int nodeVisitFrameBase = 0;
+
     /// <summary>
     /// 評価結果を CSV に追記する
     /// </summary>
@@ -82,7 +87,115 @@ public static class EvaluationLogger
     }
 
     // EvaluationLogger.cs に追加するメソッド例
-    public static void LogNodeVisit(int playerId, MapNode node)
+    //public static void LogNodeVisit(int playerId, int frame, MapNode node)
+    //{
+    //    if (node == null)
+    //    {
+    //        Debug.LogWarning("[EvaluationLogger] LogNodeVisit called with null node.");
+    //        return;
+    //    }
+
+    //    try
+    //    {
+    //        // ★ 出力先フォルダ（プロジェクトに合わせて変更OK）
+    //        string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+    //        if (!System.IO.Directory.Exists(baseDir))
+    //        {
+    //            System.IO.Directory.CreateDirectory(baseDir);
+    //        }
+
+    //        string fileName = "NodeVisit_CellFromStart.csv";
+    //        string path = System.IO.Path.Combine(baseDir, fileName);
+
+    //        // ★ ファイルが無ければヘッダ行を書き込む
+    //        if (!System.IO.File.Exists(path))
+    //        {
+    //            string header = "PlayerId,NodeName,NodePosX,NodePosY,NodePosZ";
+    //            System.IO.File.AppendAllText(path, header + System.Environment.NewLine);
+    //        }
+
+    //        // ★ Node の座標を取得
+    //        Vector3 nodePos = node.transform.position;
+
+    //        // 小数点のフォーマットを安定させる（カンマ区切りと衝突しないように）
+    //        var ci = System.Globalization.CultureInfo.InvariantCulture;
+
+    //        string line = string.Format(
+    //            ci,
+    //            "{0},{1},{2},{3},{4}",
+    //            playerId,
+    //            node.name,
+    //            nodePos.x,
+    //            nodePos.y,
+    //            nodePos.z
+    //        );
+
+    //        System.IO.File.AppendAllText(path, line + System.Environment.NewLine);
+    //    }
+    //    catch (System.Exception ex)
+    //    {
+    //        Debug.LogError($"[EvaluationLogger] LogNodeVisit failed: {ex}");
+    //    }
+    //}
+    //public static void LogNodeVisit(int playerId, int frame, MapNode node)
+    //{
+    //    if (node == null)
+    //    {
+    //        Debug.LogWarning("[EvaluationLogger] LogNodeVisit called with null node.");
+    //        return;
+    //    }
+
+    //    try
+    //    {
+    //        // ★ 出力先フォルダ（他のCSVと揃える）
+    //        string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+    //        if (!Directory.Exists(baseDir))
+    //        {
+    //            Directory.CreateDirectory(baseDir);
+    //        }
+
+    //        string fileName = "NodeVisit_CellFromStart.csv";
+    //        string path = Path.Combine(baseDir, fileName);
+
+    //        // ★ ファイルが無ければヘッダ行を書き込む
+    //        if (!File.Exists(path))
+    //        {
+    //            string header = "PlayerId,Frame,NodeName,NodePosX,NodePosY,NodePosZ";
+    //            File.AppendAllText(path, header + System.Environment.NewLine);
+    //        }
+
+    //        // ★ Node の座標を取得
+    //        Vector3 nodePos = node.transform.position;
+
+    //        // 小数点のフォーマットを安定させる（カンマと衝突しないように）
+    //        var ci = System.Globalization.CultureInfo.InvariantCulture;
+
+    //        // ★ 1行ぶんを組み立て
+    //        string line = string.Format(
+    //            ci,
+    //            "{0},{1},{2},{3},{4},{5}",
+    //            playerId,
+    //            frame,
+    //            node.name,
+    //            nodePos.x,
+    //            nodePos.y,
+    //            nodePos.z
+    //        );
+
+    //        // ★ 追記
+    //        File.AppendAllText(path, line + System.Environment.NewLine);
+    //    }
+    //    catch (System.Exception ex)
+    //    {
+    //        Debug.LogError($"[EvaluationLogger] LogNodeVisit failed: {ex}");
+    //    }
+    //}
+    public static void LogNodeVisit(
+    int playerId,
+    int frame,
+    MapNode node,
+    string unknownSelectMode,
+    string targetUpdateMode)
     {
         if (node == null)
         {
@@ -92,40 +205,58 @@ public static class EvaluationLogger
 
         try
         {
-            // ★ 出力先フォルダ（プロジェクトに合わせて変更OK）
+            // ★ 出力先フォルダ（他のCSVと揃える）
             string baseDir = @"D:\GitHub\NodeGitHub\CSV";
-            if (!System.IO.Directory.Exists(baseDir))
+            if (!Directory.Exists(baseDir))
             {
-                System.IO.Directory.CreateDirectory(baseDir);
+                Directory.CreateDirectory(baseDir);
             }
 
-            string fileName = "NodeVisit_CellFromStart.csv";
-            string path = System.IO.Path.Combine(baseDir, fileName);
-
-            // ★ ファイルが無ければヘッダ行を書き込む
-            if (!System.IO.File.Exists(path))
+            // ★ ファイルパスがまだ決まっていなければ、ここで決める
+            if (string.IsNullOrEmpty(nodeVisitFilePath))
             {
-                string header = "PlayerId,NodeName,NodePosX,NodePosY,NodePosZ";
-                System.IO.File.AppendAllText(path, header + System.Environment.NewLine);
+                // 日付時間: 20251130_235959 のような形式
+                string timestamp = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
+
+                // モード名に変な文字（空白やカンマ）が入っても困らないように軽く整形
+                string safeUnknown = (unknownSelectMode ?? "Unknown").Replace(",", "_").Replace(" ", "");
+                string safeTarget = (targetUpdateMode ?? "None").Replace(",", "_").Replace(" ", "");
+
+                string fileName = $"{timestamp}_{safeUnknown}_{safeTarget}.csv";
+                nodeVisitFilePath = Path.Combine(baseDir, fileName);
+            }
+
+            // ★ ファイルがまだ無い or ヘッダ未書き込みならヘッダ行を書く
+            if (!nodeVisitHeaderWritten || !File.Exists(nodeVisitFilePath))
+            {
+                string header = "PlayerId,Frame,NodeName,NodePosX,NodePosY,NodePosZ";
+                File.AppendAllText(nodeVisitFilePath, header + System.Environment.NewLine);
+                nodeVisitHeaderWritten = true;
             }
 
             // ★ Node の座標を取得
             Vector3 nodePos = node.transform.position;
 
-            // 小数点のフォーマットを安定させる（カンマ区切りと衝突しないように）
+            // 小数点のフォーマット（カンマと衝突しないように）
             var ci = System.Globalization.CultureInfo.InvariantCulture;
 
+            int localFrame = frame - nodeVisitFrameBase;
+
+            // ★ 1行ぶんを組み立て
             string line = string.Format(
                 ci,
-                "{0},{1},{2},{3},{4}",
+                "{0},{1},{2},{3},{4},{5}",
                 playerId,
+                //frame,
+                localFrame,
                 node.name,
                 nodePos.x,
                 nodePos.y,
                 nodePos.z
             );
 
-            System.IO.File.AppendAllText(path, line + System.Environment.NewLine);
+            // ★ 追記
+            File.AppendAllText(nodeVisitFilePath, line + System.Environment.NewLine);
         }
         catch (System.Exception ex)
         {
@@ -133,4 +264,11 @@ public static class EvaluationLogger
         }
     }
 
+    public static void ResetNodeVisitLog()
+    {
+        nodeVisitFilePath = null;
+        nodeVisitHeaderWritten = false;
+
+        nodeVisitFrameBase = Time.frameCount;
+    }
 }

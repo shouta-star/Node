@@ -746,8 +746,6 @@ public class CellFromStart : MonoBehaviour
                 deadEndEnterCount++;
             }
 
-            EvaluationLogger.LogNodeVisit(playerId, currentNode);
-
             // ③ Goal 到達判定：Tag が "Goal" の Node に来たら
             if (!goalReached && currentNode.gameObject.CompareTag("Goal"))
             {
@@ -763,6 +761,16 @@ public class CellFromStart : MonoBehaviour
                     RestartManager.Instance.StartRestart();
                 }
             }
+
+            //EvaluationLogger.LogNodeVisit(playerId, Time.frameCount, currentNode);
+            EvaluationLogger.LogNodeVisit(
+                playerId,
+                Time.frameCount,
+                currentNode,
+                unknownSelectMode.ToString(),
+                targetUpdateMode.ToString()
+            );
+
         }
         else
         {
