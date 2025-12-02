@@ -215,7 +215,10 @@ public static class EvaluationLogger
         {
             // ★ 出力先フォルダ（他のCSVと揃える）
             //string baseDir = @"D:\GitHub\NodeGitHub\CSV";
-            string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival";
+            //string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival";
+            //string baseDir = @"D:\GitHub\Node\CSV\Random_EveryNode";
+            //string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival";
+            string baseDir = @"D:\GitHub\Node\CSV\Farthest_OnArrival";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);

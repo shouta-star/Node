@@ -504,12 +504,12 @@ public class MapNode : MonoBehaviour
                 Gizmos.DrawLine(transform.position, node.transform.position);
         }
 
-#if UNITY_EDITOR
-        UnityEditor.Handles.Label(
-            transform.position + Vector3.up * 0.3f,
-            $"V:{value:F2}\nU:{unknownCount} W:{wallCount}"
-        );
-#endif
+//#if UNITY_EDITOR
+//        UnityEditor.Handles.Label(
+//            transform.position + Vector3.up * 0.3f,
+//            $"V:{value:F2}\nU:{unknownCount} W:{wallCount}"
+//        );
+//#endif
     }
 
     private void OnDestroy()

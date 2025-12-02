@@ -733,6 +733,11 @@ public class CellFromStart : MonoBehaviour
         // ★ Node参照を確定
         currentNode = MapNode.FindByCell(WorldToCell(targetPos));
 
+        if(currentNode != null)
+        {
+            currentNode.passCount++;
+        }
+
         // ===== 評価ログ更新ここから =====
         if (currentNode != null)
         {
@@ -1428,24 +1433,77 @@ public class CellFromStart : MonoBehaviour
             Debug.Log($"[UN-CUR] Selected Unknown = {unknownTarget.name}");
         }
 
-        MapNode localFarthestFromStart =
-            nearNodes.OrderByDescending(n => n.distanceFromStart).FirstOrDefault();
+        //MapNode localFarthestFromStart =
+        //    nearNodes.OrderByDescending(n => n.distanceFromStart).FirstOrDefault();
+
+        // ★ ここから修正 ★
+        MapNode localFarthestFromStart = null;
+
+        if (unknownNodes.Count > 0)
+        {
+            // ④-1: 探索範囲内（nearNodes）の中で Start から最も遠いノード
+            localFarthestFromStart =
+                nearNodes.OrderByDescending(n => n.distanceFromStart).FirstOrDefault();
+
+            Debug.Log(
+                $"[TARGET] Local farthest from Start (near range) = " +
+                $"{(localFarthestFromStart != null ? localFarthestFromStart.name : "null")}");
+        }
+        else
+        {
+            // ④-2: 探索範囲内に未知が無い → マップ全体から Start から最遠のノードを探す
+            var globalCandidates = MapNode.allNodes
+                .Where(n => n != null &&
+                            n.distanceFromStart < int.MaxValue &&
+                            n != currentNode);
+
+            localFarthestFromStart = globalCandidates
+                .OrderByDescending(n => n.distanceFromStart)
+                .FirstOrDefault();
+
+            Debug.Log(
+                "[TARGET] No unknown in near range → " +
+                $"Global farthest from Start = " +
+                $"{(localFarthestFromStart != null ? localFarthestFromStart.name : "null")}, " +
+                $"dist={ (localFarthestFromStart != null ? localFarthestFromStart.distanceFromStart : -1) }");
+        }
+        // ★ ここまで修正 ★
 
         //------------------------------------------------------
         // ⑤ ターゲット決定
         //------------------------------------------------------
+        //MapNode bestTarget = null;
+
+        //if (unknownTarget != null && localFarthestFromStart != null)
+        //{
+        //    float dU = Distance(currentNode, unknownTarget);
+        //    float dS = Distance(currentNode, localFarthestFromStart);
+
+        //    bestTarget = (dU > dS) ? unknownTarget : localFarthestFromStart;
+        //}
+        //else
+        //{
+        //    bestTarget = unknownTarget ?? localFarthestFromStart;
+        //}
+
+        //if (bestTarget == null)
+        //{
+        //    Debug.LogWarning("[BEST] bestTarget NULL → fallback");
+        //    moveDir = ChooseRandomValidDirection(currentNode).Value;
+        //    MoveForward();
+        //    return;
+        //}
         MapNode bestTarget = null;
 
-        if (unknownTarget != null && localFarthestFromStart != null)
+        // ★ Unknownが1つでもあるなら必ず Unknown を優先
+        if (unknownTarget != null)
         {
-            float dU = Distance(currentNode, unknownTarget);
-            float dS = Distance(currentNode, localFarthestFromStart);
-
-            bestTarget = (dU > dS) ? unknownTarget : localFarthestFromStart;
+            bestTarget = unknownTarget;
         }
         else
         {
-            bestTarget = unknownTarget ?? localFarthestFromStart;
+            // Unknownがまったく無いときだけ Start最遠を使う
+            bestTarget = localFarthestFromStart;
         }
 
         if (bestTarget == null)
@@ -1455,6 +1513,7 @@ public class CellFromStart : MonoBehaviour
             MoveForward();
             return;
         }
+
 
         //------------------------------------------------------
         // ⑥ 経路を構築して次ノードへ進む

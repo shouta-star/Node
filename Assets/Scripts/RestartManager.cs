@@ -14,6 +14,7 @@ public class RestartManager : MonoBehaviour
 
     // 実行開始時間
     private float runStartTime = 0f;
+    private int runStartFrame = 0;
 
     bool isRestarting = false;
 
@@ -37,6 +38,7 @@ public class RestartManager : MonoBehaviour
     {
         // 実験開始の時刻
         runStartTime = Time.time;
+        runStartFrame = Time.frameCount;
     }
 
     private void Update()
@@ -348,6 +350,7 @@ public class RestartManager : MonoBehaviour
 
         // ★ 保存先フォルダ（Player.csv と同じ場所）
         string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+        //string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival";
         if (!Directory.Exists(baseDir))
         {
             Directory.CreateDirectory(baseDir);
@@ -437,10 +440,16 @@ public class RestartManager : MonoBehaviour
         if (shortestDist < 0) shortestDist = -1;
 
         // ④ TimeToGoal（＝最短経路確定までの時間）
-        float timeToGoal = Time.time - runStartTime;
+        //float timeToGoal = Time.time - runStartTime;
+        int framesToGoal = Time.frameCount - runStartFrame;
+        float timeToGoal = framesToGoal;
 
         // ⑤ TotalNodeVisits（現状は未実装なので0）
         int totalNodeVisits = 0;
+        foreach (var n in FindObjectsOfType<MapNode>())
+        {
+            totalNodeVisits += n.passCount;
+        }
 
         // ⑥ HeavyFrameCount / AvgFrame / WorstFrame（現状0）
         //int heavyFrameCount = 0;

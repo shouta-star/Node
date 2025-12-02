@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fa970f044eea104a9f73c4f26d1db62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 5
   cellSize: 1
   rayDistance: 1
   wallLayer:
@@ -180,5 +180,5 @@ MonoBehaviour:
   deadEndEnterCount: 0
   goalReached: 0
   frameToGoal: -1
-  unknownSelectMode: 0
+  unknownSelectMode: 2
   targetUpdateMode: 1
