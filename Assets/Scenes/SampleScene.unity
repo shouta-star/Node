@@ -13026,6 +13026,10 @@ PrefabInstance:
       propertyPath: debugLog
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3303906976382372999, guid: 6e123b8a46865cd44b7c3be018715904, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e569888ad4c6d634a8b51f5e88ecafd1, type: 2}
     - target: {fileID: 6566390003674606108, guid: 6e123b8a46865cd44b7c3be018715904, type: 3}
       propertyPath: targetUpdateMode
       value: 0
