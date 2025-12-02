@@ -27,6 +27,10 @@ public class MapNode : MonoBehaviour
 
     public int passCount = 0;
 
+    [Header("見た目（通過で色変化）")]
+    public float redStep;      // 1回通るごとに減らす量
+    private Renderer _renderer;        // この Node の見た目用 Renderer
+
     [Header("グリッド設定")]
     public float cellSize = 1f;
     public Vector3 gridOrigin = Vector3.zero;
@@ -62,6 +66,13 @@ public class MapNode : MonoBehaviour
         RecalculateUnknownAndWall();
 
         Debug.Log($"[DEBUG-STARTNODE] Awake(): StartNode={MapNode.StartNode?.name}");
+
+        _renderer = GetComponent<Renderer>();
+        if (_renderer != null)
+        {
+            _renderer.material.color = Color.white;
+        }
+
     }
 
     // ======================================================
@@ -558,6 +569,26 @@ public class MapNode : MonoBehaviour
         // Unknown 無し
         return null;
     }
+
+    // ======================================================
+    // ★ Player がこの Node を通過したときに呼ぶ
+    // ======================================================
+    public void OnPassed()
+    {
+        passCount++;
+
+        if (_renderer == null) return;
+
+        // 今の色を取得
+        Color c = _renderer.material.color;
+
+        // R を 0.01 減らす（0 まで）
+        float newR = Mathf.Max(0f, c.r - redStep);
+        c.r = newR;
+
+        _renderer.material.color = c;
+    }
+
 
     public static void ClearAllNodes()
     {

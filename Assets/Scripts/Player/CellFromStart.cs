@@ -736,6 +736,7 @@ public class CellFromStart : MonoBehaviour
         if(currentNode != null)
         {
             currentNode.passCount++;
+            currentNode.OnPassed();
         }
 
         // ===== 評価ログ更新ここから =====

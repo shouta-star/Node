@@ -129,6 +129,7 @@ MonoBehaviour:
   unknownCount: 0
   wallCount: 0
   passCount: 0
+  redStep: 0.05
   cellSize: 1
   gridOrigin: {x: 0, y: 0, z: 0}
   debugLog: 0
