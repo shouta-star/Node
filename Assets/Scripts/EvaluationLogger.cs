@@ -219,7 +219,13 @@ public static class EvaluationLogger
             //string baseDir = @"D:\GitHub\Node\CSV\Random_EveryNode";
             //string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival";
             //string baseDir = @"D:\GitHub\Node\CSV\Farthest_OnArrival";
-            string baseDir = @"D:\GitHub\NodeGitHub\CSV\Test";
+            //string baseDir = @"D:\GitHub\Node\CSV\1204\Random_OnArrival";
+            //string baseDir = @"D:\GitHub\Node\CSV\1204\Farthest_OnArrival";
+            //string baseDir = @"D:\GitHub\Node\CSV\1204\MostUnknown_OnArrival";
+            //string baseDir = @"D:\GitHub\Node\CSV\1204\Random_EveryNode";
+            //string baseDir = @"D:\GitHub\Node\CSV\1204\Nearest_EveryNode";
+            //string baseDir = @"D:\GitHub\Node\CSV\1204\Farthest_EveryNode";
+            string baseDir = @"D:\GitHub\Node\CSV\1204\MostUnknown_EveryNode";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);

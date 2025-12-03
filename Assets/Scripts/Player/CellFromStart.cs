@@ -50,6 +50,9 @@ public class CellFromStart : MonoBehaviour
     private bool arrivedThisNode = false;
     private bool blockTryExploreThisFrame = false;
 
+    // ★ 追加：今の lastBestTarget が「Start最遠由来」かどうか
+    private bool lastTargetIsFarthest = false;
+
     // =============================
     // ★ 評価ログ用（CellFromStart 単体）
     // =============================
@@ -1369,6 +1372,9 @@ public class CellFromStart : MonoBehaviour
         currentNode.RecalculateUnknownAndWall();
         RegisterCurrentNode(currentNode);
 
+        var nearNodes = BFS_NearNodes(currentNode, unknownReferenceDepth);
+        var unknownNodes = nearNodes.Where(n => n.unknownCount > 0).ToList();
+
         //------------------------------------------------------
         // ② FOLLOW（OnArrival の時だけ機能させる）
         //------------------------------------------------------
@@ -1377,6 +1383,15 @@ public class CellFromStart : MonoBehaviour
         bool followMode =
             (targetUpdateMode == TargetUpdateMode.OnArrival) &&
             (lastBestTarget != null && currentNode != lastBestTarget);
+
+        // ★ 追加：最遠Nodeに向かっている途中で、探索範囲に Unknown が出てきたら乗り換え
+        if (followMode && lastTargetIsFarthest && unknownNodes.Count > 0)
+        {
+            Debug.Log("[FOLLOW] Farthest 追従中に Unknown 検出 → follow 中断して再選択へ");
+            followMode = false;
+            lastBestTarget = null;
+            lastTargetIsFarthest = false;
+        }
 
         if (followMode)
         {
@@ -1397,6 +1412,9 @@ public class CellFromStart : MonoBehaviour
             else
             {
                 Debug.LogWarning($"[FOLLOW] path to {lastBestTarget.name} not found → fallback");
+                lastBestTarget = null;
+                lastTargetIsFarthest = false;
+
                 moveDir = ChooseRandomValidDirection(currentNode).Value;
                 MoveForward();
                 return;
@@ -1419,13 +1437,14 @@ public class CellFromStart : MonoBehaviour
             }
 
             lastBestTarget = null;
+            lastTargetIsFarthest = false;
         }
 
         //------------------------------------------------------
         // ④ Unknown & Start最遠 の探索
         //------------------------------------------------------
-        var nearNodes = BFS_NearNodes(currentNode, unknownReferenceDepth);
-        var unknownNodes = nearNodes.Where(n => n.unknownCount > 0).ToList();
+        //var nearNodes = BFS_NearNodes(currentNode, unknownReferenceDepth);
+        //var unknownNodes = nearNodes.Where(n => n.unknownCount > 0).ToList();
 
         MapNode unknownTarget = null;
         if (unknownNodes.Count > 0)
@@ -1510,6 +1529,9 @@ public class CellFromStart : MonoBehaviour
         if (bestTarget == null)
         {
             Debug.LogWarning("[BEST] bestTarget NULL → fallback");
+            lastBestTarget = null;
+            lastTargetIsFarthest = false;
+
             moveDir = ChooseRandomValidDirection(currentNode).Value;
             MoveForward();
             return;
@@ -1539,6 +1561,11 @@ public class CellFromStart : MonoBehaviour
         // ⑦ bestTarget のセット
         //------------------------------------------------------
         lastBestTarget = bestTarget;
+
+        // Unknown を追っているのか、Start最遠を追っているのかを保持
+        // ・unknownTarget != null  → Unknown 由来
+        // ・unknownTarget == null → Start最遠由来（＝FOLLOW 中に Unknown が出てきたら乗り換え対象）
+        lastTargetIsFarthest = (unknownTarget == null);
 
         //------------------------------------------------------
         // ⑧ 移動
