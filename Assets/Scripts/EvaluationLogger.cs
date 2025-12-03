@@ -218,12 +218,13 @@ public static class EvaluationLogger
             //string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival";
             //string baseDir = @"D:\GitHub\Node\CSV\Random_EveryNode";
             //string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival";
-            string baseDir = @"D:\GitHub\Node\CSV\Farthest_OnArrival";
+            //string baseDir = @"D:\GitHub\Node\CSV\Farthest_OnArrival";
+            string baseDir = @"D:\GitHub\NodeGitHub\CSV\Test";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);
             }
-
+            
             // ★ ファイルパスがまだ決まっていなければ、ここで決める
             if (string.IsNullOrEmpty(nodeVisitFilePath))
             {
@@ -428,6 +429,27 @@ public static class EvaluationLogger
             );
 
             File.AppendAllText(nodeVisitFilePath, line + System.Environment.NewLine);
+
+            // ★ ここから追記：CSV と同じ名前でスクリーンショット保存
+            try
+            {
+                if (!string.IsNullOrEmpty(nodeVisitFilePath))
+                {
+                    // 拡張子だけ .png に差し替え
+                    string pngPath = System.IO.Path.ChangeExtension(nodeVisitFilePath, ".png");
+
+                    ScreenCapture.CaptureScreenshot(pngPath);
+                    Debug.Log($"[EvaluationLogger] Screenshot saved: {pngPath}");
+                }
+                else
+                {
+                    Debug.LogWarning("[EvaluationLogger] Screenshot skipped: nodeVisitFilePath is null or empty.");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"[EvaluationLogger] Screenshot failed: {ex}");
+            }
         }
         catch (System.Exception ex)
         {

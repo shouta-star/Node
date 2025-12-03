@@ -583,8 +583,20 @@ public class MapNode : MonoBehaviour
         Color c = _renderer.material.color;
 
         // R を 0.01 減らす（0 まで）
-        float newR = Mathf.Max(0f, c.r - redStep);
-        c.r = newR;
+        //float newR = Mathf.Max(0f, c.r - redStep);
+        //c.r = newR;
+        if (c.r > 0f)
+        {
+            // まずは R を減らしていく
+            float newR = Mathf.Max(0f, c.r - redStep);
+            c.r = newR;
+        }
+        else
+        {
+            // R が 0 になったら、G を減らしていく
+            float newG = Mathf.Max(0f, c.g - redStep);
+            c.g = newG;
+        }
 
         _renderer.material.color = c;
     }

@@ -1,0 +1,3 @@
+RunID,RowType,PlayerID,UnknownSelectMode,TargetUpdateMode,StepIndex,Frame,NodeName,NodePosX,NodePosY,NodePosZ,CellX,CellZ,NodesCreated,ShortestPathLen,TimeToGoal,TotalNodeVisits,TotalProcessMs,AvgProcessMs,MaxProcessMs
+1,VISIT,2,Farthest,OnArrival,0,358,Node_3,-10,0,-1,-10,-1,,,,,,,
+1,SUMMARY,,Unknown,None,,,,,,,,,2,-1,1146.000,2,0,0.000,0.000
