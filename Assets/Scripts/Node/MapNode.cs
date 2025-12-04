@@ -29,7 +29,12 @@ public class MapNode : MonoBehaviour
 
     [Header("見た目（通過で色変化）")]
     public float redStep;      // 1回通るごとに減らす量
-    private Renderer _renderer;        // この Node の見た目用 Renderer
+    public Renderer _renderer;        // この Node の見た目用 Renderer
+
+    [Tooltip("色を変えたい Node が使っているマテリアル（通常Node用）")]
+    public Material colorChangeTargetMaterial;
+    // この Node が「色変更対象かどうか」
+    private bool _enableColorChange = true;
 
     [Header("グリッド設定")]
     public float cellSize = 1f;
@@ -70,9 +75,28 @@ public class MapNode : MonoBehaviour
         _renderer = GetComponent<Renderer>();
         if (_renderer != null)
         {
-            _renderer.material.color = Color.white;
+            //_renderer.material.color = Color.white;
+            // colorChangeTargetMaterial が未設定なら、全部の Node を色変更対象にする（今まで通り）
+            if (colorChangeTargetMaterial == null)
+            {
+                // 各 Node ごとにマテリアルを複製して色を独立させる
+                _renderer.material = Instantiate(_renderer.material);
+                _renderer.material.color = Color.white;
+                _enableColorChange = true;
+            }
+            // 指定されたマテリアルを使っている Node だけ色変更対象にする
+            else if (_renderer.sharedMaterial == colorChangeTargetMaterial)
+            {
+                _renderer.material = Instantiate(_renderer.sharedMaterial);
+                _renderer.material.color = Color.white;
+                _enableColorChange = true;
+            }
+            else
+            {
+                // それ以外（＝Node_1 用マテリアルなど）は色を変えない
+                _enableColorChange = false;
+            }
         }
-
     }
 
     // ======================================================
