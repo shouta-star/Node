@@ -28,7 +28,10 @@ public class MapNode : MonoBehaviour
     public int passCount = 0;
 
     [Header("見た目（通過で色変化）")]
-    public float redStep;      // 1回通るごとに減らす量
+    //public float redStep;      // 1回通るごとに減らす量
+    public int maxPassForColor;   // 何回通ったら色変化MAXにするか
+    public Color startColor = Color.white;  // 0回通過時の色
+    public Color endColor = Color.red;      // maxPassForColor回通過時の色
     public Renderer _renderer;        // この Node の見た目用 Renderer
 
     [Tooltip("色を変えたい Node が使っているマテリアル（通常Node用）")]
@@ -597,30 +600,44 @@ public class MapNode : MonoBehaviour
     // ======================================================
     // ★ Player がこの Node を通過したときに呼ぶ
     // ======================================================
+    //public void OnPassed()
+    //{
+    //    passCount++;
+
+    //    if (_renderer == null) return;
+
+    //    // 今の色を取得
+    //    Color c = _renderer.material.color;
+
+    //    // R を 0.01 減らす（0 まで）
+    //    //float newR = Mathf.Max(0f, c.r - redStep);
+    //    //c.r = newR;
+    //    if (c.r > 0f)
+    //    {
+    //        // まずは R を減らしていく
+    //        float newR = Mathf.Max(0f, c.r - redStep);
+    //        c.r = newR;
+    //    }
+    //    else
+    //    {
+    //        // R が 0 になったら、G を減らしていく
+    //        float newG = Mathf.Max(0f, c.g - redStep);
+    //        c.g = newG;
+    //    }
+
+    //    _renderer.material.color = c;
+    //}
     public void OnPassed()
     {
         passCount++;
 
-        if (_renderer == null) return;
+        if (_renderer == null || !_enableColorChange) return;
 
-        // 今の色を取得
-        Color c = _renderer.material.color;
+        // 0.0 ～ 1.0 に正規化した割合（通過回数 / 最大回数）
+        float t = Mathf.Clamp01((float)passCount / maxPassForColor);
 
-        // R を 0.01 減らす（0 まで）
-        //float newR = Mathf.Max(0f, c.r - redStep);
-        //c.r = newR;
-        if (c.r > 0f)
-        {
-            // まずは R を減らしていく
-            float newR = Mathf.Max(0f, c.r - redStep);
-            c.r = newR;
-        }
-        else
-        {
-            // R が 0 になったら、G を減らしていく
-            float newG = Mathf.Max(0f, c.g - redStep);
-            c.g = newG;
-        }
+        // startColor → endColor へ「t 割合」だけ近づける
+        Color c = Color.Lerp(startColor, endColor, t);
 
         _renderer.material.color = c;
     }
