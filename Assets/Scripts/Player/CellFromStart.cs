@@ -780,6 +780,7 @@ public class CellFromStart : MonoBehaviour
                 currentNode,
                 unknownSelectMode.ToString(),
                 targetUpdateMode.ToString(),
+                unknownReferenceDepth,
                 stepIndex
             );
 

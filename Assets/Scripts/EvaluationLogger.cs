@@ -203,6 +203,7 @@ public static class EvaluationLogger
     MapNode node,
     string unknownSelectMode,
     string targetUpdateMode,
+    int unknownReferenceDepth,
     int stepIndex)
     {
         if (node == null)
@@ -242,7 +243,8 @@ public static class EvaluationLogger
                 string safeUnknown = (unknownSelectMode ?? "Unknown").Replace(",", "_").Replace(" ", "");
                 string safeTarget = (targetUpdateMode ?? "None").Replace(",", "_").Replace(" ", "");
 
-                string fileName = $"{timestamp}_{safeUnknown}_{safeTarget}.csv";
+                //string fileName = $"{timestamp}_{safeUnknown}_{safeTarget}.csv";
+                string fileName = $"{timestamp}.csv";
                 nodeVisitFilePath = Path.Combine(baseDir, fileName);
             }
 
@@ -256,6 +258,7 @@ public static class EvaluationLogger
                     "PlayerID," +
                     "UnknownSelectMode," +
                     "TargetUpdateMode," +
+                    "UnknownReferenceDepth," +
                     "StepIndex," +
                     "Frame," +
                     "NodeName," +
@@ -316,6 +319,7 @@ public static class EvaluationLogger
                 playerId,              // PlayerID
                 unknownSelectMode,     // UnknownSelectMode
                 targetUpdateMode,      // TargetUpdateMode
+                unknownReferenceDepth,
                 stepIndex,             // StepIndex
                 localFrame,            // Frame
                 node.name,             // NodeName
