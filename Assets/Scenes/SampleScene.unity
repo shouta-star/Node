@@ -29710,16 +29710,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85d7e861c5021ff4493a3072c06e14ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unknownSelectModeOptions:
-  - mode: 0
-    weight: 1
-  - mode: 1
-    weight: 1
-  targetUpdateModeOptions:
-  - mode: 0
-    weight: 1
-  - mode: 1
-    weight: 1
+  unknownSelectModeOptions: []
+  targetUpdateModeOptions: []
   playerPrefab: {fileID: 7722438679952261210, guid: 6e123b8a46865cd44b7c3be018715904, type: 3}
   spawnPoint: {fileID: 1757142805}
   spawnInterval: 5

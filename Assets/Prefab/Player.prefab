@@ -180,5 +180,5 @@ MonoBehaviour:
   deadEndEnterCount: 0
   goalReached: 0
   frameToGoal: -1
-  unknownSelectMode: 0
+  unknownSelectMode: 3
   targetUpdateMode: 1
