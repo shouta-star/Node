@@ -53,6 +53,14 @@ public class CellFromStart : MonoBehaviour
     // ★ 追加：今の lastBestTarget が「Start最遠由来」かどうか
     private bool lastTargetIsFarthest = false;
 
+    // ★ Playerごとの寿命設定：新規Nodeを何個置いたら消えるか
+    [Header("寿命設定")]
+    [Tooltip("このプレイヤーが新規に設置できるNode数の上限")]
+    public int destroyAfterNewNodes = 3;
+
+    // ★ 今までにこのPlayerが新規に作ったNode数
+    private int newNodeCreatedCount = 0;
+
     // =============================
     // ★ 評価ログ用（CellFromStart 単体）
     // =============================
@@ -1916,6 +1924,17 @@ public class CellFromStart : MonoBehaviour
             node = obj.GetComponent<MapNode>();
             node.cell = cell;
             MapNode.allNodeCells.Add(cell);
+
+            // ★ 新規Nodeを作ったのでカウントを増やす
+            newNodeCreatedCount++;
+            Debug.Log($"[TP2] NEW Node CREATED | node={node.name} | cell={cell} | createdCount={newNodeCreatedCount}");
+
+            // ★ 規定数に達したらこのPlayerをDestroy
+            if (newNodeCreatedCount >= destroyAfterNewNodes)
+            {
+                Debug.Log($"[PLAYER-END] 新規Nodeを {newNodeCreatedCount} 個設置したので Player_{playerId} を Destroy");
+                Destroy(gameObject);   // このフレームの終わりに破棄される
+            }
 
             Debug.Log($"[TP2] NEW Node CREATED | node={node.name} | cell={cell}");
         }
