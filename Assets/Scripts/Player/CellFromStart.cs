@@ -1373,6 +1373,24 @@ public class CellFromStart : MonoBehaviour
         currentNode.RecalculateUnknownAndWall();
         RegisterCurrentNode(currentNode);
 
+        // ① 現在の Node に Unknown が残っているなら、まずその場で掘る
+        if (currentNode.unknownCount > 0)
+        {
+            Vector3? localUnknownDir = currentNode.GetUnknownDirection();
+            if (localUnknownDir.HasValue)
+            {
+                Debug.Log("[LOCAL-UNKNOWN] currentNode に Unknown があるので、その場で Unknown を優先");
+
+                // ここで一旦ターゲットをリセット
+                lastBestTarget = null;
+                lastTargetIsFarthest = false;
+
+                moveDir = localUnknownDir.Value.normalized;
+                MoveForward();
+                return;
+            }
+        }
+
         var nearNodes = BFS_NearNodes(currentNode, unknownReferenceDepth);
         var unknownNodes = nearNodes.Where(n => n.unknownCount > 0).ToList();
 
@@ -1429,13 +1447,13 @@ public class CellFromStart : MonoBehaviour
         {
             Debug.Log($"[REACHED] Target reached={lastBestTarget.name}");
 
-            Vector3? udir = currentNode.GetUnknownDirection();
-            if (udir.HasValue)
-            {
-                moveDir = udir.Value.normalized;
-                MoveForward();
-                return;
-            }
+            //Vector3? udir = currentNode.GetUnknownDirection();
+            //if (udir.HasValue)
+            //{
+            //    moveDir = udir.Value.normalized;
+            //    MoveForward();
+            //    return;
+            //}
 
             lastBestTarget = null;
             lastTargetIsFarthest = false;
@@ -1633,7 +1651,6 @@ public class CellFromStart : MonoBehaviour
 
         return dirs[Random.Range(0, dirs.Count)];
     }
-
 
     // ==========================================================
     // ★ リンクベースで到達可能な Node を BFS で列挙
