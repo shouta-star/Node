@@ -56,7 +56,7 @@ public class CellFromStart : MonoBehaviour
     // ★ Playerごとの寿命設定：新規Nodeを何個置いたら消えるか
     [Header("寿命設定")]
     [Tooltip("このプレイヤーが新規に設置できるNode数の上限")]
-    public int destroyAfterNewNodes = 3;
+    public int destroyAfterNewNodes;
 
     // ★ 今までにこのPlayerが新規に作ったNode数
     private int newNodeCreatedCount = 0;

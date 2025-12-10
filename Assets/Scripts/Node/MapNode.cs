@@ -21,6 +21,8 @@ public class MapNode : MonoBehaviour
     public int distanceFromStart = 0;
     public static MapNode StartNode; // ★ 最初に作られたNodeをStart地点として保持
 
+    public static MapNode GoalNode;
+
     [Header("探索状態")]
     public int unknownCount = 0;
     public int wallCount = 0;
@@ -45,6 +47,17 @@ public class MapNode : MonoBehaviour
 
     [Header("デバッグ")]
     public bool debugLog = true;
+
+    void Start()
+    {
+        // もともと Start で cell を計算しているなら、
+        // その処理の「後」でこれをやるのが安全
+        if (CompareTag("Goal"))
+        {
+            GoalNode = this;
+            Debug.Log($"[MapNode] GoalNode set: {name} cell=({cell.x},{cell.y})");
+        }
+    }
 
     private void Awake()
     {

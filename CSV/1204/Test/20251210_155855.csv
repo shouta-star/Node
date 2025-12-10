@@ -1,0 +1,10 @@
+RunID,RowType,PlayerID,UnknownSelectMode,TargetUpdateMode,UnknownReferenceDepth,StepIndex,Frame,NodeName,NodePosX,NodePosY,NodePosZ,CellX,CellZ,NodesCreated,ShortestPathLen,TimeToGoal,TotalNodeVisits,TotalProcessMs,AvgProcessMs,MaxProcessMs
+1,VISIT,75,Random,OnArrival,5,0,497,Node_661,-10,0,2,-10,2,,,,,,
+1,VISIT,76,Random,OnArrival,5,0,851,Node_660,-10,0,-1,-10,-1,,,,,,
+1,VISIT,76,Random,OnArrival,5,1,1043,Node_670,-8,0,-2,-8,-2,,,,,,
+1,VISIT,76,Random,OnArrival,5,2,1320,Node_663,-7,0,2,-7,2,,,,,,
+1,VISIT,76,Random,OnArrival,5,3,1366,Node_677,-6,0,2,-6,2,,,,,,
+1,VISIT,77,Random,OnArrival,5,0,1433,Node_660,-10,0,-1,-10,-1,,,,,,
+1,VISIT,77,Random,OnArrival,5,1,1566,Node_661,-10,0,2,-10,2,,,,,,
+1,VISIT,77,Random,OnArrival,5,2,1683,Node_663,-7,0,2,-7,2,,,,,,
+1,VISIT,77,Random,OnArrival,5,3,1769,Node_664,-7,0,4,-7,4,,,,,,
