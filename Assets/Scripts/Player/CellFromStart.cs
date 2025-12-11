@@ -96,6 +96,16 @@ public class CellFromStart : MonoBehaviour
     [Header("探索方針②：targetNode 更新方式")]
     public TargetUpdateMode targetUpdateMode = TargetUpdateMode.EveryNode;
 
+    // ★ 追加：Unknown が 0 のときのフォールバック先
+    public enum NoUnknownFallbackMode
+    {
+        FarthestFromStart,   // Start から最遠 Node（今まで通り）
+        NewestNode           // 一番最近できた Node（allNodes の末尾）
+    }
+
+    [Header("探索方針③：Unknown=0 のときのターゲット")]
+    public NoUnknownFallbackMode noUnknownFallbackMode = NoUnknownFallbackMode.FarthestFromStart;
+
     //void Start()
     //{
     //    moveDir = startDirection.normalized;
@@ -180,27 +190,6 @@ public class CellFromStart : MonoBehaviour
         deadEndEnterCount = 0;
     }
 
-
-    //void Update()
-    //{
-    //    if (blockTryExploreThisFrame)
-    //    {
-    //        blockTryExploreThisFrame = false;
-    //        return;
-    //    }
-
-    //    if (!isMoving)
-    //    {
-    //        if (CanPlaceNodeHere())
-    //            TryExploreMove();
-    //        else
-    //            MoveForward();
-    //    }
-    //    else
-    //    {
-    //        MoveToTarget();
-    //    }
-    //}
     void Update()
     {
         //------------------------------------------------------
@@ -325,389 +314,6 @@ public class CellFromStart : MonoBehaviour
         stepsWalked++;
     }
 
-    //private void MoveToTarget()
-    //{
-    //    if (Vector3.Distance(transform.position, targetPos) > 0.01f)
-    //        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
-    //    else
-    //    {
-    //        transform.position = targetPos;
-    //        isMoving = false;
-    //    }
-    //}
-    //private void MoveToTarget()
-    //{
-    //    // ★ 許容誤差を広げる　（重要）
-    //    const float arriveThreshold = 0.1f;
-
-    //    if (Vector3.Distance(transform.position, targetPos) > arriveThreshold)
-    //    {
-    //        transform.position = Vector3.MoveTowards(
-    //            transform.position,
-    //            targetPos,
-    //            moveSpeed * Time.deltaTime);
-    //    }
-    //    else
-    //    {
-    //        // 誤差吸収
-    //        transform.position = targetPos;
-    //        isMoving = false;
-    //    }
-    //}
-    //private void MoveToTarget()
-    //{
-    //    if (Vector3.Distance(transform.position, targetPos) > 0.01f)
-    //    {
-    //        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
-    //    }
-    //    else
-    //    {
-    //        // ★ 到達
-    //        transform.position = targetPos;
-    //        isMoving = false;
-
-    //        // EveryNode → Node 到達時にだけ bestTarget 再計算する
-    //        if (targetUpdateMode == TargetUpdateMode.EveryNode)
-    //        {
-    //            lastBestTarget = null;     // 常に更新するのでリセット
-    //            Debug.Log("[EVERY NODE] Node 到達 → bestTarget を再計算します");
-    //        }
-    //    }
-    //}
-    //private void MoveToTarget()
-    //{
-    //    if (!isMoving) return;
-
-    //    const float arriveThreshold = 0.001f;
-
-    //    if (Vector3.Distance(transform.position, targetPos) > arriveThreshold)
-    //    {
-    //        transform.position = Vector3.MoveTowards(
-    //            transform.position,
-    //            targetPos,
-    //            moveSpeed * Time.deltaTime
-    //        );
-    //    }
-    //    else
-    //    {
-    //        transform.position = targetPos;
-    //        isMoving = false;
-
-    //        // ★ Node 到達は1回だけ
-    //        if (!arrivedThisNode)
-    //        {
-    //            arrivedThisNode = true;
-
-    //            if (targetUpdateMode == TargetUpdateMode.EveryNode)
-    //            {
-    //                lastBestTarget = null;
-    //                Debug.Log("[EVERY NODE] Node 到達 → bestTarget 再計算");
-    //            }
-    //        }
-
-    //        blockTryExploreThisFrame = true;
-    //    }
-    //}
-    //private void MoveToTarget()
-    //{
-    //    if (!isMoving) return;
-
-    //    const float arriveThreshold = 0.05f;
-
-    //    if (Vector3.Distance(transform.position, targetPos) > arriveThreshold)
-    //    {
-    //        transform.position = Vector3.MoveTowards(
-    //            transform.position,
-    //            targetPos,
-    //            moveSpeed * Time.deltaTime
-    //        );
-    //    }
-    //    else
-    //    {
-    //        // ★ 完全到達
-    //        transform.position = targetPos;
-    //        isMoving = false;
-
-    //        // ★ Node へ「初めて」到達した瞬間だけ実行
-    //        if (!arrivedThisNode)
-    //        {
-    //            arrivedThisNode = true;
-
-    //            if (targetUpdateMode == TargetUpdateMode.EveryNode)
-    //            {
-    //                lastBestTarget = null;
-    //                Debug.Log("[EVERY NODE] Node 到達 → bestTarget を再計算します");
-    //            }
-    //        }
-
-    //        // このフレームの TryExploreMove はブロック
-    //        blockTryExploreThisFrame = true;
-    //    }
-    //}
-    //private void MoveToTarget()
-    //{
-    //    if (!isMoving) return;
-
-    //    const float arriveThreshold = 0.01f;
-
-    //    if (Vector3.Distance(transform.position, targetPos) > arriveThreshold)
-    //    {
-    //        transform.position = Vector3.MoveTowards(
-    //            transform.position,
-    //            targetPos,
-    //            moveSpeed * Time.deltaTime
-    //        );
-    //        return;
-    //    }
-    //    else
-    //    {
-    //        // ★ 完全到達
-    //        transform.position = targetPos;
-    //        isMoving = false;
-
-    //        // ★ Node到達後、このフレームで再び TryExploreMove が走らないようにする
-    //        blockTryExploreThisFrame = true;
-
-    //        // ★ arrivedThisNode フラグ（Nodeについた瞬間だけ true）
-    //        if (!arrivedThisNode)
-    //        {
-    //            arrivedThisNode = true;
-
-    //            //if (targetUpdateMode == TargetUpdateMode.EveryNode)
-    //            //{
-    //            //    lastBestTarget = null;
-    //            //    Debug.Log("[EVERY NODE] Node 到達 → bestTarget を再計算します");
-    //            //}
-    //        }
-    //    }
-    //}
-    //private void MoveToTarget()
-    //{
-    //    if (!isMoving) return;
-
-    //    const float arriveThreshold = 0.05f;
-
-    //    // ★ まだ到達していない場合は移動し続ける
-    //    if (Vector3.Distance(transform.position, targetPos) > arriveThreshold)
-    //    {
-    //        transform.position = Vector3.MoveTowards(
-    //            transform.position,
-    //            targetPos,
-    //            moveSpeed * Time.deltaTime
-    //        );
-    //        return;
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ★ Nodeへ完全到達した瞬間（1回だけ実行）
-    //    //------------------------------------------------------
-    //    transform.position = targetPos;
-
-    //    Debug.Log(
-    //        $"[CHECK-ARRIVE] Arrived at targetPos={targetPos} | " +
-    //        $"actualPos={transform.position} | " +
-    //        $"arrivedThisNode={arrivedThisNode}"
-    //    );
-
-
-    //    isMoving = false;
-
-    //    // ★ Nodeに「初めて」到達した瞬間だけ実行する
-    //    if (!arrivedThisNode)
-    //    {
-    //        arrivedThisNode = true;  // 次フレーム以降は無効
-
-    //        // ★ここが今回の追加ポイント
-    //        currentNode = MapNode.FindByCell(WorldToCell(targetPos));
-
-    //        // ★ EveryNode：Nodeに到達した瞬間だけ bestTarget をクリア
-    //        //if (targetUpdateMode == TargetUpdateMode.EveryNode)
-    //        //{
-    //        //    lastBestTarget = null;
-    //        //    Debug.Log("[EVERY NODE] Node 到達 → bestTarget をクリアします");
-    //        //}
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ★ このフレームに TryExploreMove() を呼ばせない
-    //    //------------------------------------------------------
-    //    blockTryExploreThisFrame = true;
-    //}
-    //private void MoveToTarget()
-    //{
-    //    if (!isMoving) return;
-
-    //    const float arriveThreshold = 0.05f;
-
-    //    // ★ まだ到達していない場合は移動し続ける
-    //    if (Vector3.Distance(transform.position, targetPos) > arriveThreshold)
-    //    {
-    //        transform.position = Vector3.MoveTowards(
-    //            transform.position,
-    //            targetPos,
-    //            moveSpeed * Time.deltaTime
-    //        );
-    //        return;
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ★ Nodeへ完全到達した瞬間（1回だけ実行）
-    //    //------------------------------------------------------
-    //    transform.position = targetPos;
-
-    //    Debug.Log(
-    //        $"[CHECK-ARRIVE] Arrived at targetPos={targetPos} | " +
-    //        $"actualPos={transform.position} | " +
-    //        $"arrivedThisNode={arrivedThisNode}"
-    //    );
-
-    //    isMoving = false;
-
-    //    // ★ Nodeに「初めて」到達した瞬間だけ実行する
-    //    if (!arrivedThisNode)
-    //    {
-    //        arrivedThisNode = true;  // 次フレーム以降は無効
-
-    //        // ★ Node参照を確定
-    //        currentNode = MapNode.FindByCell(WorldToCell(targetPos));
-
-    //        // ===== 評価ログ更新ここから =====
-    //        if (currentNode != null)
-    //        {
-    //            // ① 訪問済み Node 集合を更新
-    //            //    → 新しい Node なら uniqueNodesVisited を増やす
-    //            if (visitedNodes.Add(currentNode))
-    //            {
-    //                uniqueNodesVisited = visitedNodes.Count;
-    //            }
-
-    //            // ② 行き止まり Node に入った回数（links=1）
-    //            if (currentNode.links != null && currentNode.links.Count == 1)
-    //            {
-    //                deadEndEnterCount++;
-    //            }
-
-    //            // ③ Goal 到達判定
-    //            //    （GoalNode の参照の取り方に合わせてここを調整）
-    //            if (!goalReached && MapNode.GoalNode != null && currentNode == MapNode.GoalNode)
-    //            {
-    //                goalReached = true;
-    //                frameToGoal = Time.frameCount;
-
-    //                // ★ ここで後で RestartManager を呼ぶ予定：
-    //                // if (RestartManager.Instance != null)
-    //                // {
-    //                //     RestartManager.Instance.StartRestart();
-    //                // }
-    //            }
-    //        }
-    //        // ===== 評価ログ更新ここまで =====
-
-    //        // ★ EveryNode：Nodeに到達した瞬間だけ bestTarget をクリア
-    //        //if (targetUpdateMode == TargetUpdateMode.EveryNode)
-    //        //{
-    //        //    lastBestTarget = null;
-    //        //    Debug.Log("[EVERY NODE] Node 到達 → bestTarget をクリアします");
-    //        //}
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ★ このフレームに TryExploreMove() を呼ばせない
-    //    //------------------------------------------------------
-    //    blockTryExploreThisFrame = true;
-    //}
-    //private void MoveToTarget()
-    //{
-    //    if (!isMoving) return;
-
-    //    const float arriveThreshold = 0.05f;
-
-    //    // ★ まだ到達していない場合は移動し続ける
-    //    if (Vector3.Distance(transform.position, targetPos) > arriveThreshold)
-    //    {
-    //        transform.position = Vector3.MoveTowards(
-    //            transform.position,
-    //            targetPos,
-    //            moveSpeed * Time.deltaTime
-    //        );
-    //        return;
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ★ Nodeへ完全到達した瞬間（1回だけ実行）
-    //    //------------------------------------------------------
-    //    transform.position = targetPos;
-
-    //    Debug.Log(
-    //        $"[CHECK-ARRIVE] Arrived at targetPos={targetPos} | " +
-    //        $"actualPos={transform.position} | " +
-    //        $"arrivedThisNode={arrivedThisNode}"
-    //    );
-
-    //    isMoving = false;
-
-    //    // ★ Nodeに「初めて」到達した瞬間だけ実行する
-    //    if (!arrivedThisNode)
-    //    {
-    //        arrivedThisNode = true;  // 次フレーム以降は無効
-
-    //        // ★ Node参照を確定
-    //        currentNode = MapNode.FindByCell(WorldToCell(targetPos));
-
-    //        // ===== 評価ログ更新ここから =====
-    //        if (currentNode != null)
-    //        {
-    //            Debug.Log(
-    //                $"[GOAL-DEBUG] node={currentNode.name}, tag={currentNode.tag}, " +
-    //                $"nodePos={currentNode.transform.position}, " +
-    //                $"cell={WorldToCell(targetPos)}"
-    //            );
-
-    //            // ① 訪問済み Node 集合を更新
-    //            if (visitedNodes.Add(currentNode))
-    //            {
-    //                uniqueNodesVisited = visitedNodes.Count;
-    //            }
-
-    //            // ② 行き止まり Node に入った回数（links=1）
-    //            if (currentNode.links != null && currentNode.links.Count == 1)
-    //            {
-    //                deadEndEnterCount++;
-    //            }
-
-    //            // ③ Goal 到達判定：Tag が "Goal" の Node に来たら
-    //            if (!goalReached && currentNode.CompareTag("Goal"))
-    //            {
-    //                Debug.Log("[GOAL-DEBUG] ★ GoalNode に到達しました！");
-    //                goalReached = true;
-    //                frameToGoal = Time.frameCount;
-
-    //                 //★ 後でここで RestartManager を呼ぶ予定
-    //                 if (RestartManager.Instance != null)
-    //                 {
-    //                    RestartManager.Instance.StartRestart();
-    //                 }
-    //            }
-    //        }
-    //        else
-    //        {
-    //            Debug.LogWarning($"[GOAL-DEBUG] currentNode が null です。targetPos={targetPos}");
-    //        }
-    //        // ===== 評価ログ更新ここまで =====
-
-    //        //// ★ EveryNode：Nodeに到達した瞬間だけ bestTarget をクリアしたいならここを復活
-    //        //if (targetUpdateMode == TargetUpdateMode.EveryNode)
-    //        //{
-    //        //    lastBestTarget = null;
-    //        //    Debug.Log("[EVERY NODE] Node 到達 → bestTarget をクリアします");
-    //        //}
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ★ このフレームに TryExploreMove() を呼ばせない
-    //    //------------------------------------------------------
-    //    blockTryExploreThisFrame = true;
-    //}
     private void MoveToTarget()
     {
         if (!isMoving) return;
@@ -823,538 +429,6 @@ public class CellFromStart : MonoBehaviour
     // =============================
     // ★★★ メイン探索ルーチン ★★★
     // =============================
-    //private void TryExploreMove()
-    //{
-    //    Debug.Log($"[TryExploreMove] Start currentNode={currentNode?.name}, pos={transform.position}");
-    //    Debug.Log($"[TryExploreMove] Start currentNode={currentNode?.name}, lastBestTarget={lastBestTarget?.name}");
-
-    //    //------------------------------------------------------
-    //    // ① Node生成・更新（ここで currentNode が確定する）
-    //    //------------------------------------------------------
-    //    currentNode = TryPlaceNode(transform.position);
-    //    currentNode.RecalculateUnknownAndWall();
-    //    RegisterCurrentNode(currentNode);
-
-    //    ////------------------------------------------------------
-    //    //// ② bestTarget が既に決まっている場合（案B：到達するまで再計算しない）
-    //    ////------------------------------------------------------
-    //    //if (lastBestTarget != null && currentNode != lastBestTarget)
-    //    //{
-    //    //    Debug.Log($"[FOLLOW] toward lastBestTarget={lastBestTarget.name}");
-
-    //    //    var path = BuildShortestPath(currentNode, lastBestTarget);
-
-    //    //    if (path != null && path.Count >= 2)
-    //    //    {
-    //    //        MapNode nextNode = path[1];
-    //    //        Vector3 dir = (nextNode.transform.position - currentNode.transform.position).normalized;
-    //    //        dir.y = 0;
-
-    //    //        moveDir = dir;
-    //    //        MoveForward();
-    //    //        return;
-    //    //    }
-    //    //    else
-    //    //    {
-    //    //        Debug.LogWarning($"[FOLLOW] path to {lastBestTarget.name} not found → fallback");
-    //    //        moveDir = ChooseRandomValidDirection(currentNode).Value;
-    //    //        MoveForward();
-    //    //        return;
-    //    //    }
-    //    //}
-    //    //------------------------------------------------------
-    //    // ② bestTarget が既に決まっている場合（更新方式：EveryNode / OnArrival）
-    //    //------------------------------------------------------
-
-    //    // EveryNode の場合 → FOLLOW を無効化（必ず再計算へ進む）
-    //    // OnArrival の場合 → 最後のターゲットに到達するまで FOLLOW 継続
-    //    bool followMode =
-    //        (targetUpdateMode == TargetUpdateMode.OnArrival) &&
-    //        (lastBestTarget != null && currentNode != lastBestTarget);
-
-    //    if (followMode)
-    //    {
-    //        Debug.Log($"[FOLLOW] toward lastBestTarget={lastBestTarget.name}");
-
-    //        var path = BuildShortestPath(currentNode, lastBestTarget);
-
-    //        if (path != null && path.Count >= 2)
-    //        {
-    //            MapNode nextNode = path[1];
-    //            Vector3 dir = (nextNode.transform.position - currentNode.transform.position).normalized;
-    //            dir.y = 0;
-
-    //            moveDir = dir;
-    //            MoveForward();
-    //            return;   // ★ FOLLOW 継続（OnArrival のみ）
-    //        }
-    //        else
-    //        {
-    //            Debug.LogWarning($"[FOLLOW] path to {lastBestTarget.name} not found → fallback");
-    //            moveDir = ChooseRandomValidDirection(currentNode).Value;
-    //            MoveForward();
-    //            return;
-    //        }
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ③ bestTarget に到達した場合
-    //    //------------------------------------------------------
-    //    if (currentNode == lastBestTarget)
-    //    {
-    //        Debug.Log($"[REACHED] Target reached={lastBestTarget.name}");
-
-    //        Vector3? udir = currentNode.GetUnknownDirection();
-    //        if (udir.HasValue)
-    //        {
-    //            Debug.Log("[REACHED] Unknown dig");
-    //            moveDir = udir.Value.normalized;
-    //            MoveForward();
-    //            return;
-    //        }
-
-    //        // Unknown が無いなら target 再計算へ
-    //        lastBestTarget = null;
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ④ Unknown & Start最遠 判定フェーズ（ターゲット未決定状態）
-    //    //------------------------------------------------------
-
-    //    // ■ 探索範囲のノードを取得
-    //    var nearNodes = BFS_NearNodes(currentNode, unknownReferenceDepth);
-
-    //    // ■ 探索範囲内 Unknown ノード
-    //    var unknownNodes = nearNodes.Where(n => n.unknownCount > 0).ToList();
-
-    //    //------------------------------------------------------
-    //    // ④-1 探索範囲内 Unknown の current 最遠ノード
-    //    //------------------------------------------------------
-    //    //MapNode unknownFarthest = null;
-    //    //if (unknownNodes.Count > 0)
-    //    //{
-    //    //    unknownFarthest = unknownNodes
-    //    //        .OrderByDescending(n => Distance(currentNode, n))
-    //    //        .First();
-
-    //    //    Debug.Log($"[UN-CUR] farthest Unknown in range = {unknownFarthest.name}");
-    //    //}
-    //    // === Unknown 選択切り替え対応 ===
-    //    MapNode unknownTarget = null;
-    //    if (unknownNodes.Count > 0)
-    //    {
-    //        unknownTarget = SelectUnknownNode(unknownNodes, currentNode);
-
-    //        Debug.Log($"[UN-CUR] Selected Unknown = {unknownTarget.name}  mode={unknownSelectMode}");
-    //    }
-
-
-    //    //------------------------------------------------------
-    //    // ④-2 探索範囲内 StartNode から最遠ノード
-    //    //------------------------------------------------------
-    //    MapNode localFarthestFromStart = nearNodes
-    //        .OrderByDescending(n => n.distanceFromStart)
-    //        .FirstOrDefault();
-
-    //    if (localFarthestFromStart != null)
-    //        Debug.Log($"[LOCAL-FAR] Start最遠 in range = {localFarthestFromStart.name}");
-
-    //    //------------------------------------------------------
-    //    // ④-3 bestTarget 決定（コアロジック）
-    //    //------------------------------------------------------
-    //    MapNode bestTarget = null;
-
-    //    bool existsStartFarthestInRange = localFarthestFromStart != null;
-
-    //    if (existsStartFarthestInRange)
-    //    {
-    //        // Start最遠が探索範囲に存在する時 → Unknown と Start最遠 の current距離で比較
-    //        if (unknownTarget != null)
-    //        {
-    //            float dU = Distance(currentNode, unknownTarget);
-    //            float dS = Distance(currentNode, localFarthestFromStart);
-
-    //            Debug.Log($"[COMPARE] distToUnknown={dU}, distToStartFar={dS}");
-
-    //            bestTarget = (dU > dS) ? unknownTarget : localFarthestFromStart;
-    //        }
-    //        else
-    //        {
-    //            // Unknownがない → Start最遠のみ
-    //            bestTarget = localFarthestFromStart;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        // Start最遠が探索範囲にいない → Unknown最遠のみを採用
-    //        bestTarget = unknownTarget;
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ④-4 bestTarget が null → fallback
-    //    //------------------------------------------------------
-    //    if (bestTarget == null)
-    //    {
-    //        Debug.LogWarning("[BEST] bestTarget NULL → fallback");
-    //        moveDir = ChooseRandomValidDirection(currentNode).Value;
-    //        MoveForward();
-    //        return;
-    //    }
-
-    //    Debug.Log($"[BEST] Selected bestTarget={bestTarget.name}");
-
-    //    //------------------------------------------------------
-    //    // ④-5 経路作成
-    //    //------------------------------------------------------
-    //    var path2 = BuildShortestPath(currentNode, bestTarget);
-
-    //    if (path2 == null || path2.Count < 2)
-    //    {
-    //        Debug.LogWarning($"[PATH] Cannot reach bestTarget={bestTarget.name} → fallback");
-    //        moveDir = ChooseRandomValidDirection(currentNode).Value;
-    //        MoveForward();
-    //        return;
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ④-6 次ノードへ進む
-    //    //------------------------------------------------------
-    //    MapNode nextNode2 = path2[1];
-    //    Vector3 nextDir = (nextNode2.transform.position - currentNode.transform.position).normalized;
-    //    nextDir.y = 0;
-
-    //    moveDir = nextDir;
-
-    //    Debug.Log($"[PATH] Go to {nextNode2.name} (target={bestTarget.name})");
-
-    //    //------------------------------------------------------
-    //    // ④-7 lastBestTarget のセット（重要）
-    //    //------------------------------------------------------
-    //    lastBestTarget = bestTarget;
-
-    //    //------------------------------------------------------
-    //    // ⑤ 移動
-    //    //------------------------------------------------------
-    //    MoveForward();
-    //}
-    //private void TryExploreMove()
-    //{
-    //    Debug.Log($"[TryExploreMove] Start currentNode={currentNode?.name}, pos={transform.position}");
-    //    Debug.Log($"[TryExploreMove] Start currentNode={currentNode?.name}, lastBestTarget={lastBestTarget?.name}");
-
-    //    arrivedThisNode = false;
-
-    //    //------------------------------------------------------
-    //    // ① Node生成・更新（ここで currentNode が確定する）
-    //    //------------------------------------------------------
-    //    var oldNode = currentNode;
-    //    currentNode = TryPlaceNode(transform.position);
-    //    currentNode.RecalculateUnknownAndWall();
-    //    RegisterCurrentNode(currentNode);
-
-    //    //------------------------------------------------------
-    //    // ★ EveryNode：Nodeに到達した瞬間のみ target 破棄
-    //    //------------------------------------------------------
-    //    bool nodeJustArrived = (oldNode != currentNode);
-
-    //    //if (targetUpdateMode == TargetUpdateMode.EveryNode && nodeJustArrived)
-    //    //{
-    //    //    lastBestTarget = null;
-    //    //    Debug.Log("[MODE] EveryNode → Node到達時に bestTarget を再計算します");
-    //    //}
-
-    //    //------------------------------------------------------
-    //    // ② FOLLOW（OnArrival の時だけ）
-    //    //------------------------------------------------------
-    //    bool followMode =
-    //        (targetUpdateMode == TargetUpdateMode.OnArrival) &&
-    //        (lastBestTarget != null && currentNode != lastBestTarget);
-
-    //    if (followMode)
-    //    {
-    //        Debug.Log($"[FOLLOW] toward lastBestTarget={lastBestTarget.name}");
-
-    //        var path = BuildShortestPath(currentNode, lastBestTarget);
-
-    //        if (path != null && path.Count >= 2)
-    //        {
-    //            MapNode nextNode = path[1];
-    //            Vector3 dir = (nextNode.transform.position - currentNode.transform.position).normalized;
-    //            dir.y = 0;
-
-    //            moveDir = dir;
-    //            MoveForward();
-    //            return;
-    //        }
-    //        else
-    //        {
-    //            Debug.LogWarning($"[FOLLOW] path to {lastBestTarget.name} not found → fallback");
-    //            moveDir = ChooseRandomValidDirection(currentNode).Value;
-    //            MoveForward();
-    //            return;
-    //        }
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ③ bestTarget に到達した場合
-    //    //  ★ EveryNode では完全無効化！
-    //    //------------------------------------------------------
-    //    if (targetUpdateMode == TargetUpdateMode.OnArrival &&
-    //        currentNode == lastBestTarget)
-    //    {
-    //        Debug.Log($"[REACHED] Target reached={lastBestTarget.name}");
-
-    //        Vector3? udir = currentNode.GetUnknownDirection();
-    //        if (udir.HasValue)
-    //        {
-    //            Debug.Log("[REACHED] Unknown dig");
-    //            moveDir = udir.Value.normalized;
-    //            MoveForward();
-    //            return;
-    //        }
-
-    //        lastBestTarget = null;
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ④ Unknown & Start最遠 判定フェーズ（ターゲット未決定状態）
-    //    //------------------------------------------------------
-
-    //    var nearNodes = BFS_NearNodes(currentNode, unknownReferenceDepth);
-    //    var unknownNodes = nearNodes.Where(n => n.unknownCount > 0).ToList();
-
-    //    //------------------------------------------------------
-    //    // ④-1 Unknown ノード選択
-    //    //------------------------------------------------------
-    //    MapNode unknownTarget = null;
-    //    if (unknownNodes.Count > 0)
-    //    {
-    //        unknownTarget = SelectUnknownNode(unknownNodes, currentNode);
-    //        Debug.Log($"[UN-CUR] Selected Unknown = {unknownTarget.name}  mode={unknownSelectMode}");
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ④-2 Start から最遠ノード
-    //    //------------------------------------------------------
-    //    MapNode localFarthestFromStart = nearNodes
-    //        .OrderByDescending(n => n.distanceFromStart)
-    //        .FirstOrDefault();
-
-    //    if (localFarthestFromStart != null)
-    //        Debug.Log($"[LOCAL-FAR] Start最遠 in range = {localFarthestFromStart.name}");
-
-    //    //------------------------------------------------------
-    //    // ④-3 bestTarget 決定
-    //    //------------------------------------------------------
-    //    MapNode bestTarget = null;
-
-    //    if (localFarthestFromStart != null)
-    //    {
-    //        if (unknownTarget != null)
-    //        {
-    //            float dU = Distance(currentNode, unknownTarget);
-    //            float dS = Distance(currentNode, localFarthestFromStart);
-
-    //            Debug.Log($"[COMPARE] distToUnknown={dU}, distToStartFar={dS}");
-
-    //            bestTarget = (dU > dS) ? unknownTarget : localFarthestFromStart;
-    //        }
-    //        else
-    //        {
-    //            bestTarget = localFarthestFromStart;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        bestTarget = unknownTarget;
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ④-4 fallback
-    //    //------------------------------------------------------
-    //    if (bestTarget == null)
-    //    {
-    //        Debug.LogWarning("[BEST] bestTarget NULL → fallback");
-    //        moveDir = ChooseRandomValidDirection(currentNode).Value;
-    //        MoveForward();
-    //        return;
-    //    }
-
-    //    Debug.Log($"[BEST] Selected bestTarget={bestTarget.name}");
-
-    //    //------------------------------------------------------
-    //    // ④-5 経路作成
-    //    //------------------------------------------------------
-    //    var path2 = BuildShortestPath(currentNode, bestTarget);
-
-    //    if (path2 == null || path2.Count < 2)
-    //    {
-    //        Debug.LogWarning($"[PATH] Cannot reach bestTarget={bestTarget.name} → fallback");
-    //        moveDir = ChooseRandomValidDirection(currentNode).Value;
-    //        MoveForward();
-    //        return;
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ④-6 次ノードへ進む
-    //    //------------------------------------------------------
-    //    MapNode nextNode2 = path2[1];
-    //    Vector3 nextDir = (nextNode2.transform.position - currentNode.transform.position).normalized;
-    //    nextDir.y = 0;
-
-    //    moveDir = nextDir;
-
-    //    Debug.Log($"[PATH] Go to {nextNode2.name} (target={bestTarget.name})");
-
-    //    //------------------------------------------------------
-    //    // ④-7 lastBestTarget のセット
-    //    //------------------------------------------------------
-    //    lastBestTarget = bestTarget;
-
-    //    //------------------------------------------------------
-    //    // ⑤ 移動
-    //    //------------------------------------------------------
-    //    MoveForward();
-    //}
-    //private void TryExploreMove()
-    //{
-    //    // ★ 到達直後のフレームでは実行しない
-    //    if (blockTryExploreThisFrame)
-    //    {
-    //        blockTryExploreThisFrame = false;
-    //        return;
-    //    }
-
-    //    Debug.Log($"[TryExploreMove] Start currentNode={currentNode?.name}, pos={transform.position}");
-    //    Debug.Log($"[TryExploreMove] Start currentNode={currentNode?.name}, lastBestTarget={lastBestTarget?.name}");
-
-    //    //------------------------------------------------------
-    //    // ① Node生成・更新（Nodeスナップ後に呼ばれる前提）
-    //    //------------------------------------------------------
-    //    //MapNode oldNode = currentNode;
-
-    //    currentNode = TryPlaceNode(transform.position);
-    //    currentNode.RecalculateUnknownAndWall();
-    //    RegisterCurrentNode(currentNode);
-
-    //    //------------------------------------------------------
-    //    // ★ Node到達判定（MoveToTarget と連携して正しく動作）
-    //    //------------------------------------------------------
-    //    //bool nodeJustArrived = (oldNode != currentNode);
-
-    //    //// ★ EveryNode：Node到達時のみターゲット再計算
-    //    //if (targetUpdateMode == TargetUpdateMode.EveryNode && nodeJustArrived)
-    //    //{
-    //    //    lastBestTarget = null;
-    //    //    Debug.Log("[EVERY NODE] Node 判定 → bestTarget をクリア");
-    //    //}
-
-    //    //------------------------------------------------------
-    //    // ② FOLLOW：OnArrival時のみ
-    //    //------------------------------------------------------
-    //    bool followMode =
-    //        (targetUpdateMode == TargetUpdateMode.OnArrival) &&
-    //        (lastBestTarget != null && currentNode != lastBestTarget);
-
-    //    if (followMode)
-    //    {
-    //        Debug.Log($"[FOLLOW] toward lastBestTarget={lastBestTarget.name}");
-
-    //        var path = BuildShortestPath(currentNode, lastBestTarget);
-
-    //        if (path != null && path.Count >= 2)
-    //        {
-    //            MapNode nextNode = path[1];
-    //            Vector3 dir = (nextNode.transform.position - currentNode.transform.position).normalized;
-    //            dir.y = 0;
-
-    //            moveDir = dir;
-    //            MoveForward();
-    //            return;
-    //        }
-    //        else
-    //        {
-    //            Debug.LogWarning($"[FOLLOW] path to {lastBestTarget.name} not found → fallback");
-    //            moveDir = ChooseRandomValidDirection(currentNode).Value;
-    //            MoveForward();
-    //            return;
-    //        }
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ③ bestTargetに到達した処理（OnArrival）
-    //    //------------------------------------------------------
-    //    if (currentNode == lastBestTarget)
-    //    {
-    //        Debug.Log($"[REACHED] Target reached={lastBestTarget.name}");
-
-    //        Vector3? udir = currentNode.GetUnknownDirection();
-    //        if (udir.HasValue)
-    //        {
-    //            moveDir = udir.Value.normalized;
-    //            MoveForward();
-    //            return;
-    //        }
-
-    //        lastBestTarget = null;
-    //    }
-
-    //    //------------------------------------------------------
-    //    // ④ Unknown & Start最遠 ノード検索
-    //    //------------------------------------------------------
-    //    var nearNodes = BFS_NearNodes(currentNode, unknownReferenceDepth);
-    //    var unknownNodes = nearNodes.Where(n => n.unknownCount > 0).ToList();
-
-    //    MapNode unknownTarget = null;
-    //    if (unknownNodes.Count > 0)
-    //    {
-    //        unknownTarget = SelectUnknownNode(unknownNodes, currentNode);
-    //        Debug.Log($"[UN-CUR] Selected Unknown = {unknownTarget.name}");
-    //    }
-
-    //    MapNode localFarthestFromStart = nearNodes
-    //        .OrderByDescending(n => n.distanceFromStart)
-    //        .FirstOrDefault();
-
-    //    MapNode bestTarget = null;
-
-    //    if (unknownTarget != null && localFarthestFromStart != null)
-    //    {
-    //        float dU = Distance(currentNode, unknownTarget);
-    //        float dS = Distance(currentNode, localFarthestFromStart);
-
-    //        bestTarget = (dU > dS) ? unknownTarget : localFarthestFromStart;
-    //    }
-    //    else
-    //    {
-    //        bestTarget = unknownTarget ?? localFarthestFromStart;
-    //    }
-
-    //    if (bestTarget == null)
-    //    {
-    //        moveDir = ChooseRandomValidDirection(currentNode).Value;
-    //        MoveForward();
-    //        return;
-    //    }
-
-    //    var path2 = BuildShortestPath(currentNode, bestTarget);
-    //    if (path2 == null || path2.Count < 2)
-    //    {
-    //        moveDir = ChooseRandomValidDirection(currentNode).Value;
-    //        MoveForward();
-    //        return;
-    //    }
-
-    //    MapNode nextNode2 = path2[1];
-    //    Vector3 nextDir = (nextNode2.transform.position - currentNode.transform.position).normalized;
-    //    nextDir.y = 0;
-
-    //    moveDir = nextDir;
-
-    //    lastBestTarget = bestTarget;
-
-    //    MoveForward();
-    //}
     private void TryExploreMove()
     {
         // ★ Node到達直後のフレームでは実行しない（この1行が超重要）
@@ -1483,8 +557,40 @@ public class CellFromStart : MonoBehaviour
         //MapNode localFarthestFromStart =
         //    nearNodes.OrderByDescending(n => n.distanceFromStart).FirstOrDefault();
 
+        //// ★ ここから修正 ★
+        //MapNode localFarthestFromStart = null;
+
+        //if (unknownNodes.Count > 0)
+        //{
+        //    // ④-1: 探索範囲内（nearNodes）の中で Start から最も遠いノード
+        //    localFarthestFromStart =
+        //        nearNodes.OrderByDescending(n => n.distanceFromStart).FirstOrDefault();
+
+        //    Debug.Log(
+        //        $"[TARGET] Local farthest from Start (near range) = " +
+        //        $"{(localFarthestFromStart != null ? localFarthestFromStart.name : "null")}");
+        //}
+        //else
+        //{
+        //    // ④-2: 探索範囲内に未知が無い → マップ全体から Start から最遠のノードを探す
+        //    var globalCandidates = MapNode.allNodes
+        //        .Where(n => n != null &&
+        //                    n.distanceFromStart < int.MaxValue &&
+        //                    n != currentNode);
+
+        //    localFarthestFromStart = globalCandidates
+        //        .OrderByDescending(n => n.distanceFromStart)
+        //        .FirstOrDefault();
+
+        //    Debug.Log(
+        //        "[TARGET] No unknown in near range → " +
+        //        $"Global farthest from Start = " +
+        //        $"{(localFarthestFromStart != null ? localFarthestFromStart.name : "null")}, " +
+        //        $"dist={ (localFarthestFromStart != null ? localFarthestFromStart.distanceFromStart : -1) }");
+        //}
         // ★ ここから修正 ★
         MapNode localFarthestFromStart = null;
+        MapNode newestCandidate = null;   // ★ 追加：一番最近できた Node を入れておく
 
         if (unknownNodes.Count > 0)
         {
@@ -1498,48 +604,50 @@ public class CellFromStart : MonoBehaviour
         }
         else
         {
-            // ④-2: 探索範囲内に未知が無い → マップ全体から Start から最遠のノードを探す
+            //--------------------------------------------------
+            // ④-2: 探索範囲内に未知が無い
+            //       → マップ全体から
+            //          ・Startから最遠ノード
+            //          ・一番最近できたノード
+            //       を両方計算する
+            //--------------------------------------------------
             var globalCandidates = MapNode.allNodes
                 .Where(n => n != null &&
                             n.distanceFromStart < int.MaxValue &&
-                            n != currentNode);
+                            n != currentNode)
+                .ToList();
 
-            localFarthestFromStart = globalCandidates
-                .OrderByDescending(n => n.distanceFromStart)
-                .FirstOrDefault();
+            if (globalCandidates.Count > 0)
+            {
+                // Start から最も遠いノード（従来の挙動）
+                localFarthestFromStart = globalCandidates
+                    .OrderByDescending(n => n.distanceFromStart)
+                    .FirstOrDefault();
+
+                // 一番最近できたノード
+                // allNodes は生成順に追加されているので、
+                // フィルタ後の globalCandidates の最後の要素が「最新」
+                newestCandidate = globalCandidates.LastOrDefault();
+            }
 
             Debug.Log(
                 "[TARGET] No unknown in near range → " +
                 $"Global farthest from Start = " +
                 $"{(localFarthestFromStart != null ? localFarthestFromStart.name : "null")}, " +
                 $"dist={ (localFarthestFromStart != null ? localFarthestFromStart.distanceFromStart : -1) }");
+
+            if (newestCandidate != null)
+            {
+                Debug.Log($"[TARGET] Global newest Node = {newestCandidate.name}");
+            }
         }
+        // ★ ここまで修正 ★
+
         // ★ ここまで修正 ★
 
         //------------------------------------------------------
         // ⑤ ターゲット決定
         //------------------------------------------------------
-        //MapNode bestTarget = null;
-
-        //if (unknownTarget != null && localFarthestFromStart != null)
-        //{
-        //    float dU = Distance(currentNode, unknownTarget);
-        //    float dS = Distance(currentNode, localFarthestFromStart);
-
-        //    bestTarget = (dU > dS) ? unknownTarget : localFarthestFromStart;
-        //}
-        //else
-        //{
-        //    bestTarget = unknownTarget ?? localFarthestFromStart;
-        //}
-
-        //if (bestTarget == null)
-        //{
-        //    Debug.LogWarning("[BEST] bestTarget NULL → fallback");
-        //    moveDir = ChooseRandomValidDirection(currentNode).Value;
-        //    MoveForward();
-        //    return;
-        //}
         MapNode bestTarget = null;
 
         // ★ Unknownが1つでもあるなら必ず Unknown を優先
@@ -1550,7 +658,22 @@ public class CellFromStart : MonoBehaviour
         else
         {
             // Unknownがまったく無いときだけ Start最遠を使う
-            bestTarget = localFarthestFromStart;
+            //bestTarget = localFarthestFromStart;
+
+            // ★ Unknown が 0 のときだけフォールバックモードを使う
+            switch (noUnknownFallbackMode)
+            {
+                case NoUnknownFallbackMode.FarthestFromStart:
+                    // これまで通り：Start から最遠ノード
+                    bestTarget = localFarthestFromStart;
+                    break;
+
+                case NoUnknownFallbackMode.NewestNode:
+                    // 一番最近できたノードを優先
+                    // もし newestCandidate が null なら保険で localFarthestFromStart
+                    bestTarget = newestCandidate ?? localFarthestFromStart;
+                    break;
+            }
         }
 
         if (bestTarget == null)
@@ -1599,9 +722,6 @@ public class CellFromStart : MonoBehaviour
         //------------------------------------------------------
         MoveForward();
     }
-
-
-
 
     private MapNode SelectUnknownNode(List<MapNode> unknownNodes, MapNode current)
     {

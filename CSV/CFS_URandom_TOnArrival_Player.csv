@@ -55,3 +55,5 @@ RunIndex,StepsWalked,UniqueNodesVisited,DeadEndEnterCount,FrameToGoal
 53,7,2,0,1611
 54,12,3,0,1022
 55,12,3,0,1082
+56,12,3,0,1001
+57,12,3,0,2372
