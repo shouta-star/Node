@@ -44,36 +44,83 @@ public class PlayerSpawner : MonoBehaviour
         StartCoroutine(SpawnPlayers());
     }
 
+    //private IEnumerator SpawnPlayers()
+    //{
+    //    do
+    //    {
+    //        for (int i = 0; i < spawnCount; i++)
+    //        {
+    //            Vector3 pos = new Vector3(-10f, 0f, -5f);
+
+    //            // ★ Instantiate の戻り値を受け取る
+    //            GameObject obj = Instantiate(playerPrefab, pos, Quaternion.identity);
+
+    //            // ★ CellFromStart を取得してモードを設定
+    //            var cfs = obj.GetComponent<CellFromStart>();
+    //            if (cfs != null)
+    //            {
+    //                if (unknownSelectModeOptions != null && unknownSelectModeOptions.Count > 0)
+    //                    cfs.unknownSelectMode = ChooseUnknownSelectMode();
+
+    //                if (targetUpdateModeOptions != null && targetUpdateModeOptions.Count > 0)
+    //                    cfs.targetUpdateMode = ChooseTargetUpdateMode();
+    //            }
+
+    //            // ★ UnknownQuantity を取得
+    //            UnknownQuantity uq = obj.GetComponent<UnknownQuantity>();
+    //            //Debug.Log($"[Spawner] Player spawned at {pos}, uq={uq}");
+
+    //            if (uq != null)
+    //            {
+    //                //Debug.Log($"[Spawner] uq.CurrentNode = {uq.CurrentNode}");
+    //                //Debug.Log($"[Spawner] MapNode.StartNode = {MapNode.StartNode}");
+    //            }
+    //        }
+
+    //        yield return new WaitForSeconds(spawnInterval);
+
+    //    } while (loop);
+    //}
     private IEnumerator SpawnPlayers()
     {
         do
         {
-            for (int i = 0; i < spawnCount; i++)
+            // 基準スポーン位置（spawnPointがあればそれ、無ければ従来の固定座標）
+            Vector3 basePos = (spawnPoint != null)
+                ? spawnPoint.position
+                : new Vector3(19f, 0f, 10f);
+
+            // 上/下/左/右
+            Vector3[] dirs = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+
+            // 4体に固定（spawnCountはInspectorで4にしておくのが基本）
+            int count = Mathf.Min(spawnCount, 4);
+
+            for (int i = 0; i < count; i++)
             {
-                Vector3 pos = new Vector3(-10f, 0f, -5f);
+                Vector3 dir = dirs[i];
 
-                // ★ Instantiate の戻り値を受け取る
-                GameObject obj = Instantiate(playerPrefab, pos, Quaternion.identity);
+                // いったん基準位置で生成（Startが走る前に位置/方向を設定する）
+                GameObject obj = Instantiate(playerPrefab, basePos, Quaternion.LookRotation(dir, Vector3.up));
 
-                // ★ CellFromStart を取得してモードを設定
                 var cfs = obj.GetComponent<CellFromStart>();
+                float cell = (cfs != null) ? cfs.cellSize : 1f;
+
+                // 重なり防止：基準位置から1マスずらす（上/下/左/右に配置）
+                obj.transform.position = basePos + dir * cell;
+                obj.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+
                 if (cfs != null)
                 {
+                    // ★ここが本命：初期進行方向を個体ごとに設定
+                    cfs.startDirection = dir;
+
+                    // 既存のモード設定はそのまま
                     if (unknownSelectModeOptions != null && unknownSelectModeOptions.Count > 0)
                         cfs.unknownSelectMode = ChooseUnknownSelectMode();
 
                     if (targetUpdateModeOptions != null && targetUpdateModeOptions.Count > 0)
                         cfs.targetUpdateMode = ChooseTargetUpdateMode();
-                }
-
-                // ★ UnknownQuantity を取得
-                UnknownQuantity uq = obj.GetComponent<UnknownQuantity>();
-                //Debug.Log($"[Spawner] Player spawned at {pos}, uq={uq}");
-
-                if (uq != null)
-                {
-                    //Debug.Log($"[Spawner] uq.CurrentNode = {uq.CurrentNode}");
-                    //Debug.Log($"[Spawner] MapNode.StartNode = {MapNode.StartNode}");
                 }
             }
 
@@ -81,6 +128,7 @@ public class PlayerSpawner : MonoBehaviour
 
         } while (loop);
     }
+
 
     // ★ UnknownSelectMode を重み付きランダムで 1 つ選ぶ
     private CellFromStart.UnknownSelectMode ChooseUnknownSelectMode()

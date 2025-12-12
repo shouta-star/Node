@@ -12,7 +12,7 @@ public class CellFromStart : MonoBehaviour
     public LayerMask nodeLayer;
 
     [Header("初期設定")]
-    public Vector3 startDirection = Vector3.forward;
+    public Vector3 startDirection;
     public Vector3 gridOrigin = Vector3.zero;
     public GameObject nodePrefab;
 

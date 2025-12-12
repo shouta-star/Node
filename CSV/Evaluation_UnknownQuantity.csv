@@ -132,3 +132,4 @@ RunID,NodesCreated,ShortestPathLen,TimeToGoal,TotalNodeVisits,HeavyFrameCount,Av
 1,5,-1,1201.000,4,0,0.000,0.000
 2,5,-1,2780.000,4,0,0.000,0.000
 3,5,-1,4405.000,4,0,0.000,0.000
+1,915,-1,25120.000,6144,0,0.000,0.000

@@ -8,6 +8,8 @@ public class MapNode : MonoBehaviour
     public static List<MapNode> allNodes = new List<MapNode>();
 
     private static int nodeCreateCount = 0;  // ★ 追加：生成カウンタ
+    private static int totalPassCount = 0;  // ★ 追加：全Node合計の訪問数（通過回数
+    private static float peakAvgPass = 1f;  // ★ 追加：平均訪問回数の最大（正規化用）
 
     [Header("基本情報")]
     public Vector2Int cell;
@@ -35,6 +37,13 @@ public class MapNode : MonoBehaviour
     public Color startColor = Color.white;  // 0回通過時の色
     public Color endColor = Color.red;      // maxPassForColor回通過時の色
     public Renderer _renderer;        // この Node の見た目用 Renderer
+
+    //[Tooltip("平均訪問回数(全体訪問数/Node数)×この倍率で endColor に到達")]
+    //public float avgPassColorScale = 1f;
+
+    [Header("色（総訪問数/Node数ベース）")]
+    [Tooltip("平均訪問回数(総訪問数/Node数) × この倍率で最大色に到達")]
+    public float avgPassScale = 1.0f;
 
     [Tooltip("色を変えたい Node が使っているマテリアル（通常Node用）")]
     public Material colorChangeTargetMaterial;
@@ -108,6 +117,9 @@ public class MapNode : MonoBehaviour
                 _enableColorChange = true;
             }
         }
+
+        // ★ Node数が増えた瞬間にも「全体色」を更新（＝増えるほど薄くなる）
+        UpdateAllNodesColor_ByGlobalAverage();
     }
 
     // ======================================================
@@ -638,16 +650,59 @@ public class MapNode : MonoBehaviour
     public void OnPassed()
     {
         passCount++;
+        totalPassCount++;
 
         if (_renderer == null || !_enableColorChange) return;
 
-        // 0.0 ～ 1.0 に正規化した割合（通過回数 / 最大回数）
-        float t = Mathf.Clamp01((float)passCount / maxPassForColor);
+        // ★ 通過のたびに「全体色」を更新（＝探索が進むほど薄くなる）
+        UpdateAllNodesColor_ByGlobalAverage();
+    }
 
-        // startColor → endColor へ「t 割合」だけ近づける
-        Color c = Color.Lerp(startColor, endColor, t);
+    // ======================================================
+    // ★ 全体の平均訪問回数（総訪問数 / Node数）から「全Node共通の色」を決める
+    //    Node数が少ない：平均が大 → 濃い
+    //    Node数が増える：平均が小 → 薄い
+    //    RGBは R=255固定、G/Bを510段階で増やして白に近づける
+    // ======================================================
+    private static void UpdateAllNodesColor_ByGlobalAverage()
+    {
+        // 色変更対象Node数（Goalは _enableColorChange=false なので除外）
+        int nodeCount = 0;
+        int maxPass = 0;
 
-        _renderer.material.color = c;
+        for (int i = 0; i < allNodes.Count; i++)
+        {
+            var n = allNodes[i];
+            if (n != null && n._enableColorChange && n._renderer != null)
+            {
+                nodeCount++;
+                if (n.passCount > maxPass) maxPass = n.passCount;
+            }
+        }
+        if (nodeCount <= 0) return;
+
+        maxPass = Mathf.Max(1, maxPass); // 0除算防止（全員0回でもOK）
+
+        // 全Nodeに適用（Nodeごとに色が違う）
+        for (int i = 0; i < allNodes.Count; i++)
+        {
+            var n = allNodes[i];
+            if (n == null || !n._enableColorChange || n._renderer == null) continue;
+
+            float t = Mathf.Clamp01((float)n.passCount / maxPass); // 0..1（多いほど1）
+
+            // 510段階（多いほど s が大きい）
+            int s = Mathf.Clamp(Mathf.RoundToInt(t * 510f), 0, 510);
+
+            // ★ まずGを減らす → 0になったらBを減らす
+            int gInt = 255 - Mathf.Min(s, 255);
+            int bInt = 255 - Mathf.Max(s - 255, 0);
+
+            byte g = (byte)Mathf.Clamp(gInt, 0, 255);
+            byte b = (byte)Mathf.Clamp(bInt, 0, 255);
+
+            n._renderer.material.color = new Color32(255, g, b, 255); // 白→赤
+        }
     }
 
 
@@ -658,5 +713,7 @@ public class MapNode : MonoBehaviour
         StartNode = null;
         GoalNode = null;
         nodeCreateCount = 0;
+        totalPassCount = 0;
+        peakAvgPass = 1f;
     }
 }

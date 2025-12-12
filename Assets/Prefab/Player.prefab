@@ -163,7 +163,7 @@ MonoBehaviour:
   nodeLayer:
     serializedVersion: 2
     m_Bits: 128
-  startDirection: {x: 0, y: 0, z: 1}
+  startDirection: {x: 0, y: 0, z: 0}
   gridOrigin: {x: 0, y: 0, z: 0}
   nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
   unknownReferenceDepth: 3
