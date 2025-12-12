@@ -68,7 +68,7 @@ public class PlayerSpawner : MonoBehaviour
 
                 // š UnknownQuantity ‚ğæ“¾
                 UnknownQuantity uq = obj.GetComponent<UnknownQuantity>();
-                Debug.Log($"[Spawner] Player spawned at {pos}, uq={uq}");
+                //Debug.Log($"[Spawner] Player spawned at {pos}, uq={uq}");
 
                 if (uq != null)
                 {

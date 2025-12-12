@@ -165,7 +165,7 @@ public class CellFromStart : MonoBehaviour
             MapNode.StartNode = nodeAtStart;
             nodeAtStart.distanceFromStart = 0;
 
-            Debug.Log($"[SET STARTNODE] StartNode = {nodeAtStart.name}");
+            //Debug.Log($"[SET STARTNODE] StartNode = {nodeAtStart.name}");
         }
 
         // ------------------------------------------------
@@ -174,7 +174,7 @@ public class CellFromStart : MonoBehaviour
         currentNode = nodeAtStart;
         RegisterCurrentNode(currentNode);
 
-        Debug.Log($"[SET CURRENTNODE] currentNode = {currentNode.name}");
+        //Debug.Log($"[SET CURRENTNODE] currentNode = {currentNode.name}");
 
         // ★ 評価ログ：スタート時点での訪問情報を初期化
         visitedNodes.Clear();
@@ -207,7 +207,7 @@ public class CellFromStart : MonoBehaviour
         //------------------------------------------------------
         if (blockTryExploreThisFrame)
         {
-            Debug.Log("[UPDATE] blockTryExploreThisFrame → skip TryExploreMove");
+            //Debug.Log("[UPDATE] blockTryExploreThisFrame → skip TryExploreMove");
             blockTryExploreThisFrame = false;
             return;
         }
@@ -223,21 +223,21 @@ public class CellFromStart : MonoBehaviour
             //TryExploreMove();
             if (arrivedThisNode)
             {
-                Debug.Log("[UPDATE] Node到達直後 → TryExploreMove()");
+                //Debug.Log("[UPDATE] Node到達直後 → TryExploreMove()");
                 arrivedThisNode = false;
                 TryExploreMove();
                 return;
             }
             else
             {
-                Debug.Log("[UPDATE] Node中心だが到達直後でない → MoveForward()");
+                //Debug.Log("[UPDATE] Node中心だが到達直後でない → MoveForward()");
                 MoveForward();
                 return;
             }
         }
         //else
         {
-            Debug.Log("[UPDATE] CanPlaceNodeHere()=false → MoveForward()");
+            //Debug.Log("[UPDATE] CanPlaceNodeHere()=false → MoveForward()");
             MoveForward();
         }
     }
@@ -301,7 +301,7 @@ public class CellFromStart : MonoBehaviour
                             wallLayer))
         {
             if (debugLog)
-                Debug.Log("[Block] Wall ahead → stop movement");
+                //Debug.Log("[Block] Wall ahead → stop movement");
 
             isMoving = false;
             return;
@@ -336,11 +336,11 @@ public class CellFromStart : MonoBehaviour
         //------------------------------------------------------
         transform.position = targetPos;
 
-        Debug.Log(
-            $"[CHECK-ARRIVE] Arrived at targetPos={targetPos} | " +
-            $"actualPos={transform.position} | " +
-            $"arrivedThisNode={arrivedThisNode}"
-        );
+        //Debug.Log(
+        //    $"[CHECK-ARRIVE] Arrived at targetPos={targetPos} | " +
+        //    $"actualPos={transform.position} | " +
+        //    $"arrivedThisNode={arrivedThisNode}"
+        //);
 
         isMoving = false;
 
@@ -374,7 +374,7 @@ public class CellFromStart : MonoBehaviour
             // ③ Goal 到達判定：Tag が "Goal" の Node に来たら
             if (!goalReached && currentNode.gameObject.CompareTag("Goal"))
             {
-                Debug.Log("[GOAL] GoalNode に到達しました");
+                //Debug.Log("[GOAL] GoalNode に到達しました");
                 goalReached = true;
                 frameToGoal = Time.frameCount;
 
@@ -443,8 +443,8 @@ public class CellFromStart : MonoBehaviour
         //    arrivedThisNode = false;
         //}
 
-        Debug.Log($"[TryExploreMove] Start currentNode={currentNode?.name}, pos={transform.position}");
-        Debug.Log($"[TryExploreMove] lastBestTarget={lastBestTarget?.name}");
+        //Debug.Log($"[TryExploreMove] Start currentNode={currentNode?.name}, pos={transform.position}");
+        //Debug.Log($"[TryExploreMove] lastBestTarget={lastBestTarget?.name}");
 
         //------------------------------------------------------
         // ① Node生成・更新（Nodeスナップ後に呼ばれる前提）
@@ -461,7 +461,7 @@ public class CellFromStart : MonoBehaviour
             Vector3? localUnknownDir = currentNode.GetUnknownDirection();
             if (localUnknownDir.HasValue)
             {
-                Debug.Log("[LOCAL-UNKNOWN] currentNode に Unknown があるので、その場で Unknown を優先");
+                //Debug.Log("[LOCAL-UNKNOWN] currentNode に Unknown があるので、その場で Unknown を優先");
 
                 // ここで一旦ターゲットをリセット
                 lastBestTarget = null;
@@ -488,7 +488,7 @@ public class CellFromStart : MonoBehaviour
         // ★ 追加：最遠Nodeに向かっている途中で、探索範囲に Unknown が出てきたら乗り換え
         if (followMode && lastTargetIsFarthest && unknownNodes.Count > 0)
         {
-            Debug.Log("[FOLLOW] Farthest 追従中に Unknown 検出 → follow 中断して再選択へ");
+            //Debug.Log("[FOLLOW] Farthest 追従中に Unknown 検出 → follow 中断して再選択へ");
             followMode = false;
             lastBestTarget = null;
             lastTargetIsFarthest = false;
@@ -496,7 +496,7 @@ public class CellFromStart : MonoBehaviour
 
         if (followMode)
         {
-            Debug.Log($"[FOLLOW] toward lastBestTarget={lastBestTarget.name}");
+            //Debug.Log($"[FOLLOW] toward lastBestTarget={lastBestTarget.name}");
 
             var path = BuildShortestPath(currentNode, lastBestTarget);
 
@@ -512,7 +512,7 @@ public class CellFromStart : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"[FOLLOW] path to {lastBestTarget.name} not found → fallback");
+                //Debug.LogWarning($"[FOLLOW] path to {lastBestTarget.name} not found → fallback");
                 lastBestTarget = null;
                 lastTargetIsFarthest = false;
 
@@ -527,7 +527,7 @@ public class CellFromStart : MonoBehaviour
         //------------------------------------------------------
         if (currentNode == lastBestTarget)
         {
-            Debug.Log($"[REACHED] Target reached={lastBestTarget.name}");
+            //Debug.Log($"[REACHED] Target reached={lastBestTarget.name}");
 
             //Vector3? udir = currentNode.GetUnknownDirection();
             //if (udir.HasValue)
@@ -551,7 +551,7 @@ public class CellFromStart : MonoBehaviour
         if (unknownNodes.Count > 0)
         {
             unknownTarget = SelectUnknownNode(unknownNodes, currentNode);
-            Debug.Log($"[UN-CUR] Selected Unknown = {unknownTarget.name}");
+            //Debug.Log($"[UN-CUR] Selected Unknown = {unknownTarget.name}");
         }
 
         //MapNode localFarthestFromStart =
@@ -598,9 +598,9 @@ public class CellFromStart : MonoBehaviour
             localFarthestFromStart =
                 nearNodes.OrderByDescending(n => n.distanceFromStart).FirstOrDefault();
 
-            Debug.Log(
-                $"[TARGET] Local farthest from Start (near range) = " +
-                $"{(localFarthestFromStart != null ? localFarthestFromStart.name : "null")}");
+            //Debug.Log(
+            //    $"[TARGET] Local farthest from Start (near range) = " +
+            //    $"{(localFarthestFromStart != null ? localFarthestFromStart.name : "null")}");
         }
         else
         {
@@ -630,15 +630,15 @@ public class CellFromStart : MonoBehaviour
                 newestCandidate = globalCandidates.LastOrDefault();
             }
 
-            Debug.Log(
-                "[TARGET] No unknown in near range → " +
-                $"Global farthest from Start = " +
-                $"{(localFarthestFromStart != null ? localFarthestFromStart.name : "null")}, " +
-                $"dist={ (localFarthestFromStart != null ? localFarthestFromStart.distanceFromStart : -1) }");
+            //Debug.Log(
+            //    "[TARGET] No unknown in near range → " +
+            //    $"Global farthest from Start = " +
+            //    $"{(localFarthestFromStart != null ? localFarthestFromStart.name : "null")}, " +
+            //    $"dist={ (localFarthestFromStart != null ? localFarthestFromStart.distanceFromStart : -1) }");
 
             if (newestCandidate != null)
             {
-                Debug.Log($"[TARGET] Global newest Node = {newestCandidate.name}");
+                //Debug.Log($"[TARGET] Global newest Node = {newestCandidate.name}");
             }
         }
         // ★ ここまで修正 ★
@@ -678,7 +678,7 @@ public class CellFromStart : MonoBehaviour
 
         if (bestTarget == null)
         {
-            Debug.LogWarning("[BEST] bestTarget NULL → fallback");
+            //Debug.LogWarning("[BEST] bestTarget NULL → fallback");
             lastBestTarget = null;
             lastTargetIsFarthest = false;
 
@@ -695,7 +695,7 @@ public class CellFromStart : MonoBehaviour
 
         if (path2 == null || path2.Count < 2)
         {
-            Debug.LogWarning($"[PATH] Cannot reach bestTarget={bestTarget.name} → fallback");
+            //Debug.LogWarning($"[PATH] Cannot reach bestTarget={bestTarget.name} → fallback");
             moveDir = ChooseRandomValidDirection(currentNode).Value;
             MoveForward();
             return;
@@ -873,14 +873,14 @@ public class CellFromStart : MonoBehaviour
         // Unknown だけ
         if (targetUnknown != null && targetFarthest == null)
         {
-            Debug.Log($"[BEST] UnknownOnly → return {targetUnknown.name}");
+            //Debug.Log($"[BEST] UnknownOnly → return {targetUnknown.name}");
             return targetUnknown;
         }
 
         // Farthest だけ
         if (targetUnknown == null && targetFarthest != null)
         {
-            Debug.Log($"[BEST] FarthestOnly → return {targetFarthest.name}");
+            //Debug.Log($"[BEST] FarthestOnly → return {targetFarthest.name}");
             return targetFarthest;
         }
 
@@ -891,10 +891,10 @@ public class CellFromStart : MonoBehaviour
         MapNode best =
             (distUnknown >= distFarthest) ? targetUnknown : targetFarthest;
 
-        Debug.Log($"[CHECK-BEST] bestTarget={best?.name}, " +
-          $"current={currentNode?.name}, " +
-          $"targetUnknown={targetUnknown?.name}, " +
-          $"targetFarthest={targetFarthest?.name}");
+        //Debug.Log($"[CHECK-BEST] bestTarget={best?.name}, " +
+        //  $"current={currentNode?.name}, " +
+        //  $"targetUnknown={targetUnknown?.name}, " +
+        //  $"targetFarthest={targetFarthest?.name}");
 
         if (distUnknown >= distFarthest)
             return targetUnknown;
@@ -1029,14 +1029,14 @@ public class CellFromStart : MonoBehaviour
         Vector3 snapped = SnapToGrid(pos);
         Vector2Int cell = WorldToCell(snapped);
 
-        Debug.Log($"[TP0] TryPlaceNode START | pos={pos} | snapped={snapped} | cell={cell}");
+        //Debug.Log($"[TP0] TryPlaceNode START | pos={pos} | snapped={snapped} | cell={cell}");
 
         MapNode node;
 
         if (MapNode.allNodeCells.Contains(cell))
         {
             node = MapNode.FindByCell(cell);
-            Debug.Log($"[TP1] Existing Node FOUND | node={node.name} | links={node.links.Count}");
+            //Debug.Log($"[TP1] Existing Node FOUND | node={node.name} | links={node.links.Count}");
         }
         else
         {
@@ -1047,21 +1047,21 @@ public class CellFromStart : MonoBehaviour
 
             // ★ 新規Nodeを作ったのでカウントを増やす
             newNodeCreatedCount++;
-            Debug.Log($"[TP2] NEW Node CREATED | node={node.name} | cell={cell} | createdCount={newNodeCreatedCount}");
+            //Debug.Log($"[TP2] NEW Node CREATED | node={node.name} | cell={cell} | createdCount={newNodeCreatedCount}");
 
             // ★ 規定数に達したらこのPlayerをDestroy
             if (newNodeCreatedCount >= destroyAfterNewNodes)
             {
-                Debug.Log($"[PLAYER-END] 新規Nodeを {newNodeCreatedCount} 個設置したので Player_{playerId} を Destroy");
+                //Debug.Log($"[PLAYER-END] 新規Nodeを {newNodeCreatedCount} 個設置したので Player_{playerId} を Destroy");
                 Destroy(gameObject);   // このフレームの終わりに破棄される
             }
 
-            Debug.Log($"[TP2] NEW Node CREATED | node={node.name} | cell={cell}");
+            //Debug.Log($"[TP2] NEW Node CREATED | node={node.name} | cell={cell}");
         }
 
-        Debug.Log($"[TP3] Before LinkBackward | node={node.name}");
+        //Debug.Log($"[TP3] Before LinkBackward | node={node.name}");
         LinkBackward(node);
-        Debug.Log($"[TP4] After LinkBackward | node={node.name} | links={node.links.Count}");
+        //Debug.Log($"[TP4] After LinkBackward | node={node.name} | links={node.links.Count}");
         return node;
     }
 
@@ -1070,7 +1070,7 @@ public class CellFromStart : MonoBehaviour
         Vector3 origin = node.transform.position + Vector3.up * 0.1f;
         Vector3 dir = -moveDir;
 
-        Debug.Log($"[LB0] LinkBackward START | from={node.name} | dir={dir}");
+        //Debug.Log($"[LB0] LinkBackward START | from={node.name} | dir={dir}");
 
         LayerMask mask = wallLayer | nodeLayer;
 
@@ -1086,11 +1086,11 @@ public class CellFromStart : MonoBehaviour
             {
                 int layer = hit.collider.gameObject.layer;
 
-                Debug.Log($"[LB1] Ray Hit | dist={dist} | hit={hit.collider.name}");
+                //Debug.Log($"[LB1] Ray Hit | dist={dist} | hit={hit.collider.name}");
 
                 if ((wallLayer.value & (1 << layer)) != 0)
                 {
-                    Debug.Log($"[LB2] Hit WALL → stop");
+                    //Debug.Log($"[LB2] Hit WALL → stop");
                     return;
                 }
 
@@ -1099,7 +1099,7 @@ public class CellFromStart : MonoBehaviour
                     var hitNode = hit.collider.GetComponent<MapNode>();
                     if (hitNode != null && hitNode != node)
                     {
-                        Debug.Log($"[LB3] Linking {node.name} ↔ {hitNode.name}");
+                        //Debug.Log($"[LB3] Linking {node.name} ↔ {hitNode.name}");
 
                         node.AddLink(hitNode);
                         node.RecalculateUnknownAndWall();
@@ -1107,14 +1107,14 @@ public class CellFromStart : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log($"[LB4] Hit self or null");
+                        //Debug.Log($"[LB4] Hit self or null");
                     }
                     return;
                 }
             }
         }
 
-        Debug.Log($"[LB5] No hit up to {linkRayMaxSteps} steps");
+        //Debug.Log($"[LB5] No hit up to {linkRayMaxSteps} steps");
     }
 
     private Vector3 SnapToGrid(Vector3 pos)
@@ -1138,7 +1138,7 @@ public class CellFromStart : MonoBehaviour
 
     private void Log(string msg)
     {
-        if (debugLog) Debug.Log("[CellFS] " + msg);
+        //if (debugLog) Debug.Log("[CellFS] " + msg);
     }
 }
 

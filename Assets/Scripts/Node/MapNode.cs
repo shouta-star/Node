@@ -55,7 +55,7 @@ public class MapNode : MonoBehaviour
         if (CompareTag("Goal"))
         {
             GoalNode = this;
-            Debug.Log($"[MapNode] GoalNode set: {name} cell=({cell.x},{cell.y})");
+            //Debug.Log($"[MapNode] GoalNode set: {name} cell=({cell.x},{cell.y})");
         }
     }
 
@@ -86,31 +86,51 @@ public class MapNode : MonoBehaviour
 
         RecalculateUnknownAndWall();
 
-        Debug.Log($"[DEBUG-STARTNODE] Awake(): StartNode={MapNode.StartNode?.name}");
+        //Debug.Log($"[DEBUG-STARTNODE] Awake(): StartNode={MapNode.StartNode?.name}");
 
+        //_renderer = GetComponent<Renderer>();
+        //if (_renderer != null)
+        //{
+        //    //_renderer.material.color = Color.white;
+        //    // colorChangeTargetMaterial が未設定なら、全部の Node を色変更対象にする（今まで通り）
+        //    if (colorChangeTargetMaterial == null)
+        //    {
+        //        // 各 Node ごとにマテリアルを複製して色を独立させる
+        //        _renderer.material = Instantiate(_renderer.material);
+        //        _renderer.material.color = Color.white;
+        //        _enableColorChange = true;
+        //    }
+        //    // 指定されたマテリアルを使っている Node だけ色変更対象にする
+        //    else if (_renderer.sharedMaterial == colorChangeTargetMaterial)
+        //    {
+        //        _renderer.material = Instantiate(_renderer.sharedMaterial);
+        //        _renderer.material.color = Color.white;
+        //        _enableColorChange = true;
+        //    }
+        //    else
+        //    {
+        //        // それ以外（＝Node_1 用マテリアルなど）は色を変えない
+        //        _enableColorChange = false;
+        //    }
+        //}
         _renderer = GetComponent<Renderer>();
         if (_renderer != null)
         {
-            //_renderer.material.color = Color.white;
-            // colorChangeTargetMaterial が未設定なら、全部の Node を色変更対象にする（今まで通り）
-            if (colorChangeTargetMaterial == null)
+            // ★ Goal は色変更しない（マテリアルもいじらない）
+            if (CompareTag("Goal"))
             {
-                // 各 Node ごとにマテリアルを複製して色を独立させる
-                _renderer.material = Instantiate(_renderer.material);
-                _renderer.material.color = Color.white;
-                _enableColorChange = true;
-            }
-            // 指定されたマテリアルを使っている Node だけ色変更対象にする
-            else if (_renderer.sharedMaterial == colorChangeTargetMaterial)
-            {
-                _renderer.material = Instantiate(_renderer.sharedMaterial);
-                _renderer.material.color = Color.white;
-                _enableColorChange = true;
+                _enableColorChange = false;
             }
             else
             {
-                // それ以外（＝Node_1 用マテリアルなど）は色を変えない
-                _enableColorChange = false;
+                // ★ 通常の Node は色変更対象
+                //   各 Node ごとにマテリアルを複製して独立させる
+                _renderer.material = Instantiate(_renderer.material);
+
+                // 開始色を startColor にしておく（Inspector で白などに設定）
+                _renderer.material.color = startColor;
+
+                _enableColorChange = true;
             }
         }
     }
@@ -149,7 +169,7 @@ public class MapNode : MonoBehaviour
     {
         if (other == null || other == this)
         {
-            Debug.LogError($"[MN-AddLink ERROR] other == null");
+            //Debug.LogError($"[MN-AddLink ERROR] other == null");
             return;
         }
 
@@ -159,18 +179,18 @@ public class MapNode : MonoBehaviour
         {
             links.Add(other);
             added = true;
-           Debug.Log($"[AddLink] Add {name} → {other.name}");
+           //Debug.Log($"[AddLink] Add {name} → {other.name}");
         }
 
         if (!other.links.Contains(this))
         {
             other.links.Add(this);
             added = true;
-            Debug.Log($"[AddLink] Add {name} → {other.name}");
+            //Debug.Log($"[AddLink] Add {name} → {other.name}");
         }
 
         if (debugLog && added)
-            Debug.Log($"[MapNode] Linked: {name} ↔ {other.name}");
+            //Debug.Log($"[MapNode] Linked: {name} ↔ {other.name}");
 
         // 双方再計算（リンク確定後）
         RecalculateUnknownAndWall();
@@ -414,7 +434,7 @@ public class MapNode : MonoBehaviour
                 if (dot > 0.95f)
                 {
                     linkedInDir = true;
-                    Debug.Log($"[MapNode] {name} dir={dirName}: Linked with {link.name} (dot={dot:F2})");
+                    //Debug.Log($"[MapNode] {name} dir={dirName}: Linked with {link.name} (dot={dot:F2})");
                     break;
                 }
             }
@@ -433,7 +453,7 @@ public class MapNode : MonoBehaviour
             if (hitWall)
             {
                 wallCount++;
-                Debug.Log($"[MapNode] {name} dir={dirName}: HIT Wall");
+                //Debug.Log($"[MapNode] {name} dir={dirName}: HIT Wall");
                 continue;
             }
 
@@ -478,14 +498,14 @@ public class MapNode : MonoBehaviour
                 }
 
                 // ★ 通常の Node は Unknown にしない（現状のまま）
-                Debug.Log($"[MapNode] {name} dir={dirName}: Found Node but not linked");
+                //Debug.Log($"[MapNode] {name} dir={dirName}: Found Node but not linked");
                 continue;
             }
 
 
             // ---- 有効な Unknown ----
             unknownCount++;
-            Debug.Log($"[MapNode] {name} dir={dirName}: Valid Unknown");
+            //Debug.Log($"[MapNode] {name} dir={dirName}: Valid Unknown");
         }
     }
 
