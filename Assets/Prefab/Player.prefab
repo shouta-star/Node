@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fa970f044eea104a9f73c4f26d1db62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 10
   cellSize: 1
   rayDistance: 1
   wallLayer:
@@ -175,6 +175,7 @@ MonoBehaviour:
   bodyRenderer: {fileID: 3303906976382372999}
   exploreMaterial: {fileID: 2100000, guid: acf7ff37ebb90214cb86cbf4c62185b3, type: 2}
   playerId: 0
+  fallbackCooldownSteps: 6
   destroyAfterNewNodes: 10
   stepsWalked: 0
   uniqueNodesVisited: 0

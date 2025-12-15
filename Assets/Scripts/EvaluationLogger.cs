@@ -50,8 +50,8 @@ public static class EvaluationLogger
 
         // ▼ 保存先パス
         string fileName = $"Evaluation_{scriptName}.csv";
-        string baseDir = @"D:\GitHub\NodeGitHub\CSV";
-        //string baseDir = @"D:\GitHub\Node\CSV";
+        //string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+        string baseDir = @"D:\GitHub\Node\CSV";
         string path = Path.Combine(baseDir, fileName);
 
         // ▼ CSV が無ければヘッダ行を書く
@@ -367,7 +367,10 @@ public static class EvaluationLogger
         try
         {
             // ★ 出力先フォルダ（今のパスはそのまま使う）
-            string baseDir = @"D:\GitHub\NodeGitHub\CSV\1204\Test";
+            //string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+            //string baseDir = @"D:\GitHub\Node\CSV\Random_EveryNode_FarthestFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival_FarthestFromStart";
+            string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival_NewestNode";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);
@@ -635,7 +638,10 @@ public static class EvaluationLogger
         try
         {
             // ★ 出力先フォルダ（他のCSVと揃える）
-            string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+            //string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+            //string baseDir = @"D:\GitHub\Node\CSV\Random_EveryNode_FarthestFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival_FarthestFromStart";
+            string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival_NewestNode";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);

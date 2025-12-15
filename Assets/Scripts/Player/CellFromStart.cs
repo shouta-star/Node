@@ -53,6 +53,15 @@ public class CellFromStart : MonoBehaviour
     // ★ 追加：今の lastBestTarget が「Start最遠由来」かどうか
     private bool lastTargetIsFarthest = false;
 
+    [Header("循環回避：Unknown=0 フォールバックのクールダウン")]
+    public int fallbackCooldownSteps = 6;  // 例：6歩の間、同じノードをフォールバック候補にしない
+
+    // MapNode → 「このstepIndex未満なら選ばない」
+    private Dictionary<MapNode, int> fallbackCooldownUntil = new Dictionary<MapNode, int>();
+
+    // ★ Unknown=0 フェーズで既に選んだフォールバックターゲット
+    private HashSet<MapNode> usedFallbackTargets = new HashSet<MapNode>();
+
     // ★ Playerごとの寿命設定：新規Nodeを何個置いたら消えるか
     [Header("寿命設定")]
     [Tooltip("このプレイヤーが新規に設置できるNode数の上限")]
@@ -413,8 +422,6 @@ public class CellFromStart : MonoBehaviour
         blockTryExploreThisFrame = true;
     }
 
-
-
     private void RegisterCurrentNode(MapNode node)
     {
         if (node == null) return;
@@ -426,6 +433,29 @@ public class CellFromStart : MonoBehaviour
             recentNodes.RemoveAt(0);
     }
 
+    private bool IsFallbackOnCooldown(MapNode n)
+    {
+        if (n == null) return false;
+        if (fallbackCooldownSteps <= 0) return false;
+
+        if (fallbackCooldownUntil.TryGetValue(n, out int until))
+        {
+            if (stepIndex < until) return true;
+
+            // 期限切れは掃除
+            fallbackCooldownUntil.Remove(n);
+        }
+        return false;
+    }
+
+    private void MarkFallbackCooldown(MapNode n)
+    {
+        if (n == null) return;
+        if (fallbackCooldownSteps <= 0) return;
+
+        fallbackCooldownUntil[n] = stepIndex + fallbackCooldownSteps;
+    }
+
     // =============================
     // ★★★ メイン探索ルーチン ★★★
     // =============================
@@ -434,23 +464,12 @@ public class CellFromStart : MonoBehaviour
         // ★ Node到達直後のフレームでは実行しない（この1行が超重要）
         if (blockTryExploreThisFrame)
         {
-            //blockTryExploreThisFrame = false;
             return;
         }
-        //else
-        //{
-        //    // このフレームだけ TryExploreMove を実行する
-        //    arrivedThisNode = false;
-        //}
-
-        //Debug.Log($"[TryExploreMove] Start currentNode={currentNode?.name}, pos={transform.position}");
-        //Debug.Log($"[TryExploreMove] lastBestTarget={lastBestTarget?.name}");
 
         //------------------------------------------------------
         // ① Node生成・更新（Nodeスナップ後に呼ばれる前提）
         //------------------------------------------------------
-        //MapNode oldNode = currentNode;
-
         currentNode = TryPlaceNode(transform.position);
         currentNode.RecalculateUnknownAndWall();
         RegisterCurrentNode(currentNode);
@@ -461,8 +480,6 @@ public class CellFromStart : MonoBehaviour
             Vector3? localUnknownDir = currentNode.GetUnknownDirection();
             if (localUnknownDir.HasValue)
             {
-                //Debug.Log("[LOCAL-UNKNOWN] currentNode に Unknown があるので、その場で Unknown を優先");
-
                 // ここで一旦ターゲットをリセット
                 lastBestTarget = null;
                 lastTargetIsFarthest = false;
@@ -473,22 +490,20 @@ public class CellFromStart : MonoBehaviour
             }
         }
 
+        // 近場探索（リンクBFS）
         var nearNodes = BFS_NearNodes(currentNode, unknownReferenceDepth);
         var unknownNodes = nearNodes.Where(n => n.unknownCount > 0).ToList();
 
         //------------------------------------------------------
         // ② FOLLOW（OnArrival の時だけ機能させる）
         //------------------------------------------------------
-        //bool nodeJustArrived = (oldNode != currentNode);
-
         bool followMode =
             (targetUpdateMode == TargetUpdateMode.OnArrival) &&
             (lastBestTarget != null && currentNode != lastBestTarget);
 
-        // ★ 追加：最遠Nodeに向かっている途中で、探索範囲に Unknown が出てきたら乗り換え
+        // ★ フォールバック追従中に、近場に Unknown が出てきたら乗り換え
         if (followMode && lastTargetIsFarthest && unknownNodes.Count > 0)
         {
-            //Debug.Log("[FOLLOW] Farthest 追従中に Unknown 検出 → follow 中断して再選択へ");
             followMode = false;
             lastBestTarget = null;
             lastTargetIsFarthest = false;
@@ -496,8 +511,6 @@ public class CellFromStart : MonoBehaviour
 
         if (followMode)
         {
-            //Debug.Log($"[FOLLOW] toward lastBestTarget={lastBestTarget.name}");
-
             var path = BuildShortestPath(currentNode, lastBestTarget);
 
             if (path != null && path.Count >= 2)
@@ -512,7 +525,6 @@ public class CellFromStart : MonoBehaviour
             }
             else
             {
-                //Debug.LogWarning($"[FOLLOW] path to {lastBestTarget.name} not found → fallback");
                 lastBestTarget = null;
                 lastTargetIsFarthest = false;
 
@@ -527,158 +539,90 @@ public class CellFromStart : MonoBehaviour
         //------------------------------------------------------
         if (currentNode == lastBestTarget)
         {
-            //Debug.Log($"[REACHED] Target reached={lastBestTarget.name}");
-
-            //Vector3? udir = currentNode.GetUnknownDirection();
-            //if (udir.HasValue)
-            //{
-            //    moveDir = udir.Value.normalized;
-            //    MoveForward();
-            //    return;
-            //}
-
             lastBestTarget = null;
             lastTargetIsFarthest = false;
         }
 
         //------------------------------------------------------
-        // ④ Unknown & Start最遠 の探索
+        // ④ Unknown（近場） or Global Frontier（全体フロンティア）を決める
         //------------------------------------------------------
-        //var nearNodes = BFS_NearNodes(currentNode, unknownReferenceDepth);
-        //var unknownNodes = nearNodes.Where(n => n.unknownCount > 0).ToList();
-
+        // ④-1: 近場に Unknown があればいつも通り Unknown を優先
         MapNode unknownTarget = null;
         if (unknownNodes.Count > 0)
-        {
             unknownTarget = SelectUnknownNode(unknownNodes, currentNode);
-            //Debug.Log($"[UN-CUR] Selected Unknown = {unknownTarget.name}");
-        }
 
-        //MapNode localFarthestFromStart =
-        //    nearNodes.OrderByDescending(n => n.distanceFromStart).FirstOrDefault();
+        // ④-2: 近場に Unknown が無い → 「到達可能なノード」の中から
+        //       unknownCount > 0（＝掘れる場所が残るノード）だけを集めてターゲットにする
+        MapNode globalFrontierTarget = null;
 
-        //// ★ ここから修正 ★
-        //MapNode localFarthestFromStart = null;
-
-        //if (unknownNodes.Count > 0)
-        //{
-        //    // ④-1: 探索範囲内（nearNodes）の中で Start から最も遠いノード
-        //    localFarthestFromStart =
-        //        nearNodes.OrderByDescending(n => n.distanceFromStart).FirstOrDefault();
-
-        //    Debug.Log(
-        //        $"[TARGET] Local farthest from Start (near range) = " +
-        //        $"{(localFarthestFromStart != null ? localFarthestFromStart.name : "null")}");
-        //}
-        //else
-        //{
-        //    // ④-2: 探索範囲内に未知が無い → マップ全体から Start から最遠のノードを探す
-        //    var globalCandidates = MapNode.allNodes
-        //        .Where(n => n != null &&
-        //                    n.distanceFromStart < int.MaxValue &&
-        //                    n != currentNode);
-
-        //    localFarthestFromStart = globalCandidates
-        //        .OrderByDescending(n => n.distanceFromStart)
-        //        .FirstOrDefault();
-
-        //    Debug.Log(
-        //        "[TARGET] No unknown in near range → " +
-        //        $"Global farthest from Start = " +
-        //        $"{(localFarthestFromStart != null ? localFarthestFromStart.name : "null")}, " +
-        //        $"dist={ (localFarthestFromStart != null ? localFarthestFromStart.distanceFromStart : -1) }");
-        //}
-        // ★ ここから修正 ★
-        MapNode localFarthestFromStart = null;
-        MapNode newestCandidate = null;   // ★ 追加：一番最近できた Node を入れておく
-
-        if (unknownNodes.Count > 0)
+        if (unknownTarget == null)
         {
-            // ④-1: 探索範囲内（nearNodes）の中で Start から最も遠いノード
-            localFarthestFromStart =
-                nearNodes.OrderByDescending(n => n.distanceFromStart).FirstOrDefault();
+            // currentNode からリンクで到達可能なノードだけ
+            var reachable = BFS_ReachableNodes(currentNode);
 
-            //Debug.Log(
-            //    $"[TARGET] Local farthest from Start (near range) = " +
-            //    $"{(localFarthestFromStart != null ? localFarthestFromStart.name : "null")}");
-        }
-        else
-        {
-            //--------------------------------------------------
-            // ④-2: 探索範囲内に未知が無い
-            //       → マップ全体から
-            //          ・Startから最遠ノード
-            //          ・一番最近できたノード
-            //       を両方計算する
-            //--------------------------------------------------
-            var globalCandidates = MapNode.allNodes
+            // ★ Unknown 判定の取りこぼしを減らしたいので、ここで再計算（重いなら後で最適化可）
+            foreach (var n in reachable)
+                if (n != null) n.RecalculateUnknownAndWall();
+
+            var globalFrontiers = reachable
                 .Where(n => n != null &&
+                            n != currentNode &&
                             n.distanceFromStart < int.MaxValue &&
-                            n != currentNode)
+                            n.unknownCount > 0)          // ★ここが最重要：unknown>0 のみ
                 .ToList();
 
-            if (globalCandidates.Count > 0)
+            if (globalFrontiers.Count == 0)
             {
-                // Start から最も遠いノード（従来の挙動）
-                localFarthestFromStart = globalCandidates
-                    .OrderByDescending(n => n.distanceFromStart)
-                    .FirstOrDefault();
-
-                // 一番最近できたノード
-                // allNodes は生成順に追加されているので、
-                // フィルタ後の globalCandidates の最後の要素が「最新」
-                newestCandidate = globalCandidates.LastOrDefault();
+                // ★ 完全探索済み（unknown がどこにも無い）→ ここで終了動作
+                // 循環させたくないなら「動かない」が一番確実
+                lastBestTarget = null;
+                lastTargetIsFarthest = false;
+                isMoving = false;
+                return;
             }
 
-            //Debug.Log(
-            //    "[TARGET] No unknown in near range → " +
-            //    $"Global farthest from Start = " +
-            //    $"{(localFarthestFromStart != null ? localFarthestFromStart.name : "null")}, " +
-            //    $"dist={ (localFarthestFromStart != null ? localFarthestFromStart.distanceFromStart : -1) }");
-
-            if (newestCandidate != null)
-            {
-                //Debug.Log($"[TARGET] Global newest Node = {newestCandidate.name}");
-            }
-        }
-        // ★ ここまで修正 ★
-
-        // ★ ここまで修正 ★
-
-        //------------------------------------------------------
-        // ⑤ ターゲット決定
-        //------------------------------------------------------
-        MapNode bestTarget = null;
-
-        // ★ Unknownが1つでもあるなら必ず Unknown を優先
-        if (unknownTarget != null)
-        {
-            bestTarget = unknownTarget;
-        }
-        else
-        {
-            // Unknownがまったく無いときだけ Start最遠を使う
-            //bestTarget = localFarthestFromStart;
-
-            // ★ Unknown が 0 のときだけフォールバックモードを使う
             switch (noUnknownFallbackMode)
             {
                 case NoUnknownFallbackMode.FarthestFromStart:
-                    // これまで通り：Start から最遠ノード
-                    bestTarget = localFarthestFromStart;
+                    // 「フロンティアの中で」Startから最遠
+                    globalFrontierTarget = globalFrontiers
+                        .OrderByDescending(n => n.distanceFromStart)
+                        .FirstOrDefault();
                     break;
 
                 case NoUnknownFallbackMode.NewestNode:
-                    // 一番最近できたノードを優先
-                    // もし newestCandidate が null なら保険で localFarthestFromStart
-                    bestTarget = newestCandidate ?? localFarthestFromStart;
+                    // 「フロンティアの中で」一番最近できたノード
+                    // allNodes は生成順なので、末尾から探す
+                    var frontierSet = new HashSet<MapNode>(globalFrontiers);
+                    for (int i = MapNode.allNodes.Count - 1; i >= 0; i--)
+                    {
+                        var n = MapNode.allNodes[i];
+                        if (n == null) continue;
+                        if (n == currentNode) continue;
+                        if (!frontierSet.Contains(n)) continue;
+
+                        globalFrontierTarget = n;
+                        break;
+                    }
+
+                    // 保険：見つからないとき
+                    if (globalFrontierTarget == null)
+                    {
+                        globalFrontierTarget = globalFrontiers
+                            .OrderByDescending(n => n.distanceFromStart)
+                            .FirstOrDefault();
+                    }
                     break;
             }
         }
 
+        //------------------------------------------------------
+        // ⑤ ターゲット決定（Unknown優先 → 無ければ GlobalFrontier）
+        //------------------------------------------------------
+        MapNode bestTarget = unknownTarget ?? globalFrontierTarget;
+
         if (bestTarget == null)
         {
-            //Debug.LogWarning("[BEST] bestTarget NULL → fallback");
             lastBestTarget = null;
             lastTargetIsFarthest = false;
 
@@ -687,7 +631,6 @@ public class CellFromStart : MonoBehaviour
             return;
         }
 
-
         //------------------------------------------------------
         // ⑥ 経路を構築して次ノードへ進む
         //------------------------------------------------------
@@ -695,7 +638,6 @@ public class CellFromStart : MonoBehaviour
 
         if (path2 == null || path2.Count < 2)
         {
-            //Debug.LogWarning($"[PATH] Cannot reach bestTarget={bestTarget.name} → fallback");
             moveDir = ChooseRandomValidDirection(currentNode).Value;
             MoveForward();
             return;
@@ -712,9 +654,8 @@ public class CellFromStart : MonoBehaviour
         //------------------------------------------------------
         lastBestTarget = bestTarget;
 
-        // Unknown を追っているのか、Start最遠を追っているのかを保持
-        // ・unknownTarget != null  → Unknown 由来
-        // ・unknownTarget == null → Start最遠由来（＝FOLLOW 中に Unknown が出てきたら乗り換え対象）
+        // ★ unknownTarget が null のときは「近場Unknownが無かったのでグローバルフロンティアへ」
+        //    FOLLOW中に近場Unknownが出たら乗り換え対象にしたいので true 扱いにする
         lastTargetIsFarthest = (unknownTarget == null);
 
         //------------------------------------------------------
@@ -722,6 +663,7 @@ public class CellFromStart : MonoBehaviour
         //------------------------------------------------------
         MoveForward();
     }
+
 
     private MapNode SelectUnknownNode(List<MapNode> unknownNodes, MapNode current)
     {
