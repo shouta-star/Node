@@ -11,6 +11,13 @@ public class MapNode : MonoBehaviour
     private static int totalPassCount = 0;  // ★ 追加：全Node合計の訪問数（通過回数
     private static float peakAvgPass = 1f;  // ★ 追加：平均訪問回数の最大（正規化用）
 
+    // ★ スクショ直前の一斉色更新を「1回だけ」にするため
+    private static bool colorDirtyThisRun = false;   // passCountが動いたら true
+    private static bool colorAppliedThisRun = false; // 一斉反映済みなら true
+
+    // ★ Start距離の再計算を間引く用
+    private static bool startDistanceDirty = false;
+
     [Header("基本情報")]
     public Vector2Int cell;
     public List<MapNode> links = new List<MapNode>();
@@ -119,7 +126,7 @@ public class MapNode : MonoBehaviour
         }
 
         // ★ Node数が増えた瞬間にも「全体色」を更新（＝増えるほど薄くなる）
-        UpdateAllNodesColor_ByGlobalAverage();
+        //UpdateAllNodesColor_ByGlobalAverage();
     }
 
     // ======================================================
@@ -179,12 +186,17 @@ public class MapNode : MonoBehaviour
         if (debugLog && added)
             //Debug.Log($"[MapNode] Linked: {name} ↔ {other.name}");
 
+        if (!added) return;
+
         // 双方再計算（リンク確定後）
         RecalculateUnknownAndWall();
         other.RecalculateUnknownAndWall();
 
         // ★ Startからの距離も更新（Goalと同じDijkstra方式）
-        RecalculateStartDistance();
+        //RecalculateStartDistance();
+
+        // ★ Start距離は即時再計算しない（重いので間引く）
+        RequestRecalculateStartDistance();
     }
 
     // ======================================================
@@ -265,6 +277,28 @@ public class MapNode : MonoBehaviour
             }
         }
     }
+
+    // ★ 再計算が必要になったことだけ記録
+    public static void RequestRecalculateStartDistance()
+    {
+        startDistanceDirty = true;
+    }
+
+    // ★ dirtyなら1回だけ実行（Schedulerから呼ぶ）
+    public static void ProcessRecalculateStartDistanceIfNeeded()
+    {
+        if (!startDistanceDirty) return;
+        startDistanceDirty = false;
+        RecalculateStartDistance();
+    }
+
+    // ★ スクショ直前など「必ず最新にしたい」時用
+    public static void ForceRecalculateStartDistanceNow()
+    {
+        startDistanceDirty = false;
+        RecalculateStartDistance();
+    }
+
 
     // ======================================================
     // Linkベースでの未知数・壁数再計算
@@ -652,11 +686,33 @@ public class MapNode : MonoBehaviour
         passCount++;
         totalPassCount++;
 
-        if (_renderer == null || !_enableColorChange) return;
+        //if (_renderer == null || !_enableColorChange) return;
 
         // ★ 通過のたびに「全体色」を更新（＝探索が進むほど薄くなる）
-        UpdateAllNodesColor_ByGlobalAverage();
+        //UpdateAllNodesColor_ByGlobalAverage();
+
+        // ★ 色は通過中は変えない（スクショ直前に一斉反映）
+        colorDirtyThisRun = true;
     }
+
+    public static void ApplyColorsOnceBeforeScreenshot()
+    {
+        if (colorAppliedThisRun) return; // 2回目以降は何もしない
+
+        // 通過が無かったなら、もともと startColor のままなので固定だけして終わり
+        if (!colorDirtyThisRun)
+        {
+            colorAppliedThisRun = true;
+            return;
+        }
+
+        // ★ ここでだけ全ノード一斉更新
+        UpdateAllNodesColor_ByGlobalAverage();
+
+        // ★ このRunでは二度と色を変えない
+        colorAppliedThisRun = true;
+    }
+
 
     // ======================================================
     // ★ 全体の平均訪問回数（総訪問数 / Node数）から「全Node共通の色」を決める
@@ -715,5 +771,10 @@ public class MapNode : MonoBehaviour
         nodeCreateCount = 0;
         totalPassCount = 0;
         peakAvgPass = 1f;
+
+        colorDirtyThisRun = false;
+        colorAppliedThisRun = false;
+
+        startDistanceDirty = false;
     }
 }

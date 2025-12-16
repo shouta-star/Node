@@ -296,6 +296,20 @@ public class CellFromStart : MonoBehaviour
         int openings = (!frontWall ? 1 : 0) + (!leftWall ? 1 : 0) + (!rightWall ? 1 : 0);
 
         return frontWall || openings >= 2;
+
+        //// Nodeを置くのは「意思決定点」だけにする
+
+        //// 行き止まり（前も左右も壁）
+        //bool deadEnd = frontWall && leftWall && rightWall;
+
+        //// 曲がり角（前が壁で、左右どちらかだけ空き）
+        //bool corner = frontWall && (leftWall != rightWall);
+
+        //// 分岐（左右が両方空き：ここは判断点）
+        //bool split = (!leftWall && !rightWall);
+
+        //return deadEnd || corner || split;
+
     }
 
 

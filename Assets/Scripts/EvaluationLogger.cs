@@ -733,23 +733,23 @@ public static class EvaluationLogger
             File.AppendAllText(nodeVisitFilePath, line + System.Environment.NewLine);
 
             // Åö Ç±Ç±Ç©ÇÁêÊÇÃÉXÉNÉVÉáï€ë∂èàóùÇÕç°ÇÃÇ‹Ç‹Ç≈OK
-            try
-            {
-                if (!string.IsNullOrEmpty(nodeVisitFilePath))
-                {
-                    string pngPath = System.IO.Path.ChangeExtension(nodeVisitFilePath, ".png");
-                    ScreenCapture.CaptureScreenshot(pngPath);
-                    Debug.Log($"[EvaluationLogger] Screenshot saved: {pngPath}");
-                }
-                else
-                {
-                    Debug.LogWarning("[EvaluationLogger] Screenshot skipped: nodeVisitFilePath is null or empty.");
-                }
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogError($"[EvaluationLogger] Screenshot capture failed: {ex}");
-            }
+            //try
+            //{
+            //    if (!string.IsNullOrEmpty(nodeVisitFilePath))
+            //    {
+            //        //string pngPath = System.IO.Path.ChangeExtension(nodeVisitFilePath, ".png");
+            //        //ScreenCapture.CaptureScreenshot(pngPath);
+            //        //Debug.Log($"[EvaluationLogger] Screenshot saved: {pngPath}");
+            //    }
+            //    else
+            //    {
+            //        Debug.LogWarning("[EvaluationLogger] Screenshot skipped: nodeVisitFilePath is null or empty.");
+            //    }
+            //}
+            //catch (System.Exception ex)
+            //{
+            //    Debug.LogError($"[EvaluationLogger] Screenshot capture failed: {ex}");
+            //}
         }
         catch (System.Exception ex)
         {
@@ -757,6 +757,25 @@ public static class EvaluationLogger
         }
     }
 
+    public static void CaptureRunScreenshot()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(nodeVisitFilePath))
+            {
+                Debug.LogWarning("[EvaluationLogger] Screenshot skipped: nodeVisitFilePath is null or empty.");
+                return;
+            }
+
+            string pngPath = Path.ChangeExtension(nodeVisitFilePath, ".png");
+            ScreenCapture.CaptureScreenshot(pngPath);
+            Debug.Log($"[EvaluationLogger] Screenshot saved: {pngPath}");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[EvaluationLogger] Screenshot capture failed: {ex}");
+        }
+    }
 
     public static void ResetNodeVisitLog()
     {

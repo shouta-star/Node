@@ -511,55 +511,106 @@ public class RestartManager : MonoBehaviour
         //Debug.Log("=== CSV 出力完了 ===");
     }
 
+
     private IEnumerator RestartFlow()
     {
         Debug.Log("=== ★ 最短経路確定：CSV記録 & 再実行準備中 ★ ===");
 
-        // ① 古いプレイヤーをすべて削除（ここが最重要）
-        var players = FindObjectsOfType<UnknownQuantity>();
-        foreach (var p in players)
-            Destroy(p.gameObject);
-        // ★ CellFromStart プレイヤーも全部消す
-        var cfsPlayers = FindObjectsOfType<CellFromStart>();
-        foreach (var p in cfsPlayers)
-            Destroy(p.gameObject);
-
-        // ② 旧プレイヤーの Update が走らないよう 1フレーム待つ
+        // 0) まず1フレーム待つ：Goal到達フレームのOnPassed等を完走させる
         yield return null;
 
         // ★ 何回目のRunかをインクリメント
         runIndex++;
 
-        // ★ CFS用 Player.csv を出力
-        //WriteCellFromStartPlayerCsv();
-
+        // 1) CSV出力（プレイヤーがまだ居る状態でやる）
         WriteNodeCsv();
-
-        // ③ CSV出力
         RecordEvaluation();
-        yield return new WaitForSeconds(1f);
 
-        // ④ Nodeデータクリア
+        MapNode.ApplyColorsOnceBeforeScreenshot();
+
+        // 2) スクショ（OnPassed/色更新が反映された状態を撮る）
+        EvaluationLogger.CaptureRunScreenshot();
+        yield return new WaitForEndOfFrame();
+
+        // 3) ここで古いプレイヤーを削除
+        var players = FindObjectsOfType<UnknownQuantity>();
+        foreach (var p in players) Destroy(p.gameObject);
+
+        var cfsPlayers = FindObjectsOfType<CellFromStart>();
+        foreach (var p in cfsPlayers) Destroy(p.gameObject);
+
+        // 4) 旧プレイヤーの Update が走らないよう 1フレーム待つ
+        yield return null;
+
+        // 5) Nodeデータクリア
         MapNode.ClearAllNodes();
 
         UnknownQuantity.ResetAlgorithmMetrics();
-
         UnknownQuantity.shortestModeArrivalCount = 0;
 
-        // フラグリセット ←★ これが無いと2回目以降動かない
         isRestarting = false;
         hasRestarted = false;
         UnknownQuantity.hasLearnedGoal = false;
 
-        // TImeToGoalを毎回リセット
         runStartTime = Time.time;
 
-        // ▼ 次のRun用に Node到達ログCSV を切り替える（ここを追加）
+        // 次のRun用に Node到達ログCSV を切り替え
         EvaluationLogger.ResetNodeVisitLog();
 
-        // ⑤ シーン再読み込み
+        // シーン再読み込み
         string sceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(sceneName);
     }
+
+    //private IEnumerator RestartFlow()
+    //{
+    //    Debug.Log("=== ★ 最短経路確定：CSV記録 & 再実行準備中 ★ ===");
+
+    //    // ① 古いプレイヤーをすべて削除（ここが最重要）
+    //    var players = FindObjectsOfType<UnknownQuantity>();
+    //    foreach (var p in players)
+    //        Destroy(p.gameObject);
+    //    // ★ CellFromStart プレイヤーも全部消す
+    //    var cfsPlayers = FindObjectsOfType<CellFromStart>();
+    //    foreach (var p in cfsPlayers)
+    //        Destroy(p.gameObject);
+
+    //    // ② 旧プレイヤーの Update が走らないよう 1フレーム待つ
+    //    yield return null;
+
+    //    // ★ 何回目のRunかをインクリメント
+    //    runIndex++;
+
+    //    // ★ CFS用 Player.csv を出力
+    //    //WriteCellFromStartPlayerCsv();
+
+    //    WriteNodeCsv();
+
+    //    // ③ CSV出力
+    //    RecordEvaluation();
+    //    yield return new WaitForSeconds(1f);
+
+    //    // ④ Nodeデータクリア
+    //    MapNode.ClearAllNodes();
+
+    //    UnknownQuantity.ResetAlgorithmMetrics();
+
+    //    UnknownQuantity.shortestModeArrivalCount = 0;
+
+    //    // フラグリセット ←★ これが無いと2回目以降動かない
+    //    isRestarting = false;
+    //    hasRestarted = false;
+    //    UnknownQuantity.hasLearnedGoal = false;
+
+    //    // TImeToGoalを毎回リセット
+    //    runStartTime = Time.time;
+
+    //    // ▼ 次のRun用に Node到達ログCSV を切り替える（ここを追加）
+    //    EvaluationLogger.ResetNodeVisitLog();
+
+    //    // ⑤ シーン再読み込み
+    //    string sceneName = SceneManager.GetActiveScene().name;
+    //    SceneManager.LoadScene(sceneName);
+    //}
 
 }
