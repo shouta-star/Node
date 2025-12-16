@@ -312,7 +312,6 @@ public class CellFromStart : MonoBehaviour
 
     }
 
-
     private void MoveForward()
     {
         Vector3 next = transform.position + moveDir * cellSize;
