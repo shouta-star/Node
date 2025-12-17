@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7722438679952261210
+--- !u!1 &6997970435145029357
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,12 +8,12 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 35143190978831985}
-  - component: {fileID: 8171184140269905544}
-  - component: {fileID: 3303906976382372999}
-  - component: {fileID: 4362335469872980544}
-  - component: {fileID: 6566390003674606108}
-  - component: {fileID: 3536537460910133026}
+  - component: {fileID: 6694258325951819560}
+  - component: {fileID: 6797595984987093649}
+  - component: {fileID: 1227592138390721517}
+  - component: {fileID: 5242177830911053058}
+  - component: {fileID: 1276717745442702468}
+  - component: {fileID: 6445760909044610146}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -21,13 +21,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &35143190978831985
+--- !u!4 &6694258325951819560
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7722438679952261210}
+  m_GameObject: {fileID: 6997970435145029357}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -36,21 +36,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8171184140269905544
+--- !u!33 &6797595984987093649
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7722438679952261210}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &3303906976382372999
+  m_GameObject: {fileID: 6997970435145029357}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1227592138390721517
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7722438679952261210}
+  m_GameObject: {fileID: 6997970435145029357}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -89,13 +89,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4362335469872980544
-SphereCollider:
+--- !u!136 &5242177830911053058
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7722438679952261210}
+  m_GameObject: {fileID: 6997970435145029357}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -107,16 +107,18 @@ SphereCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 0
-  serializedVersion: 3
+  serializedVersion: 2
   m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6566390003674606108
+--- !u!114 &1276717745442702468
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7722438679952261210}
+  m_GameObject: {fileID: 6997970435145029357}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fa970f044eea104a9f73c4f26d1db62, type: 3}
@@ -138,9 +140,9 @@ MonoBehaviour:
   weightUnknown: 1
   weightDistance: 1
   linkRayMaxSteps: 100
-  debugLog: 0
+  debugLog: 1
   debugRay: 1
-  bodyRenderer: {fileID: 3303906976382372999}
+  bodyRenderer: {fileID: 1227592138390721517}
   exploreMaterial: {fileID: 2100000, guid: acf7ff37ebb90214cb86cbf4c62185b3, type: 2}
   playerId: 0
   fallbackCooldownSteps: 6
@@ -150,16 +152,16 @@ MonoBehaviour:
   deadEndEnterCount: 0
   goalReached: 0
   frameToGoal: -1
-  unknownSelectMode: 1
+  unknownSelectMode: 0
   targetUpdateMode: 1
   noUnknownFallbackMode: 1
---- !u!114 &3536537460910133026
+--- !u!114 &6445760909044610146
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7722438679952261210}
+  m_GameObject: {fileID: 6997970435145029357}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a95e31afb768db44849147cf36bc09a, type: 3}
@@ -170,8 +172,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   nodePrefab: {fileID: -5807446751301946216, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
-  moveSpeed: 3
-  arriveEpsilon: 0.05
+  moveSpeed: 4
+  arriveEpsilon: 0.02
   probeHeight: 0.3
   probeRadius: 0.3
   probePadding: 0.02
@@ -180,11 +182,10 @@ MonoBehaviour:
   recalcEveryFrames: 10
   avoidImmediateBacktrack: 1
   destroyAfterNewNodes: 10
-<<<<<<< HEAD
   destroySelfOnLimit: 1
-=======
   useGoalTag: 1
   goalTransform: {fileID: 1343801100588082762, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
   triggerRestartOnGoal: 1
   playerId: 0
->>>>>>> note
+  goalNodeTag: Goal
+  autoFindGoalTransform: 1
