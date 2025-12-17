@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7602633477358429969}
   - component: {fileID: 3827702157883144745}
   - component: {fileID: 286847407677603923}
+  - component: {fileID: 1557108063541798161}
   m_Layer: 7
   m_Name: Goal
   m_TagString: Goal
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 478198885246482142}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: 5}
+  m_LocalPosition: {x: 15, y: 0, z: 11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -116,7 +117,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 478198885246482142}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3b54827d4c042c468dc3193e1bd6e96, type: 3}
   m_Name: 
@@ -133,7 +134,27 @@ MonoBehaviour:
   startColor: {r: 1, g: 1, b: 1, a: 1}
   endColor: {r: 1, g: 0, b: 0, a: 1}
   _renderer: {fileID: 7602633477358429969}
+  avgPassScale: 1
   colorChangeTargetMaterial: {fileID: 2100000, guid: 4a9d26b300742fd4a9b8471ebea733bc, type: 2}
   cellSize: 1
   gridOrigin: {x: 0, y: 0, z: 0}
   debugLog: 0
+--- !u!114 &1557108063541798161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478198885246482142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f91f99abc12afff498312ed598ff8ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  links: []
+  unknownCount: 0
+  wallCount: 0
+  passCount: 0
+  enableColorChange: 1
+  cell: {x: 0, y: 0}
+  blockedMask: 0
