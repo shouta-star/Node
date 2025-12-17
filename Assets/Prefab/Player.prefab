@@ -117,7 +117,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7722438679952261210}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fa970f044eea104a9f73c4f26d1db62, type: 3}
   m_Name: 
@@ -150,7 +150,7 @@ MonoBehaviour:
   deadEndEnterCount: 0
   goalReached: 0
   frameToGoal: -1
-  unknownSelectMode: 0
+  unknownSelectMode: 1
   targetUpdateMode: 1
   noUnknownFallbackMode: 1
 --- !u!114 &3536537460910133026
@@ -160,7 +160,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7722438679952261210}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a95e31afb768db44849147cf36bc09a, type: 3}
   m_Name: 
@@ -175,5 +175,9 @@ MonoBehaviour:
   probeHeight: 0.3
   probeRadius: 0.3
   probePadding: 0.02
+  cellCheckY: 0.5
+  cellCheckHalfY: 1
   recalcEveryFrames: 10
   avoidImmediateBacktrack: 1
+  destroyAfterNewNodes: 10
+  destroySelfOnLimit: 1
