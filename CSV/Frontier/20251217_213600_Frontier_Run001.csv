@@ -1,0 +1,5 @@
+﻿Timestamp,RunIndex,PlayerId,Frame,StepIndex,NodeName,CellX,CellY,PosX,PosZ,PassCount,UnknownCount,WallCount,LinkCount
+20251217_213600.994,1,0,11,0,Node_2,19,11,19.000,11.000,1,0,0,0
+20251217_213600.995,1,0,11,0,Node_3,19,9,19.000,9.000,1,0,0,0
+20251217_213600.995,1,0,11,0,Node_4,18,10,18.000,10.000,1,0,0,0
+20251217_213600.997,1,0,11,0,Node_5,20,10,20.000,10.000,1,0,0,0

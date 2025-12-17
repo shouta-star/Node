@@ -175,5 +175,12 @@ MonoBehaviour:
   probeHeight: 0.3
   probeRadius: 0.3
   probePadding: 0.02
+  cellCheckY: 0.5
+  cellCheckHalfY: 1
   recalcEveryFrames: 10
   avoidImmediateBacktrack: 1
+  destroyAfterNewNodes: 10
+  useGoalTag: 1
+  goalTransform: {fileID: 1343801100588082762, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
+  triggerRestartOnGoal: 1
+  playerId: 0

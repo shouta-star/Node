@@ -1,0 +1,3 @@
+RunIndex,Timestamp,Scene,StepsToGoal,ElapsedSec,TotalNodes,TotalNodeVisits,NewNodesPlaced,VisitLogPath
+1,20251218_004907,SampleScene,11,3.297,29,41,7,"D:\GitHub\Node\CSV/Frontier\20251218_004902.csv"
+2,20251218_004911,SampleScene,11,3.275,29,41,7,"D:\GitHub\Node\CSV/Frontier\20251218_004907.csv"
