@@ -1,4 +1,0 @@
-RunID,NodesCreated,ShortestPathLen,TimeToGoal,TotalNodeVisits,TotalProcessMs,AvgProcessMs,MaxProcessMs
-1,27,-1,216.000,18,0,0.000,0.000
-2,27,-1,427.000,18,0,0.000,0.000
-3,27,-1,641.000,18,0,0.000,0.000

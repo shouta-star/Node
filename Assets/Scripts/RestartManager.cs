@@ -485,6 +485,7 @@ public class RestartManager : MonoBehaviour
         // ★ UnknownSelectMode / TargetUpdateMode を UnknownQuantity から取得
         string uMode = "Unknown";
         string tMode = "None";
+        string fMode = "None";
 
         //var uq = FindObjectOfType<UnknownQuantity>();
         var cfs = FindObjectOfType<CellFromStart>();
@@ -498,6 +499,7 @@ public class RestartManager : MonoBehaviour
         EvaluationLogger.LogSummaryRowForCurrentRun(
             uMode,
             tMode,
+            fMode,
             nodesCreated,       // NodesCreated
             shortestDist,       // ShortestPathLen
             timeToGoal,         // TimeToGoal

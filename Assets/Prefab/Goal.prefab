@@ -117,7 +117,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 478198885246482142}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3b54827d4c042c468dc3193e1bd6e96, type: 3}
   m_Name: 
@@ -146,15 +146,18 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 478198885246482142}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f91f99abc12afff498312ed598ff8ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cell: {x: 0, y: 0}
   links: []
   unknownCount: 0
   wallCount: 0
   passCount: 0
-  enableColorChange: 1
-  cell: {x: 0, y: 0}
+  drawLinksGizmos: 1
+  debugWallLayer:
+    serializedVersion: 2
+    m_Bits: 0
   blockedMask: 0

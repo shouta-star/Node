@@ -154,7 +154,7 @@ MonoBehaviour:
   frameToGoal: -1
   unknownSelectMode: 0
   targetUpdateMode: 1
-  noUnknownFallbackMode: 1
+  noUnknownFallbackMode: 0
 --- !u!114 &6445760909044610146
 MonoBehaviour:
   m_ObjectHideFlags: 0

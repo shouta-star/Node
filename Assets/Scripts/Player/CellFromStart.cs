@@ -416,6 +416,7 @@ public class CellFromStart : MonoBehaviour
                 currentNode,
                 unknownSelectMode.ToString(),
                 targetUpdateMode.ToString(),
+                noUnknownFallbackMode.ToString(),
                 unknownReferenceDepth,
                 stepIndex
             );
