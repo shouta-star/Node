@@ -1,4 +1,4 @@
-////using System;
+ï»¿////using System;
 ////using System.IO;
 ////using System.Text;
 ////using UnityEngine;
@@ -76,10 +76,10 @@
 //using UnityEngine;
 
 ///// <summary>
-///// Frontier —pFEvaluationLogger ‚Æ“¯‚¶—ñE“¯‚¶RowType\‘¢‚Ì CSV ‚ğo—Í‚·‚é loggerB
-///// ‚³‚ç‚ÉAŠù‘¶‚Ì FrontierRestartManager / FrontierExplorer ‚ªŒÄ‚ñ‚Å‚¢‚é‹ŒAPI‚àŒİŠ·‚Å—pˆÓB
+///// Frontier ç”¨ï¼šEvaluationLogger ã¨åŒã˜åˆ—ãƒ»åŒã˜RowTypeæ§‹é€ ã® CSV ã‚’å‡ºåŠ›ã™ã‚‹ loggerã€‚
+///// ã•ã‚‰ã«ã€æ—¢å­˜ã® FrontierRestartManager / FrontierExplorer ãŒå‘¼ã‚“ã§ã„ã‚‹æ—§APIã‚‚äº’æ›ã§ç”¨æ„ã€‚
 /////
-///// CSV—ñiEvaluationLogger“¯“™j:
+///// CSVåˆ—ï¼ˆEvaluationLoggeråŒç­‰ï¼‰:
 ///// RunID,RowType,PlayerID,UnknownSelectMode,TargetUpdateMode,UnknownReferenceDepth,StepIndex,Frame,
 ///// NodeName,NodePosX,NodePosY,NodePosZ,CellX,CellZ,GoalCellX,GoalCellZ,NodesCreated,ShortestPathLen,
 ///// TimeToGoal,TotalNodeVisits,TotalProcessMs,AvgProcessMs,MaxProcessMs
@@ -90,23 +90,23 @@
 ///// </summary>
 //public static class FrontierEvaluationLogger
 //{
-//    // ===== o—Íæ =====
+//    // ===== å‡ºåŠ›å…ˆ =====
 //    private static string baseDir = null;
 
-//    // ===== Œ»İRun =====
+//    // ===== ç¾åœ¨Run =====
 //    private static int currentRunId = 0;
 //    private static int nodeVisitFrameBase = 0;
 
-//    // ===== CSVƒtƒ@ƒCƒ‹ =====
+//    // ===== CSVãƒ•ã‚¡ã‚¤ãƒ« =====
 //    private static string nodeVisitFilePath = null;
 //    private static bool headerWritten = false;
 
 //    // =========================
-//    // ‹ŒAPIŒİŠ·iƒGƒ‰[‚ğÁ‚·‚½‚ßj
+//    // æ—§APIäº’æ›ï¼ˆã‚¨ãƒ©ãƒ¼ã‚’æ¶ˆã™ãŸã‚ï¼‰
 //    // =========================
 
 //    /// <summary>
-//    /// ‹Œ: EnsureBaseDir(string)
+//    /// æ—§: EnsureBaseDir(string)
 //    /// </summary>
 //    public static void EnsureBaseDir(string dir)
 //    {
@@ -115,7 +115,7 @@
 
 //        if (string.IsNullOrEmpty(baseDir))
 //        {
-//            // w’è–³‚µ‚È‚çƒvƒƒWƒFƒNƒg’¼‰º /CSV/Frontier
+//            // æŒ‡å®šç„¡ã—ãªã‚‰ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆç›´ä¸‹ /CSV/Frontier
 //            string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
 //            baseDir = Path.Combine(projectRoot, "CSV", "Frontier");
 //        }
@@ -125,10 +125,10 @@
 //    }
 
 //    /// <summary>
-//    /// ‹Œ: ResetNodeVisitLog(prefix, runIndex)
-//    /// - runIndex ‚ğ RunID ‚Æ‚µ‚Äg‚¤
-//    /// - frameBase ‚ğXV
-//    /// - ƒtƒ@ƒCƒ‹–¼‚ğì‚éitimestamp_prefix_RunXXX.csvj
+//    /// æ—§: ResetNodeVisitLog(prefix, runIndex)
+//    /// - runIndex ã‚’ RunID ã¨ã—ã¦ä½¿ã†
+//    /// - frameBase ã‚’æ›´æ–°
+//    /// - ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ä½œã‚‹ï¼ˆtimestamp_prefix_RunXXX.csvï¼‰
 //    /// </summary>
 //    public static void ResetNodeVisitLog(string prefix, int runIndex)
 //    {
@@ -145,43 +145,43 @@
 
 //        nodeVisitFilePath = Path.Combine(baseDir, fileName);
 
-//        // æ‚Éƒwƒbƒ_‚ğ‘‚¢‚Ä‚¨‚­i‹ŒÀ‘•‚Æ“¯—lj
+//        // å…ˆã«ãƒ˜ãƒƒãƒ€ã‚’æ›¸ã„ã¦ãŠãï¼ˆæ—§å®Ÿè£…ã¨åŒæ§˜ï¼‰
 //        WriteHeaderIfNeeded();
 //    }
 
 //    /// <summary>
-//    /// ‹Œ: GetCurrentVisitLogPath()
+//    /// æ—§: GetCurrentVisitLogPath()
 //    /// </summary>
 //    public static string GetCurrentVisitLogPath() => nodeVisitFilePath;
 
 //    /// <summary>
-//    /// ‹Œ: LogNodeVisit(runIndex, playerId, frame, stepIndex, node)
-//    /// ¨ UnknownSelectMode/TargetUpdateMode/UnknownReferenceDepth ‚ÍŒÅ’è’l‚Å–„‚ß‚é
-//    /// i•K—v‚È‚ç FrontierExplorer ‘¤‚Å•ÊƒI[ƒo[ƒ[ƒh‚ğg‚Á‚Äã‘‚«‰Â”\j
+//    /// æ—§: LogNodeVisit(runIndex, playerId, frame, stepIndex, node)
+//    /// â†’ UnknownSelectMode/TargetUpdateMode/UnknownReferenceDepth ã¯å›ºå®šå€¤ã§åŸ‹ã‚ã‚‹
+//    /// ï¼ˆå¿…è¦ãªã‚‰ FrontierExplorer å´ã§åˆ¥ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰ã‚’ä½¿ã£ã¦ä¸Šæ›¸ãå¯èƒ½ï¼‰
 //    /// </summary>
 //    public static void LogNodeVisit(int runIndex, int playerId, int frame, int stepIndex, FrontierNode node)
 //    {
-//        // ‹ŒŒÄ‚Ño‚µ‚Í runIndex ‚ğ“n‚µ‚Ä‚­‚é‚Ì‚ÅA‚±‚±‚Å currentRunId ‚ğ‡‚í‚¹‚é
+//        // æ—§å‘¼ã³å‡ºã—ã¯ runIndex ã‚’æ¸¡ã—ã¦ãã‚‹ã®ã§ã€ã“ã“ã§ currentRunId ã‚’åˆã‚ã›ã‚‹
 //        currentRunId = runIndex;
 
-//        // ŒİŠ·—p‚ÌŒÅ’è’l
+//        // äº’æ›ç”¨ã®å›ºå®šå€¤
 //        const string unknownSelectMode = "Frontier";
-//        const string targetUpdateMode = "OnArrival"; // ‚Ç‚ê‚Å‚àOKiCSVŒİŠ·‚Ì‚½‚ß‚É•¶š‚ğ–„‚ß‚éj
+//        const string targetUpdateMode = "OnArrival"; // ã©ã‚Œã§ã‚‚OKï¼ˆCSVäº’æ›ã®ãŸã‚ã«æ–‡å­—ã‚’åŸ‹ã‚ã‚‹ï¼‰
 //        const int unknownReferenceDepth = 0;
 
 //        LogNodeVisit(playerId, frame, node, unknownSelectMode, targetUpdateMode, unknownReferenceDepth, stepIndex);
 //    }
 
 //    // =========================
-//    // VAPIi–{‘Ìj
+//    // æ–°APIï¼ˆæœ¬ä½“ï¼‰
 //    // =========================
 
 //    public static int GetCurrentRunId() => currentRunId;
 //    public static string GetNodeVisitFilePath() => nodeVisitFilePath;
 
 //    /// <summary>
-//    /// V: RunŠJniRunID++ ‚µ‚ÄV‹Kƒtƒ@ƒCƒ‹‚É‚µ‚½‚¢ê‡‚Ég‚¦‚éj
-//    /// ¦Šù‘¶ƒR[ƒh‚Í ResetNodeVisitLog(prefix, runIndex) ‚ğg‚Á‚Ä‚é‚Ì‚Å•s—v
+//    /// æ–°: Runé–‹å§‹ï¼ˆRunID++ ã—ã¦æ–°è¦ãƒ•ã‚¡ã‚¤ãƒ«ã«ã—ãŸã„å ´åˆã«ä½¿ãˆã‚‹ï¼‰
+//    /// â€»æ—¢å­˜ã‚³ãƒ¼ãƒ‰ã¯ ResetNodeVisitLog(prefix, runIndex) ã‚’ä½¿ã£ã¦ã‚‹ã®ã§ä¸è¦
 //    /// </summary>
 //    public static void ResetNodeVisitLog()
 //    {
@@ -193,7 +193,7 @@
 //    }
 
 //    /// <summary>
-//    /// V: VISIT s
+//    /// æ–°: VISIT è¡Œ
 //    /// </summary>
 //    public static void LogNodeVisit(
 //        int playerId,
@@ -208,7 +208,7 @@
 
 //        EnsureBaseDir(baseDir);
 
-//        // ƒtƒ@ƒCƒ‹‚ª‚Ü‚¾–³‚¢‚È‚çƒfƒtƒHƒ‹ƒg–¼‚Åì‚éi•ÛŒ¯j
+//        // ãƒ•ã‚¡ã‚¤ãƒ«ãŒã¾ã ç„¡ã„ãªã‚‰ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆåã§ä½œã‚‹ï¼ˆä¿é™ºï¼‰
 //        if (string.IsNullOrEmpty(nodeVisitFilePath))
 //        {
 //            string ts = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
@@ -225,7 +225,7 @@
 
 //        int localFrame = frame - nodeVisitFrameBase;
 
-//        // VISITi23—ñAŒã”¼‚Í‹ó—“j
+//        // VISITï¼ˆ23åˆ—ã€å¾ŒåŠã¯ç©ºæ¬„ï¼‰
 //        string line = string.Format(
 //            ci,
 //            "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22}",
@@ -243,14 +243,14 @@
 //            p.z,                          //11
 //            cellX,                        //12
 //            cellZ,                        //13
-//            "", "", "", "", "", "", "", "", "" // 14..22 ‹ó—“
+//            "", "", "", "", "", "", "", "", "" // 14..22 ç©ºæ¬„
 //        );
 
 //        File.AppendAllText(nodeVisitFilePath, line + System.Environment.NewLine);
 //    }
 
 //    /// <summary>
-//    /// V: SUMMARY s
+//    /// æ–°: SUMMARY è¡Œ
 //    /// </summary>
 //    public static void LogSummaryRowForCurrentRun(
 //        string unknownSelectMode,
@@ -321,7 +321,7 @@
 //    }
 
 //    // =========================
-//    // “à•”
+//    // å†…éƒ¨
 //    // =========================
 
 //    private static void WriteHeaderIfNeeded()
@@ -398,7 +398,7 @@ public static class FrontierEvaluationLogger
 
     public static string GetCurrentVisitLogPath() => nodeVisitFilePath;
 
-    // FrontierExplorer ŒİŠ·i5ˆø”j
+    // FrontierExplorer äº’æ›ï¼ˆ5å¼•æ•°ï¼‰
     public static void LogNodeVisit(int runIndex, int playerId, int frame, int stepIndex, FrontierNode node)
     {
         LogNodeVisit(
@@ -409,18 +409,18 @@ public static class FrontierEvaluationLogger
             node,
             unknownSelectMode: "Frontier",
             targetUpdateMode: "Frontier",
-            unknownReferenceDepth: 0,
-            nodesCreated: FrontierNode.All != null ? FrontierNode.All.Count : 0,
-            shortestPathLen: -1,
-            timeToGoal: -1f,
-            totalNodeVisits: FrontierNode.totalPassCount,
-            totalProcessMs: -1,
-            avgProcessMs: -1f,
-            maxProcessMs: -1f
+            unknownReferenceDepth: 0
+            //nodesCreated: FrontierNode.All != null ? FrontierNode.All.Count : 0,
+            //shortestPathLen: -1,
+            //timeToGoal: -1f,
+            //totalNodeVisits: FrontierNode.totalPassCount,
+            //totalProcessMs: -1,
+            //avgProcessMs: -1f,
+            //maxProcessMs: -1f
         );
     }
 
-    // 23—ñiEvaluationLogger ‚Æ“¯‚¶—ñ”j
+    // 23åˆ—ï¼ˆEvaluationLogger ã¨åŒã˜åˆ—æ•°ï¼‰
     public static void LogNodeVisit(
         int runIndex,
         int playerId,
@@ -429,14 +429,15 @@ public static class FrontierEvaluationLogger
         FrontierNode node,
         string unknownSelectMode,
         string targetUpdateMode,
-        int unknownReferenceDepth,
-        int nodesCreated,
-        int shortestPathLen,
-        float timeToGoal,
-        int totalNodeVisits,
-        int totalProcessMs,
-        float avgProcessMs,
-        float maxProcessMs)
+        int unknownReferenceDepth
+        //int nodesCreated,
+        //int shortestPathLen,
+        //float timeToGoal,
+        //int totalNodeVisits,
+        //int totalProcessMs,
+        //float avgProcessMs,
+        //float maxProcessMs
+    )
     {
         try
         {
@@ -503,15 +504,16 @@ public static class FrontierEvaluationLogger
                 pos.z,
                 node.cell.x,
                 node.cell.y,
-                goalCellX,
-                goalCellZ,
-                nodesCreated,
-                shortestPathLen,
-                timeToGoal,
-                totalNodeVisits,
-                totalProcessMs,
-                avgProcessMs,
-                maxProcessMs
+                "", "", "", "", "", "", "", "", ""
+                //goalCellX,
+                //goalCellZ,
+                //nodesCreated,
+                //shortestPathLen,
+                //timeToGoal,
+                //totalNodeVisits,
+                //totalProcessMs,
+                //avgProcessMs,
+                //maxProcessMs
             );
 
             File.AppendAllText(nodeVisitFilePath, line + Environment.NewLine);
@@ -519,6 +521,85 @@ public static class FrontierEvaluationLogger
         catch (Exception ex)
         {
             Debug.LogError($"[FrontierEvaluationLogger] LogNodeVisit failed: {ex}");
+        }
+    }
+
+    // â˜… æœ€å¾Œã«1å›ã ã‘å‘¼ã¶ï¼ˆEvaluationLoggerã®SUMMARYè¡Œç›¸å½“ï¼‰
+    public static void LogSummary(
+        int runIndex,
+        string unknownSelectMode,
+        string targetUpdateMode,
+        int unknownReferenceDepth,
+        int nodesCreated,
+        int shortestPathLen,
+        float timeToGoal,
+        int totalNodeVisits,
+        int totalProcessMs,
+        float avgProcessMs,
+        float maxProcessMs)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(baseDir))
+                EnsureBaseDir(Path.Combine(Application.dataPath, "..", "CSV", "Frontier"));
+
+            if (string.IsNullOrEmpty(nodeVisitFilePath))
+            {
+                string ts = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                nodeVisitFilePath = Path.Combine(baseDir, $"{ts}.csv");
+            }
+
+            // ãƒ˜ãƒƒãƒ€ãŒç„¡ã„ãªã‚‰æ›¸ãï¼ˆVISITãŒ0å›ã§ã‚‚SUMMARYã ã‘ã¯å‡ºã›ã‚‹ï¼‰
+            if (!nodeVisitHeaderWritten || !File.Exists(nodeVisitFilePath))
+            {
+                string header =
+                    "RunID,RowType,PlayerID,UnknownSelectMode,TargetUpdateMode,UnknownReferenceDepth,StepIndex,Frame," +
+                    "NodeName,NodePosX,NodePosY,NodePosZ,CellX,CellZ," +
+                    "GoalCellX,GoalCellZ,NodesCreated,ShortestPathLen,TimeToGoal,TotalNodeVisits,TotalProcessMs,AvgProcessMs,MaxProcessMs";
+                AppendLine(header);
+                nodeVisitHeaderWritten = true;
+            }
+
+            var ci = CultureInfo.InvariantCulture;
+
+            // SUMMARYè¡Œï¼šNodeæƒ…å ±(8..13)ã¯ç©ºæ¬„ã€GoalCellã€œMaxProcessMsã ã‘åŸ‹ã‚ã‚‹
+            string line = string.Format(
+                ci,
+                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22}",
+                runIndex,
+                "SUMMARY",
+                "", // PlayerIDç©ºæ¬„
+                unknownSelectMode,
+                targetUpdateMode,
+                unknownReferenceDepth,
+                "", // StepIndexç©ºæ¬„
+                "", // Frameç©ºæ¬„
+                "", "", "", "", "", "", // NodeName..CellZ ç©ºæ¬„
+                goalCellX,
+                goalCellZ,
+                nodesCreated,
+                shortestPathLen,
+                timeToGoal.ToString("F3", ci),
+                totalNodeVisits,
+                totalProcessMs,
+                avgProcessMs.ToString("F3", ci),
+                maxProcessMs.ToString("F3", ci)
+            );
+
+            AppendLine(line);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[FrontierEvaluationLogger] LogSummary failed: {ex}");
+        }
+    }
+
+    private static void AppendLine(string line)
+    {
+        using (var fs = new FileStream(nodeVisitFilePath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+        using (var sw = new StreamWriter(fs))
+        {
+            sw.WriteLine(line);
         }
     }
 }

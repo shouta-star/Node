@@ -1,167 +1,4 @@
-﻿//using System;
-//using System.Collections;
-//using System.IO;
-//using System.Text;
-//using UnityEngine;
-//using UnityEngine.SceneManagement;
-
-//public class FrontierRestartManager : MonoBehaviour
-//{
-//    public static FrontierRestartManager Instance = null;
-
-//    [Header("CSV")]
-//    public string outputSubFolder = "CSV/Frontier"; // プロジェクト直下からの相対
-//    public string filePrefix = "Frontier";
-
-//    [Header("Restart")]
-//    public bool destroyPlayersBeforeReload = true;
-
-//    private bool isRestarting = false;
-//    private bool hasRestarted = false;
-
-//    // ★「現在のRun番号」(1始まり)
-//    private int runIndex = 1;
-
-//    private void Awake()
-//    {
-//        if (Instance != null && Instance != this)
-//        {
-//            Destroy(gameObject);
-//            return;
-//        }
-//        Instance = this;
-//        DontDestroyOnLoad(gameObject);
-//    }
-
-//    private void Start()
-//    {
-//        FrontierEvaluationLogger.EnsureBaseDir(GetBaseDir());
-//        FrontierEvaluationLogger.ResetNodeVisitLog(filePrefix, runIndex);
-//    }
-
-//    public int GetRunIndex() => runIndex;
-
-//    public void StartRestart(FrontierExplorer player)
-//    {
-//        if (isRestarting || hasRestarted) return;
-//        StartCoroutine(RestartFlow(player));
-//    }
-
-//    private IEnumerator RestartFlow(FrontierExplorer player)
-//    {
-//        isRestarting = true;
-//        hasRestarted = true;
-
-//        yield return null; // Goal到達フレームの処理を完走
-
-//        int finishedRun = runIndex;
-
-//        // ① 色確定
-//        FrontierNode.ApplyColorsOnceBeforeScreenshot();
-
-//        // ② CSV出力
-//        WriteFrontierNodeCsv(finishedRun);
-//        WriteRunSummaryCsv(finishedRun, player);
-
-//        // ③ 次Runへ（Visitログ切替）
-//        runIndex++;
-//        FrontierEvaluationLogger.ResetNodeVisitLog(filePrefix, runIndex);
-
-//        // ④ Player削除
-//        if (destroyPlayersBeforeReload)
-//        {
-//            var players = FindObjectsOfType<FrontierExplorer>();
-//            foreach (var p in players) Destroy(p.gameObject);
-//        }
-
-//        yield return null;
-
-//        // ⑤ Nodeクリア
-//        FrontierNode.ClearAllNodes();
-
-//        isRestarting = false;
-//        hasRestarted = false;
-
-//        // ⑥ リロード
-//        string sceneName = SceneManager.GetActiveScene().name;
-//        SceneManager.LoadScene(sceneName);
-//    }
-
-//    private string GetBaseDir()
-//    {
-//        string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
-//        string dir = Path.Combine(projectRoot, outputSubFolder);
-//        Directory.CreateDirectory(dir);
-//        return dir;
-//    }
-
-//    private void WriteFrontierNodeCsv(int runIdx)
-//    {
-//        string baseDir = GetBaseDir();
-//        string path = Path.Combine(baseDir, $"{filePrefix}_Node.csv");
-
-//        if (!File.Exists(path))
-//        {
-//            File.AppendAllText(path,
-//                "RunIndex,NodeName,CellX,CellY,PosX,PosZ,UnknownCount,WallCount,LinkCount,PassCount,IsDeadEnd,IsFrontier\n");
-//        }
-
-//        var sb = new StringBuilder(4096);
-
-//        foreach (var n in FrontierNode.All)
-//        {
-//            if (n == null) continue;
-
-//            bool isDeadEnd = (n.links != null && n.links.Count == 1);
-//            bool isFrontier = (n.unknownCount > 0);
-
-//            sb.Append(runIdx).Append(',')
-//              .Append(n.name).Append(',')
-//              .Append(n.cell.x).Append(',')
-//              .Append(n.cell.y).Append(',')
-//              .Append(n.transform.position.x.ToString("F3")).Append(',')
-//              .Append(n.transform.position.z.ToString("F3")).Append(',')
-//              .Append(n.unknownCount).Append(',')
-//              .Append(n.wallCount).Append(',')
-//              .Append(n.links != null ? n.links.Count : 0).Append(',')
-//              .Append(n.passCount).Append(',')
-//              .Append(isDeadEnd ? 1 : 0).Append(',')
-//              .Append(isFrontier ? 1 : 0).Append('\n');
-//        }
-
-//        File.AppendAllText(path, sb.ToString());
-//    }
-
-//    private void WriteRunSummaryCsv(int runIdx, FrontierExplorer player)
-//    {
-//        string baseDir = GetBaseDir();
-//        string path = Path.Combine(baseDir, $"{filePrefix}_RunSummary.csv");
-
-//        if (!File.Exists(path))
-//        {
-//            File.AppendAllText(path,
-//                "RunIndex,Timestamp,Scene,StepsToGoal,ElapsedSec,TotalNodes,TotalNodeVisits,NewNodesPlaced,VisitLogPath\n");
-//        }
-
-//        string ts = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-//        string sceneName = SceneManager.GetActiveScene().name;
-
-//        int steps = player != null ? player.StepIndex : -1;
-//        float elapsed = player != null ? player.ElapsedTime : -1f;
-//        int totalNodes = FrontierNode.All != null ? FrontierNode.All.Count : 0;
-//        int totalVisits = FrontierNode.totalPassCount;
-//        int newNodes = player != null ? player.NewNodesPlaced : -1;
-
-//        string visitPath = FrontierEvaluationLogger.GetCurrentVisitLogPath() ?? "";
-
-//        string line =
-//            $"{runIdx},{ts},{sceneName},{steps},{elapsed:F3},{totalNodes},{totalVisits},{newNodes},\"{visitPath}\"\n";
-
-//        File.AppendAllText(path, line);
-//    }
-//}
-
-using System;
+﻿using System;
 using System.Collections;
 using System.IO;
 using System.Text;
@@ -361,6 +198,20 @@ public class FrontierRestartManager : MonoBehaviour
         {
             Debug.LogError($"[FRM][Flow][B2] WriteRunSummaryCsv failed: {ex}");
         }
+
+        FrontierEvaluationLogger.LogSummary(
+            finishedRun,
+            unknownSelectMode: "Frontier",
+            targetUpdateMode: "Frontier",
+            unknownReferenceDepth: 0,
+            nodesCreated: (FrontierNode.All != null ? FrontierNode.All.Count : 0),
+            shortestPathLen: -1,
+            timeToGoal: -1f,
+            totalNodeVisits: FrontierNode.totalPassCount,
+            totalProcessMs: 0,
+            avgProcessMs: 0f,
+            maxProcessMs: 0f
+        );
 
         // C) 次 Run へ（Visitログ切替）
         Debug.Log($"[FRM][Flow][C] increment runIndex {runIndex} -> {runIndex + 1}");
