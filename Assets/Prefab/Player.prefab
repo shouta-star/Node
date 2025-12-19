@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5242177830911053058}
   - component: {fileID: 1276717745442702468}
   - component: {fileID: 6445760909044610146}
+  - component: {fileID: -11731101771326339}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -152,9 +153,9 @@ MonoBehaviour:
   deadEndEnterCount: 0
   goalReached: 0
   frameToGoal: -1
-  unknownSelectMode: 0
+  unknownSelectMode: 2
   targetUpdateMode: 1
-  noUnknownFallbackMode: 0
+  noUnknownFallbackMode: 1
 --- !u!114 &6445760909044610146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,3 +190,28 @@ MonoBehaviour:
   playerId: 0
   goalNodeTag: Goal
   autoFindGoalTransform: 1
+--- !u!114 &-11731101771326339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6997970435145029357}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27367c45c57841743882e0a532ddb71d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mode: 1
+  cellSize: 1
+  moveSpeed: 3
+  arriveEps: 0.05
+  randomBlend: 0.35
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  wallCheckMargin: 0.45
+  goal: {fileID: 0}
+  enableNodeVisitLog: 1
+  nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
+  playerId: 0

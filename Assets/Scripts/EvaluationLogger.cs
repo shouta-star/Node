@@ -1,35 +1,35 @@
-using System.IO;
+ï»¿using System.IO;
 using UnityEngine;
 
 /// <summary>
-/// Às•]‰¿‚ğ CSV ‚É’Ç‹L‚·‚é‹¤’ÊƒƒK[
-/// EƒXƒNƒŠƒvƒg‚²‚Æ‚É CSV ‚ğ 1 ŒÂì¬
-/// ERunID ‚ÍƒAƒvƒŠ‹N“®‚©‚ç‚Ì˜A”Ôistaticj
-/// E1 s‚É 1 ‰ñ•ª‚Ì•]‰¿Œ‹‰Ê‚ğ’Ç‰Á‚·‚é
-/// Eƒtƒ@ƒCƒ‹‚Í Application.persistentDataPath ‚É•Û‘¶
+/// s] CSV É’Ç‹Lé‹¤ÊƒK[
+/// EXNvgÆ‚ CSV  1 Âì¬
+/// ERunID ÍƒAvNÌ˜AÔistaticj
+/// E1 s 1 ñ•ª‚Ì•]Ê‚Ç‰
+/// Et@C Application.persistentDataPath É•Û‘
 /// </summary>
 public static class EvaluationLogger
 {
-    // ‹N“®‚µ‚Ä‚©‚ç‚Ì˜A”Ôi‘SƒXƒNƒŠƒvƒg‹¤’Êj
+    // NÄ‚Ì˜AÔiSXNvgÊj
     private static int runCounter = 0;
 
-    // š Player ‚ª’Ê‰ß‚µ‚½ Node ‚ğ‹L˜^‚·‚é CSV —piƒwƒbƒ_‘‚«‚İÏ‚İƒtƒ‰ƒOj
+    //  Player Ê‰ß‚ Node L^ CSV piwb_İÏ‚İƒtOj
     private static bool nodeVisitHeaderWritten = false;
 
-    // Node“’BƒƒO—p‚Ìƒtƒ@ƒCƒ‹ƒpƒXi1Run‚Å1‚Âj
+    // NodeBOpÌƒt@CpXi1Run1Âj
     private static string nodeVisitFilePath = null;
 
     private static int nodeVisitFrameBase = 0;
 
-    // ‚±‚ÌRun‚ÌIDi1,2,3,...j
+    // RunIDi1,2,3,...j
     private static int currentRunId = 0;
 
-    // ÅŒã‚É‹L˜^‚³‚ê‚½ƒ‚[ƒhiSUMMARYs‚Ég‚¢‚½‚¢ê‡j
+    // ÅŒÉ‹L^ê‚½[hiSUMMARYsÉgê‡j
     private static string lastUnknownSelectMode = "";
     private static string lastTargetUpdateMode = "";
 
     /// <summary>
-    /// •]‰¿Œ‹‰Ê‚ğ CSV ‚É’Ç‹L‚·‚é
+    /// ]Ê‚ CSV É’Ç‹L
     /// </summary>
     public static void Record(
         string scriptName,
@@ -45,16 +45,16 @@ public static class EvaluationLogger
     //float worstFrameTime
     )
     {
-        // RunID ‚ğ‰ÁZ
+        // RunID Z
         runCounter++;
 
-        // ¥ •Û‘¶æƒpƒX
+        //  Û‘pX
         string fileName = $"Evaluation_{scriptName}.csv";
         //string baseDir = @"D:\GitHub\NodeGitHub\CSV";
         string baseDir = @"D:\GitHub\Node\CSV";
         string path = Path.Combine(baseDir, fileName);
 
-        // ¥ CSV ‚ª–³‚¯‚ê‚Îƒwƒbƒ_s‚ğ‘‚­
+        //  CSV Îƒwb_s
         if (!File.Exists(path))
         {
             string header =
@@ -66,34 +66,34 @@ public static class EvaluationLogger
                 "TotalProcessMs," +
                 "AvgProcessMs," +
                 "MaxProcessMs";
-                //"HeavyFrameCount," +
-                //"AvgFrame," +
-                //"WorstFrame";
+            //"HeavyFrameCount," +
+            //"AvgFrame," +
+            //"WorstFrame";
 
             File.AppendAllText(path, header + "\n");
         }
 
-        // ¥ CSV 1 s•ª‚Ìƒf[ƒ^‚ğì¬
+        //  CSV 1 sÌƒf[^ì¬
         string line =
             runCounter + "," +
             nodesCreated + "," +
             shortestPathLen + "," +
             timeToGoal.ToString("F3") + "," +
             totalNodeVisits + "," +
-            totalProcessMs + "," +            // š C³Ï
-            avgProcessMs.ToString("F3") + "," +  // š C³Ï
-            maxProcessMs.ToString("F3");         // š C³Ï
-                                             //heavyFrameCount + "," +
-                                             //avgFrameTime.ToString("F3") + "," +
-                                             //worstFrameTime.ToString("F3");
+            totalProcessMs + "," +            //  C
+            avgProcessMs.ToString("F3") + "," +  //  C
+            maxProcessMs.ToString("F3");         //  C
+                                                 //heavyFrameCount + "," +
+                                                 //avgFrameTime.ToString("F3") + "," +
+                                                 //worstFrameTime.ToString("F3");
 
-        // ¥ ’Ç‹L
+        //  Ç‹L
         File.AppendAllText(path, line + "\n");
 
-        Debug.Log($"[EvaluationLogger] Log appended ¨ {path}");
+        Debug.Log($"[EvaluationLogger] Log appended  {path}");
     }
 
-    
+
     public static void LogNodeVisit(
     int playerId,
     int frame,
@@ -112,32 +112,32 @@ public static class EvaluationLogger
 
         try
         {
-            // š o—ÍæƒtƒHƒ‹ƒ_i¡‚ÌƒpƒX‚Í‚»‚Ì‚Ü‚Üg‚¤j
+            //  oÍtH_iÌƒpXÍ‚Ì‚Ü‚Ügj
             //string baseDir = @"D:\GitHub\NodeGitHub\CSV";
             //string baseDir = @"D:\GitHub\Node\CSV\Random_EveryNode_FarthestFromStart";
-            string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival_FarthestFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival_FarthestFromStart";
             //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Random_OnArrival_NewestNode";
             //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Random_OnArrival_FarthestFromStart";
             //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Random_EveryNode_NewestNode";
-            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Nearest_OnArrival_FarthestFromStart";
-            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Nearest_OnArrival_NewestNode";
-            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Test";
+            //string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival_FarthestFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival_NewestNode";
+            string baseDir = @"D:\GitHub\Node\CSV\Test";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);
             }
 
-            // š ƒtƒ@ƒCƒ‹ƒpƒX‚ª‚Ü‚¾Œˆ‚Ü‚Á‚Ä‚¢‚È‚¯‚ê‚ÎA‚±‚±‚ÅŒˆ‚ß‚é
+            //  t@CpXÜ‚Ü‚Ä‚È‚ÎAÅŒß‚
             if (string.IsNullOrEmpty(nodeVisitFilePath))
             {
                 string timestamp = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
                 string safeUnknown = (unknownSelectMode ?? "Unknown").Replace(",", "_").Replace(" ", "");
                 string safeTarget = (targetUpdateMode ?? "None").Replace(",", "_").Replace(" ", "");
-                string fileName = $"{timestamp}.csv";   // ‚±‚±‚à¡‚Ìd—l‚Ì‚Ü‚Ü‚ÅOK
+                string fileName = $"{timestamp}.csv";   // ÌdlÌ‚Ü‚Ü‚OK
                 nodeVisitFilePath = Path.Combine(baseDir, fileName);
             }
 
-            // š ƒtƒ@ƒCƒ‹‚ª‚Ü‚¾–³‚¢ or ƒwƒbƒ_–¢‘‚«‚İ‚È‚çƒwƒbƒ_s‚ğ‘‚­
+            //  t@CÜ‚ or wb_İ‚È‚wb_s
             if (!nodeVisitHeaderWritten || !File.Exists(nodeVisitFilePath))
             {
                 string header =
@@ -156,7 +156,7 @@ public static class EvaluationLogger
                     "NodePosZ," +
                     "CellX," +
                     "CellZ," +
-                    "GoalCellX," +     // š GoalCell —ñ‚Í‚±‚±‚Å’è‹`‚µ‚Ä‚¨‚­
+                    "GoalCellX," +     //  GoalCell Í‚Å’`Ä‚
                     "GoalCellZ," +
                     "NodesCreated," +
                     "ShortestPathLen," +
@@ -170,57 +170,57 @@ public static class EvaluationLogger
                 nodeVisitHeaderWritten = true;
             }
 
-            // š Node ‚ÌÀ•W‚ğæ“¾
+            //  Node ÌWæ“¾
             Vector3 nodePos = node.transform.position;
 
-            // ƒOƒŠƒbƒhÀ•WiMapNode ‘¤‚Å‚Á‚Ä‚¢‚é cellj
+            // ObhWiMapNode ÅÄ‚ cellj
             int cellX = node.cell.x;
             int cellZ = node.cell.y;
 
-            // ¬”“_‚ÌƒtƒH[ƒ}ƒbƒgiƒJƒ“ƒ}‚ÆÕ“Ë‚µ‚È‚¢‚æ‚¤‚Éj
+            // _ÌƒtH[}bgiJ}ÆÕ“Ë‚È‚æ‚¤Éj
             var ci = System.Globalization.CultureInfo.InvariantCulture;
 
-            // Run“àƒtƒŒ[ƒ€
+            // Runt[
             int localFrame = frame - nodeVisitFrameBase;
 
-            // RowType ‚Í VISIT ŒÅ’è
+            // RowType  VISIT Å’
             string rowType = "VISIT";
 
-            // ƒ‚[ƒh–¼‚ÍŒã‚ÅSUMMARYs‚É‚àg‚¢‚½‚¢‚Ì‚Å•Û‘¶
+            // [hÍŒSUMMARYsÉ‚gÌ‚Å•Û‘
             lastUnknownSelectMode = unknownSelectMode;
             lastTargetUpdateMode = targetUpdateMode;
 
-            // š 1s‚Ô‚ñ‚ğ‘g‚İ—§‚Äi23—ñj
+            // â˜… 1è¡Œã¶ã‚“ï¼ˆVISITï¼‰ã‚’çµ„ã¿ç«‹ã¦ï¼ˆ24åˆ—ï¼š{0}ã€œ{23}ï¼‰
             string line = string.Format(
                 ci,
                 "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23}",
                 currentRunId,          // 0: RunID
-                rowType,               // 1: RowType = VISIT
+                rowType,               // 1: RowType = "VISIT"
                 playerId,              // 2: PlayerID
                 unknownSelectMode,     // 3: UnknownSelectMode
                 targetUpdateMode,      // 4: TargetUpdateMode
                 unknownReferenceDepth, // 5: UnknownReferenceDepth
-                noUnknownFallbackMode,
-                stepIndex,             // 6: StepIndex
-                localFrame,            // 7: Frame
-                node.name,             // 8: NodeName
-                nodePos.x,             // 9: NodePosX
-                nodePos.y,             //10: NodePosY
-                nodePos.z,             //11: NodePosZ
-                cellX,                 //12: CellX
-                cellZ,                 //13: CellZ
-                "",                    //14: GoalCellXiVISIT‚Å‚Í‹ó—“j
-                "",                    //15: GoalCellZiVISIT‚Å‚Í‹ó—“j
-                "",                    //16: NodesCreated
-                "",                    //17: ShortestPathLen
-                "",                    //18: TimeToGoal
-                "",                    //19: TotalNodeVisits
-                "",                    //20: TotalProcessMs
-                "",                    //21: AvgProcessMs
-                ""                     //22: MaxProcessMs
+                noUnknownFallbackMode, // 6: NoUnknownFallbackMode
+                stepIndex,             // 7: StepIndex
+                localFrame,            // 8: Frameï¼ˆRunå†…ï¼‰
+                node.name,             // 9: NodeName
+                nodePos.x,             //10: NodePosX
+                nodePos.y,             //11: NodePosY
+                nodePos.z,             //12: NodePosZ
+                cellX,                 //13: CellX
+                cellZ,                 //14: CellZ
+                "",                    //15: GoalCellXï¼ˆVISITã§ã¯ç©ºæ¬„ï¼‰
+                "",                    //16: GoalCellZï¼ˆVISITã§ã¯ç©ºæ¬„ï¼‰
+                "",                    //17: NodesCreated
+                "",                    //18: ShortestPathLen
+                "",                    //19: TimeToGoal
+                "",                    //20: TotalNodeVisits
+                "",                    //21: TotalProcessMs
+                "",                    //22: AvgProcessMs
+                ""                     //23: MaxProcessMs
             );
 
-            // š ’Ç‹L
+            //  Ç‹L
             File.AppendAllText(nodeVisitFilePath, line + System.Environment.NewLine);
         }
         catch (System.Exception ex)
@@ -231,8 +231,8 @@ public static class EvaluationLogger
 
 
     /// <summary>
-    /// ‚±‚Ì Run ‚ÌƒTƒ}ƒŠî•ñ‚ğuRowType=SUMMARYv‚Æ‚µ‚Ä
-    /// NodeVisit —p CSV ‚É 1 s‚¾‚¯’Ç‹L‚·‚é
+    ///  Run ÌƒT}uRowType=SUMMARYvÆ‚
+    /// NodeVisit p CSV  1 sÇ‹L
     /// </summary>
     public static void LogSummaryRowForCurrentRun(
         string unknownSelectMode,
@@ -248,24 +248,24 @@ public static class EvaluationLogger
     {
         try
         {
-            // š o—ÍæƒtƒHƒ‹ƒ_i‘¼‚ÌCSV‚Æ‘µ‚¦‚éj
+            //  oÍtH_iCSVÆ‘j
             //string baseDir = @"D:\GitHub\NodeGitHub\CSV";
             //string baseDir = @"D:\GitHub\Node\CSV\Random_EveryNode_FarthestFromStart";
-            string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival_FarthestFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival_FarthestFromStart";
             //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Random_OnArrival_NewestNode";
             //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Random_OnArrival_FarthestFromStart";
             //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Random_EveryNode_NewestNode";
-            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Nearest_OnArrival_FarthestFromStart";
-            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Nearest_OnArrival_NewestNode";
+            //string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival_FarthestFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival_NewestNode";
             //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Farthest_OnArrival_NewestNode";
-            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Test";
+            string baseDir = @"D:\GitHub\Node\CSV\Test";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);
             }
 
-            // š ƒtƒ@ƒCƒ‹ƒpƒX‚ª‚Ü‚¾Œˆ‚Ü‚Á‚Ä‚¢‚È‚¯‚ê‚ÎA‚±‚±‚ÅŒˆ‚ß‚é
-            // i‚±‚ÌRun‚Å VISIT s‚ª 1 ‰ñ‚ào‚Ä‚¢‚È‚¢ƒP[ƒX‚àƒJƒo[j
+            //  t@CpXÜ‚Ü‚Ä‚È‚ÎAÅŒß‚
+            // iRun VISIT s 1 oÄ‚È‚P[XJo[j
             if (string.IsNullOrEmpty(nodeVisitFilePath))
             {
                 string timestamp = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
@@ -275,7 +275,7 @@ public static class EvaluationLogger
                 nodeVisitFilePath = Path.Combine(baseDir, fileName);
             }
 
-            // š GoalNode ‚ÌƒOƒŠƒbƒhÀ•W‚ğæ“¾
+            //  GoalNode ÌƒObhWæ“¾
             int goalCellX = 0;
             int goalCellZ = 0;
             if (MapNode.GoalNode != null)
@@ -284,7 +284,7 @@ public static class EvaluationLogger
                 goalCellZ = MapNode.GoalNode.cell.y;
             }
 
-            // š ƒwƒbƒ_‚ª‚Ü‚¾‘‚©‚ê‚Ä‚¢‚È‚¢‚È‚çA‚±‚±‚Å‘‚­
+            //  wb_Ü‚Ä‚È‚È‚AÅ
             if (!nodeVisitHeaderWritten || !File.Exists(nodeVisitFilePath))
             {
                 string header =
@@ -319,39 +319,39 @@ public static class EvaluationLogger
 
             var ci = System.Globalization.CultureInfo.InvariantCulture;
 
-            // š RowType = SUMMARY ‚Ì 1 s‚ğ‘g‚İ—§‚Ä‚éiVISIT ‚Æ“¯‚¶23—ñ\‘¢j
             string line = string.Format(
                 ci,
                 "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23}",
                 currentRunId,                  // 0: RunID
                 "SUMMARY",                     // 1: RowType
-                "",                            // 2: PlayerIDiRun‘S‘Ì‚È‚Ì‚Å‹ó—“j
+                "",                            // 2: PlayerIDï¼ˆRunå…¨ä½“ãªã®ã§ç©ºæ¬„ï¼‰
                 unknownSelectMode,             // 3: UnknownSelectMode
                 targetUpdateMode,              // 4: TargetUpdateMode
-                noUnknownFallbackMode,
-                "",                            // 5: UnknownReferenceDepthiSUMMARY‚Å‚Í‹ó—“‚ÅOKj
-                "",                            // 6: StepIndex
-                "",                            // 7: Frame
-                "",                            // 8: NodeName
-                "",                            // 9: NodePosX
-                "",                            //10: NodePosY
-                "",                            //11: NodePosZ
-                "",                            //12: CellX
-                "",                            //13: CellZ
-                goalCellX,                     //14: GoalCellX š‚±‚±‚ÉƒS[ƒ‹ƒZƒ‹X
-                goalCellZ,                     //15: GoalCellZ š‚±‚±‚ÉƒS[ƒ‹ƒZƒ‹Z
-                nodesCreated,                  //16: NodesCreated
-                shortestPathLen,               //17: ShortestPathLen
-                timeToGoal.ToString("F3", ci), //18: TimeToGoal
-                totalNodeVisits,               //19: TotalNodeVisits
-                totalProcessMs,                //20: TotalProcessMs
-                avgProcessMs.ToString("F3", ci), //21: AvgProcessMs
-                maxProcessMs.ToString("F3", ci)  //22: MaxProcessMs
+                "",                            // 5: UnknownReferenceDepthï¼ˆSUMMARYã§ã¯ç©ºæ¬„ï¼‰
+                noUnknownFallbackMode,         // 6: NoUnknownFallbackMode
+                "",                            // 7: StepIndex
+                "",                            // 8: Frame
+                "",                            // 9: NodeName
+                "",                            //10: NodePosX
+                "",                            //11: NodePosY
+                "",                            //12: NodePosZ
+                "",                            //13: CellX
+                "",                            //14: CellZ
+                goalCellX,                     //15: GoalCellX
+                goalCellZ,                     //16: GoalCellZ
+                nodesCreated,                  //17: NodesCreated
+                shortestPathLen,               //18: ShortestPathLen
+                timeToGoal.ToString("F3", ci), //19: TimeToGoal
+                totalNodeVisits,               //20: TotalNodeVisits
+                totalProcessMs,                //21: TotalProcessMs
+                avgProcessMs.ToString("F3", ci), //22: AvgProcessMs
+                maxProcessMs.ToString("F3", ci)  //23: MaxProcessMs
             );
+
 
             File.AppendAllText(nodeVisitFilePath, line + System.Environment.NewLine);
 
-            // š ‚±‚±‚©‚çæ‚ÌƒXƒNƒVƒ‡•Û‘¶ˆ—‚Í¡‚Ì‚Ü‚Ü‚ÅOK
+            //  ÌƒXNVÛ‘ÍÌ‚Ü‚Ü‚OK
             //try
             //{
             //    if (!string.IsNullOrEmpty(nodeVisitFilePath))
@@ -401,10 +401,422 @@ public static class EvaluationLogger
         nodeVisitFilePath = null;
         nodeVisitHeaderWritten = false;
 
-        // š ‚±‚Ìƒ^ƒCƒ~ƒ“ƒO‚ğ Run ‚ÌŠJn‚Æ‚İ‚È‚·
+        //  Ìƒ^C~O Run ÌŠJnÆ‚İ‚È‚
         nodeVisitFrameBase = Time.frameCount;
 
-        // š RunID ‚ğƒCƒ“ƒNƒŠƒƒ“ƒg
+        //  RunID CNg
         currentRunId++;
     }
 }
+
+
+//using System.IO;
+//using UnityEngine;
+
+///// <summary>
+///// å®Ÿè¡Œè©•ä¾¡ã‚’ CSV ã«è¿½è¨˜ã™ã‚‹å…±é€šãƒ­ã‚¬ãƒ¼
+///// ãƒ»ã‚¹ã‚¯ãƒªãƒ—ãƒˆã”ã¨ã« CSV ã‚’ 1 å€‹ä½œæˆ
+///// ãƒ»RunID ã¯ã‚¢ãƒ—ãƒªèµ·å‹•ã‹ã‚‰ã®é€£ç•ªï¼ˆstaticï¼‰
+///// ãƒ»1 è¡Œã« 1 å›åˆ†ã®è©•ä¾¡çµæœã‚’è¿½åŠ ã™ã‚‹
+///// ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ã¯ Application.persistentDataPath ã«ä¿å­˜
+///// </summary>
+//public static class EvaluationLogger
+//{
+//    // èµ·å‹•ã—ã¦ã‹ã‚‰ã®é€£ç•ªï¼ˆå…¨ã‚¹ã‚¯ãƒªãƒ—ãƒˆå…±é€šï¼‰
+//    private static int runCounter = 0;
+
+//    // â˜… Player ãŒé€šéã—ãŸ Node ã‚’è¨˜éŒ²ã™ã‚‹ CSV ç”¨ï¼ˆãƒ˜ãƒƒãƒ€æ›¸ãè¾¼ã¿æ¸ˆã¿ãƒ•ãƒ©ã‚°ï¼‰
+//    private static bool nodeVisitHeaderWritten = false;
+
+//    // Nodeåˆ°é”ãƒ­ã‚°ç”¨ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ï¼ˆ1Runã§1ã¤ï¼‰
+//    private static string nodeVisitFilePath = null;
+
+//    private static int nodeVisitFrameBase = 0;
+
+//    // ã“ã®Runã®IDï¼ˆ1,2,3,...ï¼‰
+//    private static int currentRunId = 0;
+
+//    // æœ€å¾Œã«è¨˜éŒ²ã•ã‚ŒãŸãƒ¢ãƒ¼ãƒ‰ï¼ˆSUMMARYè¡Œã«ä½¿ã„ãŸã„å ´åˆï¼‰
+//    private static string lastUnknownSelectMode = "";
+//    private static string lastTargetUpdateMode = "";
+
+//    /// <summary>
+//    /// è©•ä¾¡çµæœã‚’ CSV ã«è¿½è¨˜ã™ã‚‹
+//    /// </summary>
+//    public static void Record(
+//        string scriptName,
+//        int nodesCreated,
+//        int shortestPathLen,
+//        float timeToGoal,
+//        int totalNodeVisits,
+//        int totalProcessMs,
+//        float avgProcessMs,
+//        float maxProcessMs
+//    //int heavyFrameCount,
+//    //float avgFrameTime,
+//    //float worstFrameTime
+//    )
+//    {
+//        // RunID ã‚’åŠ ç®—
+//        runCounter++;
+
+//        // â–¼ ä¿å­˜å…ˆãƒ‘ã‚¹
+//        string fileName = $"Evaluation_{scriptName}.csv";
+//        //string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+//        string baseDir = @"D:\GitHub\Node\CSV";
+//        string path = Path.Combine(baseDir, fileName);
+
+//        // â–¼ CSV ãŒç„¡ã‘ã‚Œã°ãƒ˜ãƒƒãƒ€è¡Œã‚’æ›¸ã
+//        if (!File.Exists(path))
+//        {
+//            string header =
+//                "RunID," +
+//                "NodesCreated," +
+//                "ShortestPathLen," +
+//                "TimeToGoal," +
+//                "TotalNodeVisits," +
+//                "TotalProcessMs," +
+//                "AvgProcessMs," +
+//                "MaxProcessMs";
+//                //"HeavyFrameCount," +
+//                //"AvgFrame," +
+//                //"WorstFrame";
+
+//            File.AppendAllText(path, header + "\n");
+//        }
+
+//        // â–¼ CSV 1 è¡Œåˆ†ã®ãƒ‡ãƒ¼ã‚¿ã‚’ä½œæˆ
+//        string line =
+//            runCounter + "," +
+//            nodesCreated + "," +
+//            shortestPathLen + "," +
+//            timeToGoal.ToString("F3") + "," +
+//            totalNodeVisits + "," +
+//            totalProcessMs + "," +            // â˜… ä¿®æ­£æ¸ˆ
+//            avgProcessMs.ToString("F3") + "," +  // â˜… ä¿®æ­£æ¸ˆ
+//            maxProcessMs.ToString("F3");         // â˜… ä¿®æ­£æ¸ˆ
+//                                             //heavyFrameCount + "," +
+//                                             //avgFrameTime.ToString("F3") + "," +
+//                                             //worstFrameTime.ToString("F3");
+
+//        // â–¼ è¿½è¨˜
+//        File.AppendAllText(path, line + "\n");
+
+//        Debug.Log($"[EvaluationLogger] Log appended â†’ {path}");
+//    }
+
+
+//    public static void LogNodeVisit(
+//    int playerId,
+//    int frame,
+//    MapNode node,
+//    string unknownSelectMode,
+//    string targetUpdateMode,
+//    string noUnknownFallbackMode,
+//    int unknownReferenceDepth,
+//    int stepIndex)
+//    {
+//        if (node == null)
+//        {
+//            Debug.LogWarning("[EvaluationLogger] LogNodeVisit called with null node.");
+//            return;
+//        }
+
+//        try
+//        {
+//            // â˜… å‡ºåŠ›å…ˆãƒ•ã‚©ãƒ«ãƒ€ï¼ˆä»Šã®ãƒ‘ã‚¹ã¯ãã®ã¾ã¾ä½¿ã†ï¼‰
+//            //string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+//            //string baseDir = @"D:\GitHub\Node\CSV\Random_EveryNode_FarthestFromStart";
+//            //string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival_FarthestFromStart";
+//            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Random_OnArrival_NewestNode";
+//            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Random_OnArrival_FarthestFromStart";
+//            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Random_EveryNode_NewestNode";
+//            //string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival_FarthestFromStart";
+//            string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival_NewestNode";
+//            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Test";
+//            if (!Directory.Exists(baseDir))
+//            {
+//                Directory.CreateDirectory(baseDir);
+//            }
+
+//            // â˜… ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ãŒã¾ã æ±ºã¾ã£ã¦ã„ãªã‘ã‚Œã°ã€ã“ã“ã§æ±ºã‚ã‚‹
+//            if (string.IsNullOrEmpty(nodeVisitFilePath))
+//            {
+//                string timestamp = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
+//                string safeUnknown = (unknownSelectMode ?? "Unknown").Replace(",", "_").Replace(" ", "");
+//                string safeTarget = (targetUpdateMode ?? "None").Replace(",", "_").Replace(" ", "");
+//                string fileName = $"{timestamp}.csv";   // ã“ã“ã‚‚ä»Šã®ä»•æ§˜ã®ã¾ã¾ã§OK
+//                nodeVisitFilePath = Path.Combine(baseDir, fileName);
+//            }
+
+//            // â˜… ãƒ•ã‚¡ã‚¤ãƒ«ãŒã¾ã ç„¡ã„ or ãƒ˜ãƒƒãƒ€æœªæ›¸ãè¾¼ã¿ãªã‚‰ãƒ˜ãƒƒãƒ€è¡Œã‚’æ›¸ã
+//            if (!nodeVisitHeaderWritten || !File.Exists(nodeVisitFilePath))
+//            {
+//                string header =
+//                    "RunID," +
+//                    "RowType," +
+//                    "PlayerID," +
+//                    "UnknownSelectMode," +
+//                    "TargetUpdateMode," +
+//                    "UnknownReferenceDepth," +
+//                    "NoUnknownFallbackMode," +
+//                    "StepIndex," +
+//                    "Frame," +
+//                    "NodeName," +
+//                    "NodePosX," +
+//                    "NodePosY," +
+//                    "NodePosZ," +
+//                    "CellX," +
+//                    "CellZ," +
+//                    "GoalCellX," +     // â˜… GoalCell åˆ—ã¯ã“ã“ã§å®šç¾©ã—ã¦ãŠã
+//                    "GoalCellZ," +
+//                    "NodesCreated," +
+//                    "ShortestPathLen," +
+//                    "TimeToGoal," +
+//                    "TotalNodeVisits," +
+//                    "TotalProcessMs," +
+//                    "AvgProcessMs," +
+//                    "MaxProcessMs";
+
+//                File.AppendAllText(nodeVisitFilePath, header + System.Environment.NewLine);
+//                nodeVisitHeaderWritten = true;
+//            }
+
+//            // â˜… Node ã®åº§æ¨™ã‚’å–å¾—
+//            Vector3 nodePos = node.transform.position;
+
+//            // ã‚°ãƒªãƒƒãƒ‰åº§æ¨™ï¼ˆMapNode å´ã§æŒã£ã¦ã„ã‚‹ cellï¼‰
+//            int cellX = node.cell.x;
+//            int cellZ = node.cell.y;
+
+//            // å°æ•°ç‚¹ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆï¼ˆã‚«ãƒ³ãƒã¨è¡çªã—ãªã„ã‚ˆã†ã«ï¼‰
+//            var ci = System.Globalization.CultureInfo.InvariantCulture;
+
+//            // Runå†…ãƒ•ãƒ¬ãƒ¼ãƒ 
+//            int localFrame = frame - nodeVisitFrameBase;
+
+//            // RowType ã¯ VISIT å›ºå®š
+//            string rowType = "VISIT";
+
+//            // ãƒ¢ãƒ¼ãƒ‰åã¯å¾Œã§SUMMARYè¡Œã«ã‚‚ä½¿ã„ãŸã„ã®ã§ä¿å­˜
+//            lastUnknownSelectMode = unknownSelectMode;
+//            lastTargetUpdateMode = targetUpdateMode;
+
+//            // â˜… 1è¡Œã¶ã‚“ã‚’çµ„ã¿ç«‹ã¦ï¼ˆ23åˆ—ï¼‰
+//            string line = string.Format(
+//                ci,
+//                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23}",
+//                currentRunId,          // 0: RunID
+//                rowType,               // 1: RowType = VISIT
+//                playerId,              // 2: PlayerID
+//                unknownSelectMode,     // 3: UnknownSelectMode
+//                targetUpdateMode,      // 4: TargetUpdateMode
+//                unknownReferenceDepth, // 5: UnknownReferenceDepth
+//                noUnknownFallbackMode,
+//                stepIndex,             // 6: StepIndex
+//                localFrame,            // 7: Frame
+//                node.name,             // 8: NodeName
+//                nodePos.x,             // 9: NodePosX
+//                nodePos.y,             //10: NodePosY
+//                nodePos.z,             //11: NodePosZ
+//                cellX,                 //12: CellX
+//                cellZ,                 //13: CellZ
+//                "",                    //14: GoalCellXï¼ˆVISITã§ã¯ç©ºæ¬„ï¼‰
+//                "",                    //15: GoalCellZï¼ˆVISITã§ã¯ç©ºæ¬„ï¼‰
+//                "",                    //16: NodesCreated
+//                "",                    //17: ShortestPathLen
+//                "",                    //18: TimeToGoal
+//                "",                    //19: TotalNodeVisits
+//                "",                    //20: TotalProcessMs
+//                "",                    //21: AvgProcessMs
+//                ""                     //22: MaxProcessMs
+//            );
+
+//            // â˜… è¿½è¨˜
+//            File.AppendAllText(nodeVisitFilePath, line + System.Environment.NewLine);
+//        }
+//        catch (System.Exception ex)
+//        {
+//            Debug.LogError($"[EvaluationLogger] LogNodeVisit failed: {ex}");
+//        }
+//    }
+
+
+//    /// <summary>
+//    /// ã“ã® Run ã®ã‚µãƒãƒªæƒ…å ±ã‚’ã€ŒRowType=SUMMARYã€ã¨ã—ã¦
+//    /// NodeVisit ç”¨ CSV ã« 1 è¡Œã ã‘è¿½è¨˜ã™ã‚‹
+//    /// </summary>
+//    public static void LogSummaryRowForCurrentRun(
+//        string unknownSelectMode,
+//        string targetUpdateMode,
+//        string noUnknownFallbackMode,
+//        int nodesCreated,
+//        int shortestPathLen,
+//        float timeToGoal,
+//        int totalNodeVisits,
+//        int totalProcessMs,
+//        float avgProcessMs,
+//        float maxProcessMs)
+//    {
+//        try
+//        {
+//            // â˜… å‡ºåŠ›å…ˆãƒ•ã‚©ãƒ«ãƒ€ï¼ˆä»–ã®CSVã¨æƒãˆã‚‹ï¼‰
+//            //string baseDir = @"D:\GitHub\NodeGitHub\CSV";
+//            //string baseDir = @"D:\GitHub\Node\CSV\Random_EveryNode_FarthestFromStart";
+//            //string baseDir = @"D:\GitHub\Node\CSV\Random_OnArrival_FarthestFromStart";
+//            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Random_OnArrival_NewestNode";
+//            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Random_OnArrival_FarthestFromStart";
+//            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Random_EveryNode_NewestNode";
+//            //string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival_FarthestFromStart";
+//            string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival_NewestNode";
+//            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Farthest_OnArrival_NewestNode";
+//            //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Test";
+//            if (!Directory.Exists(baseDir))
+//            {
+//                Directory.CreateDirectory(baseDir);
+//            }
+
+//            // â˜… ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ãŒã¾ã æ±ºã¾ã£ã¦ã„ãªã‘ã‚Œã°ã€ã“ã“ã§æ±ºã‚ã‚‹
+//            // ï¼ˆã“ã®Runã§ VISIT è¡ŒãŒ 1 å›ã‚‚å‡ºã¦ã„ãªã„ã‚±ãƒ¼ã‚¹ã‚‚ã‚«ãƒãƒ¼ï¼‰
+//            if (string.IsNullOrEmpty(nodeVisitFilePath))
+//            {
+//                string timestamp = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
+//                string safeUnknown = (unknownSelectMode ?? "Unknown").Replace(",", "_").Replace(" ", "");
+//                string safeTarget = (targetUpdateMode ?? "None").Replace(",", "_").Replace(" ", "");
+//                string fileName = $"{timestamp}_{safeUnknown}_{safeTarget}.csv";
+//                nodeVisitFilePath = Path.Combine(baseDir, fileName);
+//            }
+
+//            // â˜… GoalNode ã®ã‚°ãƒªãƒƒãƒ‰åº§æ¨™ã‚’å–å¾—
+//            int goalCellX = 0;
+//            int goalCellZ = 0;
+//            if (MapNode.GoalNode != null)
+//            {
+//                goalCellX = MapNode.GoalNode.cell.x;
+//                goalCellZ = MapNode.GoalNode.cell.y;
+//            }
+
+//            // â˜… ãƒ˜ãƒƒãƒ€ãŒã¾ã æ›¸ã‹ã‚Œã¦ã„ãªã„ãªã‚‰ã€ã“ã“ã§æ›¸ã
+//            if (!nodeVisitHeaderWritten || !File.Exists(nodeVisitFilePath))
+//            {
+//                string header =
+//                    "RunID," +
+//                    "RowType," +
+//                    "PlayerID," +
+//                    "UnknownSelectMode," +
+//                    "TargetUpdateMode," +
+//                    "UnknownReferenceDepth," +
+//                    "NoUnknownFallbackMode," +
+//                    "StepIndex," +
+//                    "Frame," +
+//                    "NodeName," +
+//                    "NodePosX," +
+//                    "NodePosY," +
+//                    "NodePosZ," +
+//                    "CellX," +
+//                    "CellZ," +
+//                    "GoalCellX," +
+//                    "GoalCellZ," +
+//                    "NodesCreated," +
+//                    "ShortestPathLen," +
+//                    "TimeToGoal," +
+//                    "TotalNodeVisits," +
+//                    "TotalProcessMs," +
+//                    "AvgProcessMs," +
+//                    "MaxProcessMs";
+
+//                File.AppendAllText(nodeVisitFilePath, header + System.Environment.NewLine);
+//                nodeVisitHeaderWritten = true;
+//            }
+
+//            var ci = System.Globalization.CultureInfo.InvariantCulture;
+
+//            // â˜… RowType = SUMMARY ã® 1 è¡Œã‚’çµ„ã¿ç«‹ã¦ã‚‹ï¼ˆVISIT ã¨åŒã˜23åˆ—æ§‹é€ ï¼‰
+//            string line = string.Format(
+//                ci,
+//                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23}",
+//                currentRunId,                  // 0: RunID
+//                "SUMMARY",                     // 1: RowType
+//                "",                            // 2: PlayerIDï¼ˆRunå…¨ä½“ãªã®ã§ç©ºæ¬„ï¼‰
+//                unknownSelectMode,             // 3: UnknownSelectMode
+//                targetUpdateMode,              // 4: TargetUpdateMode
+//                noUnknownFallbackMode,
+//                "",                            // 5: UnknownReferenceDepthï¼ˆSUMMARYã§ã¯ç©ºæ¬„ã§OKï¼‰
+//                "",                            // 6: StepIndex
+//                "",                            // 7: Frame
+//                "",                            // 8: NodeName
+//                "",                            // 9: NodePosX
+//                "",                            //10: NodePosY
+//                "",                            //11: NodePosZ
+//                "",                            //12: CellX
+//                "",                            //13: CellZ
+//                goalCellX,                     //14: GoalCellX â˜…ã“ã“ã«ã‚´ãƒ¼ãƒ«ã‚»ãƒ«X
+//                goalCellZ,                     //15: GoalCellZ â˜…ã“ã“ã«ã‚´ãƒ¼ãƒ«ã‚»ãƒ«Z
+//                nodesCreated,                  //16: NodesCreated
+//                shortestPathLen,               //17: ShortestPathLen
+//                timeToGoal.ToString("F3", ci), //18: TimeToGoal
+//                totalNodeVisits,               //19: TotalNodeVisits
+//                totalProcessMs,                //20: TotalProcessMs
+//                avgProcessMs.ToString("F3", ci), //21: AvgProcessMs
+//                maxProcessMs.ToString("F3", ci)  //22: MaxProcessMs
+//            );
+
+//            File.AppendAllText(nodeVisitFilePath, line + System.Environment.NewLine);
+
+//            // â˜… ã“ã“ã‹ã‚‰å…ˆã®ã‚¹ã‚¯ã‚·ãƒ§ä¿å­˜å‡¦ç†ã¯ä»Šã®ã¾ã¾ã§OK
+//            //try
+//            //{
+//            //    if (!string.IsNullOrEmpty(nodeVisitFilePath))
+//            //    {
+//            //        //string pngPath = System.IO.Path.ChangeExtension(nodeVisitFilePath, ".png");
+//            //        //ScreenCapture.CaptureScreenshot(pngPath);
+//            //        //Debug.Log($"[EvaluationLogger] Screenshot saved: {pngPath}");
+//            //    }
+//            //    else
+//            //    {
+//            //        Debug.LogWarning("[EvaluationLogger] Screenshot skipped: nodeVisitFilePath is null or empty.");
+//            //    }
+//            //}
+//            //catch (System.Exception ex)
+//            //{
+//            //    Debug.LogError($"[EvaluationLogger] Screenshot capture failed: {ex}");
+//            //}
+//        }
+//        catch (System.Exception ex)
+//        {
+//            Debug.LogError($"[EvaluationLogger] LogSummaryRowForCurrentRun failed: {ex}");
+//        }
+//    }
+
+//    public static void CaptureRunScreenshot()
+//    {
+//        try
+//        {
+//            if (string.IsNullOrEmpty(nodeVisitFilePath))
+//            {
+//                Debug.LogWarning("[EvaluationLogger] Screenshot skipped: nodeVisitFilePath is null or empty.");
+//                return;
+//            }
+
+//            string pngPath = Path.ChangeExtension(nodeVisitFilePath, ".png");
+//            ScreenCapture.CaptureScreenshot(pngPath);
+//            Debug.Log($"[EvaluationLogger] Screenshot saved: {pngPath}");
+//        }
+//        catch (System.Exception ex)
+//        {
+//            Debug.LogError($"[EvaluationLogger] Screenshot capture failed: {ex}");
+//        }
+//    }
+
+//    public static void ResetNodeVisitLog()
+//    {
+//        nodeVisitFilePath = null;
+//        nodeVisitHeaderWritten = false;
+
+//        // â˜… ã“ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚’ Run ã®é–‹å§‹ã¨ã¿ãªã™
+//        nodeVisitFrameBase = Time.frameCount;
+
+//        // â˜… RunID ã‚’ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
+//        currentRunId++;
+//    }
+//}
