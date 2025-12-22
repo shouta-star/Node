@@ -187,8 +187,10 @@ public static class EvaluationLogger
             string rowType = "VISIT";
 
             // [h͌SUMMARYsɂĝŕۑ
-            lastUnknownSelectMode = unknownSelectMode;
-            lastTargetUpdateMode = targetUpdateMode;
+            //lastUnknownSelectMode = unknownSelectMode;
+            //lastTargetUpdateMode = targetUpdateMode;
+            lastUnknownSelectMode = unknownSelectMode ?? "";
+            lastTargetUpdateMode = targetUpdateMode ?? "";
 
             // ★ 1行ぶん（VISIT）を組み立て（24列：{0}〜{23}）
             string line = string.Format(
@@ -319,14 +321,22 @@ public static class EvaluationLogger
 
             var ci = System.Globalization.CultureInfo.InvariantCulture;
 
+            string summaryUnknown = !string.IsNullOrEmpty(lastUnknownSelectMode)
+                ? lastUnknownSelectMode
+                : (unknownSelectMode ?? "");
+
+            string summaryTarget = !string.IsNullOrEmpty(lastTargetUpdateMode)
+                ? lastTargetUpdateMode
+                : (targetUpdateMode ?? "");
+
             string line = string.Format(
                 ci,
                 "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23}",
                 currentRunId,                  // 0: RunID
                 "SUMMARY",                     // 1: RowType
                 "",                            // 2: PlayerID（Run全体なので空欄）
-                unknownSelectMode,             // 3: UnknownSelectMode
-                targetUpdateMode,              // 4: TargetUpdateMode
+                summaryUnknown,//unknownSelectMode,             // 3: UnknownSelectMode
+                summaryTarget,//targetUpdateMode,              // 4: TargetUpdateMode
                 "",                            // 5: UnknownReferenceDepth（SUMMARYでは空欄）
                 noUnknownFallbackMode,         // 6: NoUnknownFallbackMode
                 "",                            // 7: StepIndex
@@ -406,6 +416,9 @@ public static class EvaluationLogger
 
         //  RunID CNg
         currentRunId++;
+
+        lastUnknownSelectMode = "";
+        lastTargetUpdateMode = "";
     }
 }
 

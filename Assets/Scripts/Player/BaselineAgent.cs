@@ -83,6 +83,13 @@ private Vector2Int currentTargetCell;
         }
     }
 
+    void Awake()
+    {
+        // ★ スポーン順に 1,2,3... を自動採番（Inspectorで0のPrefabでも確実）
+        if (playerId <= 0)
+            playerId = nextPlayerId++;
+    }
+
     void Start()
     {
         if (goal == null)
