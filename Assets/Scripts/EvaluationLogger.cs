@@ -121,7 +121,10 @@ public static class EvaluationLogger
             //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Random_EveryNode_NewestNode";
             //string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival_FarthestFromStart";
             //string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival_NewestNode";
-            string baseDir = @"D:\GitHub\Node\CSV\Test";
+            //string baseDir = @"D:\GitHub\Node\CSV\Farthest_OnArrival_FarthestFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\Farthest_OnArrival_NewestNode";
+            string baseDir = @"D:\GitHub\Node\CSV\MostUnknown_OnArrival_FarthestFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\Test";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);
@@ -260,7 +263,10 @@ public static class EvaluationLogger
             //string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival_FarthestFromStart";
             //string baseDir = @"D:\GitHub\Node\CSV\Nearest_OnArrival_NewestNode";
             //string baseDir = @"D:\GitHub\NodeGitHub\CSV\Farthest_OnArrival_NewestNode";
-            string baseDir = @"D:\GitHub\Node\CSV\Test";
+            //string baseDir = @"D:\GitHub\Node\CSV\Farthest_OnArrival_FarthestFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\Farthest_OnArrival_NewestNode";
+            string baseDir = @"D:\GitHub\Node\CSV\MostUnknown_OnArrival_FarthestFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\Test";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);
