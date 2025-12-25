@@ -22,6 +22,9 @@ public class MapNode : MonoBehaviour
     public Vector2Int cell;
     public List<MapNode> links = new List<MapNode>();
 
+    [Header("Node情報")]
+    public bool isExcluded = false;
+
     [Header("Goal関連情報")]
     public float DistanceFromGoal = Mathf.Infinity;
     public float value = 0f;

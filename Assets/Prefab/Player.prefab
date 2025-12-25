@@ -141,6 +141,11 @@ MonoBehaviour:
   weightUnknown: 1
   weightDistance: 1
   linkRayMaxSteps: 100
+  pointLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  pointDetectRadius: 0.45
+  debugPointDetectLog: 1
   debugLog: 1
   debugRay: 1
   bodyRenderer: {fileID: 1227592138390721517}

@@ -26,6 +26,11 @@ public class CellFromStart : MonoBehaviour
     [Header("Ray設定")]
     public int linkRayMaxSteps = 100;
 
+    [Header("Point Influence (Colliderなし)")]
+    public Vector3 pointGridOrigin = Vector3.zero;
+    public float pointCellSize = 1f;
+    public bool debugPointLog = true;
+
     [Header("デバッグ")]
     public bool debugLog = true;
     public bool debugRay = true;
@@ -1005,6 +1010,9 @@ public class CellFromStart : MonoBehaviour
             newNodeCreatedCount++;
             //Debug.Log($"[TP2] NEW Node CREATED | node={node.name} | cell={cell} | createdCount={newNodeCreatedCount}");
 
+            // ★ ここで「生成直後に一度だけ」ポイント判定
+            ApplyPointInfluence_Once(node);
+
             // ★ 規定数に達したらこのPlayerをDestroy
             if (newNodeCreatedCount >= destroyAfterNewNodes)
             {
@@ -1019,6 +1027,24 @@ public class CellFromStart : MonoBehaviour
         LinkBackward(node);
         //Debug.Log($"[TP4] After LinkBackward | node={node.name} | links={node.links.Count}");
         return node;
+    }
+
+    private void ApplyPointInfluence_Once(MapNode node)
+    {
+        if (node == null) return;
+
+        // 事故防止：Goalは除外しない
+        if (node.CompareTag("Goal")) return;
+
+        // node.cell は既に設定されている前提
+        if (NodePointMarker.IsExcludedCell(node.cell))
+        {
+            node.isExcluded = true; // 永続
+            node.name += "_EX";     // 目視確認用（不要なら消してOK）
+
+            if (debugPointLog)
+                Debug.Log($"[POINT] Excluded set (no-collider): {node.name} cell={node.cell}");
+        }
     }
 
     private void LinkBackward(MapNode node)
