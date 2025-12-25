@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fa970f044eea104a9f73c4f26d1db62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  moveSpeed: 1
   cellSize: 1
   rayDistance: 1
   wallLayer:
@@ -141,11 +141,11 @@ MonoBehaviour:
   weightUnknown: 1
   weightDistance: 1
   linkRayMaxSteps: 100
-  pointLayerMask:
-    serializedVersion: 2
-    m_Bits: 256
-  pointDetectRadius: 0.45
-  debugPointDetectLog: 1
+  pointGridOrigin: {x: 0, y: 0, z: 0}
+  pointCellSize: 1
+  debugPointLog: 1
+  dbgExclude: 1
+  dbgEveryNFrames: 30
   debugLog: 1
   debugRay: 1
   bodyRenderer: {fileID: 1227592138390721517}
@@ -158,9 +158,9 @@ MonoBehaviour:
   deadEndEnterCount: 0
   goalReached: 0
   frameToGoal: -1
-  unknownSelectMode: 3
+  unknownSelectMode: 0
   targetUpdateMode: 1
-  noUnknownFallbackMode: 0
+  noUnknownFallbackMode: 1
 --- !u!114 &6445760909044610146
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -31,6 +31,15 @@ public class CellFromStart : MonoBehaviour
     public float pointCellSize = 1f;
     public bool debugPointLog = true;
 
+    [SerializeField] private bool dbgExclude = true;
+    [SerializeField] private int dbgEveryNFrames = 30;
+
+    private void DLog(string msg)
+    {
+        if (!dbgExclude) return;
+        Debug.Log(msg);
+    }
+
     [Header("デバッグ")]
     public bool debugLog = true;
     public bool debugRay = true;
@@ -317,6 +326,29 @@ public class CellFromStart : MonoBehaviour
 
     }
 
+    //private void MoveForward()
+    //{
+    //    Vector3 next = transform.position + moveDir * cellSize;
+
+    //    // 壁チェック
+    //    if (Physics.Raycast(transform.position + Vector3.up * 0.1f,
+    //                        moveDir,
+    //                        cellSize,
+    //                        wallLayer))
+    //    {
+    //        if (debugLog)
+    //            //Debug.Log("[Block] Wall ahead → stop movement");
+
+    //        isMoving = false;
+    //        return;
+    //    }
+
+    //    targetPos = SnapToGrid(next);
+    //    isMoving = true;
+
+    //    // ★ 評価ログ：1マス分の移動が確定したので歩数を加算
+    //    stepsWalked++;
+    //}
     private void MoveForward()
     {
         Vector3 next = transform.position + moveDir * cellSize;
@@ -328,18 +360,32 @@ public class CellFromStart : MonoBehaviour
                             wallLayer))
         {
             if (debugLog)
-                //Debug.Log("[Block] Wall ahead → stop movement");
+                ; // Debug.Log("[Block] Wall ahead → stop movement");
 
             isMoving = false;
             return;
         }
 
-        targetPos = SnapToGrid(next);
+        // ★ 追加：Excluded セルへ入ろうとしていたらブロック（Collider不要）
+        Vector3 nextSnap = SnapToGrid(next);
+        Vector2Int nextCell = WorldToCell(nextSnap);
+
+        if (IsExcludedCell(nextCell))
+        {
+            if (debugLog)
+                Debug.Log($"[MOVE][BLOCK_EX] pos={transform.position} -> nextCell={nextCell} dir={moveDir}");
+
+            isMoving = false;  // 次フレームに TryExploreMove 側で別方向を選び直させる
+            return;
+        }
+
+        targetPos = nextSnap;
         isMoving = true;
 
         // ★ 評価ログ：1マス分の移動が確定したので歩数を加算
         stepsWalked++;
     }
+
 
     private void MoveToTarget()
     {
@@ -655,6 +701,18 @@ public class CellFromStart : MonoBehaviour
         //------------------------------------------------------
         var path2 = BuildShortestPath(currentNode, bestTarget);
 
+        if (path2 != null)
+        {
+            var ex = path2.FirstOrDefault(n => n != null && n.isExcluded);
+            if (ex != null) Debug.Log($"[PATH][HAS_EX] target={bestTarget?.name} ex={ex.name} len={path2.Count}");
+            else Debug.Log($"[PATH][OK] target={bestTarget?.name} len={path2.Count}");
+        }
+        else
+        {
+            Debug.Log($"[PATH][NULL] target={bestTarget?.name}");
+        }
+
+
         if (path2 == null || path2.Count < 2)
         {
             moveDir = ChooseRandomValidDirection(currentNode).Value;
@@ -715,6 +773,31 @@ public class CellFromStart : MonoBehaviour
     // =============================
     // ★ 有効なランダム方向を返す（A/B/C 共通処理）
     // =============================
+    //private Vector3? ChooseRandomValidDirection(MapNode node)
+    //{
+    //    List<Vector3> dirs = new()
+    //    {
+    //        Vector3.forward,
+    //        Vector3.back,
+    //        Vector3.left,
+    //        Vector3.right
+    //    };
+
+    //    // ★背後方向を除外（無限ループ防止）
+    //    Vector3 backDir = -moveDir;
+    //    dirs = dirs.Where(d => Vector3.Dot(d.normalized, backDir.normalized) < 0.7f).ToList();
+
+    //    // ★リンク方向は除外
+    //    dirs = dirs.Where(d => !IsLinkedDirection(node, d)).ToList();
+
+    //    // ★壁方向も除外
+    //    dirs = dirs.Where(d => !IsWall(node, d)).ToList();
+
+    //    if (dirs.Count == 0)
+    //        return null;
+
+    //    return dirs[Random.Range(0, dirs.Count)];
+    //}
     private Vector3? ChooseRandomValidDirection(MapNode node)
     {
         List<Vector3> dirs = new()
@@ -735,11 +818,15 @@ public class CellFromStart : MonoBehaviour
         // ★壁方向も除外
         dirs = dirs.Where(d => !IsWall(node, d)).ToList();
 
+        // ★追加：Excluded 方向（次セルが Excluded）も除外
+        dirs = dirs.Where(d => !IsExcludedNeighbor(node, d)).ToList();
+
         if (dirs.Count == 0)
             return null;
 
         return dirs[Random.Range(0, dirs.Count)];
     }
+
 
     // ==========================================================
     // ★ リンクベースで到達可能な Node を BFS で列挙
@@ -758,6 +845,11 @@ public class CellFromStart : MonoBehaviour
 
             foreach (var next in n.links)
             {
+                if (next == null) continue;
+
+                // ★ 追加
+                if (next.isExcluded) continue;
+
                 if (!visited.Contains(next))
                 {
                     visited.Add(next);
@@ -773,6 +865,18 @@ public class CellFromStart : MonoBehaviour
     // =============================
     // ★ 終端ノード D（ランダム）方式
     // =============================
+    //private Vector3? ChooseTerminalDirection(MapNode node)
+    //{
+    //    List<Vector3> dirs = AllMovesExceptBack();
+
+    //    dirs = dirs.Where(d => !IsLinkedDirection(node, d)).ToList();
+    //    dirs = dirs.Where(d => !IsWall(node, d)).ToList();
+
+    //    if (dirs.Count == 0) return null;
+    //    if (dirs.Count == 1) return dirs[0];
+
+    //    return dirs[Random.Range(0, dirs.Count)];
+    //}
     private Vector3? ChooseTerminalDirection(MapNode node)
     {
         List<Vector3> dirs = AllMovesExceptBack();
@@ -780,11 +884,15 @@ public class CellFromStart : MonoBehaviour
         dirs = dirs.Where(d => !IsLinkedDirection(node, d)).ToList();
         dirs = dirs.Where(d => !IsWall(node, d)).ToList();
 
+        // ★追加：Excluded 方向（次セルが Excluded）も除外
+        dirs = dirs.Where(d => !IsExcludedNeighbor(node, d)).ToList();
+
         if (dirs.Count == 0) return null;
         if (dirs.Count == 1) return dirs[0];
 
         return dirs[Random.Range(0, dirs.Count)];
     }
+
 
     private bool IsTerminalNode(MapNode node)
         => node != null && node.links.Count == 1;
@@ -812,6 +920,10 @@ public class CellFromStart : MonoBehaviour
             foreach (var link in node.links)
             {
                 if (link == null) continue;
+
+                // ★ 追加
+                if (link.isExcluded) continue;
+
                 if (visited.Contains(link)) continue;
 
                 visited.Add(link);
@@ -893,42 +1005,150 @@ public class CellFromStart : MonoBehaviour
         q.Enqueue(start);
         prev[start] = null;
 
+        int expanded = 0;
+        int skipEx = 0;
+
         while (q.Count > 0)
         {
             var node = q.Dequeue();
+            expanded++;
 
-            // ★ 修正ポイント：リンクが片方向でも双方向扱いにする
+            // --- 正リンク展開 ---
             foreach (var next in node.links)
             {
+                if (next == null) continue;
+
+                // ★除外ノードは経由しない（goal は事故防止で例外）
+                if (next.isExcluded && next != goal)
+                {
+                    skipEx++;
+                    // ログ出しすぎ防止：たまにだけ
+                    if (dbgExclude && (Time.frameCount % dbgEveryNFrames == 0))
+                        Debug.Log($"[BFS][SKIP_EX] {node.name}->{next.name}");
+                    continue;
+                }
+
                 if (!prev.ContainsKey(next))
                 {
                     prev[next] = node;
                     q.Enqueue(next);
 
                     if (next == goal)
+                    {
+                        if (dbgExclude)
+                            Debug.Log($"[BFS][FOUND] expanded={expanded} skipEx={skipEx} start={start.name} goal={goal.name}");
                         return Rebuild(prev, start, goal);
+                    }
                 }
             }
 
-            // ★ 追加：逆リンクも救済（“node → X” ではなく “X → node” のみ存在するケース）
+            // --- 逆リンク救済展開（あなたの仕様） ---
             foreach (var other in MapNode.allNodes)
             {
-                if (other.links.Contains(node)) // ← 逆リンク
+                if (other == null) continue;
+
+                if (other.links.Contains(node))
                 {
+                    // ★ここは other を見る（next は存在しない）
+                    if (other.isExcluded && other != goal)
+                    {
+                        skipEx++;
+                        if (dbgExclude && (Time.frameCount % dbgEveryNFrames == 0))
+                            Debug.Log($"[BFS][SKIP_EX_REV] {node.name}<-{other.name}");
+                        continue;
+                    }
+
                     if (!prev.ContainsKey(other))
                     {
                         prev[other] = node;
                         q.Enqueue(other);
 
                         if (other == goal)
+                        {
+                            if (dbgExclude)
+                                Debug.Log($"[BFS][FOUND_REV] expanded={expanded} skipEx={skipEx} start={start.name} goal={goal.name}");
                             return Rebuild(prev, start, goal);
+                        }
                     }
                 }
             }
         }
 
-        return null; // 到達不可
+        if (dbgExclude)
+            Debug.Log($"[BFS][FAIL] expanded={expanded} skipEx={skipEx} start={start.name} goal={goal.name}");
+
+        return null;
     }
+
+    //private List<MapNode> BuildShortestPath(MapNode start, MapNode goal)
+    //{
+    //    if (start == null || goal == null) return null;
+    //    if (start == goal) return new List<MapNode>() { start };
+
+    //    Queue<MapNode> q = new Queue<MapNode>();
+    //    Dictionary<MapNode, MapNode> prev = new Dictionary<MapNode, MapNode>();
+
+    //    q.Enqueue(start);
+    //    prev[start] = null;
+
+    //    while (q.Count > 0)
+    //    {
+    //        var node = q.Dequeue();
+
+    //        // ★ 修正ポイント：リンクが片方向でも双方向扱いにする
+    //        foreach (var next in node.links)
+    //        {
+    //            if (next == null) continue;
+
+    //            if (next.isExcluded && next != goal)
+    //            {
+    //                Debug.Log($"[BFS][SKIP_EX] {node.name}->{next.name}");
+    //                continue;
+    //            }
+    //            // ★ 追加：除外ノードは経路に含めない
+    //            //if (next.isExcluded) continue;
+    //            // ★追加：除外ノードは経由しない
+    //            if (next.isExcluded && next != goal) continue;
+
+    //            if (!prev.ContainsKey(next))
+    //            {
+    //                prev[next] = node;
+    //                q.Enqueue(next);
+
+    //                if (next == goal)
+    //                    return Rebuild(prev, start, goal);
+    //            }
+    //        }
+
+    //        // ★ 追加：逆リンクも救済（“node → X” ではなく “X → node” のみ存在するケース）
+    //        foreach (var other in MapNode.allNodes)
+    //        {
+    //            if (other.links.Contains(node)) // ← 逆リンク
+    //            {
+    //                if (next.isExcluded && next != goal)
+    //                {
+    //                    Debug.Log($"[BFS][SKIP_EX] {node.name}->{next.name}");
+    //                    continue;
+    //                }
+    //                // ★ 追加：除外ノードは経路に含めない
+    //                //if (other.isExcluded) continue;
+    //                // ★追加：除外ノードは経由しない
+    //                if (other.isExcluded && other != goal) continue;
+
+    //                if (!prev.ContainsKey(other))
+    //                {
+    //                    prev[other] = node;
+    //                    q.Enqueue(other);
+
+    //                    if (other == goal)
+    //                        return Rebuild(prev, start, goal);
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //    return null; // 到達不可
+    //}
 
     private List<MapNode> Rebuild(Dictionary<MapNode, MapNode> prev,
                                   MapNode start, MapNode goal)
@@ -1122,6 +1342,31 @@ public class CellFromStart : MonoBehaviour
     {
         //if (debugLog) Debug.Log("[CellFS] " + msg);
     }
+
+    // ★ 追加：Vector3方向 → セル差分（x,z）
+    private static Vector2Int DirToCellDelta(Vector3 dir)
+    {
+        if (Vector3.Dot(dir, Vector3.forward) > 0.9f) return new Vector2Int(0, 1);
+        if (Vector3.Dot(dir, Vector3.back) > 0.9f) return new Vector2Int(0, -1);
+        if (Vector3.Dot(dir, Vector3.right) > 0.9f) return new Vector2Int(1, 0);
+        if (Vector3.Dot(dir, Vector3.left) > 0.9f) return new Vector2Int(-1, 0);
+        return Vector2Int.zero;
+    }
+
+    // ★ 追加：このセルは Excluded セルか？（Collider不要）
+    private bool IsExcludedCell(Vector2Int cell)
+    {
+        return NodePointMarker.IsExcludedCell(cell);
+    }
+
+    // ★ 追加：node から dir に1マス進む先が Excluded か？
+    private bool IsExcludedNeighbor(MapNode node, Vector3 dir)
+    {
+        if (node == null) return false;
+        Vector2Int nextCell = node.cell + DirToCellDelta(dir);
+        return IsExcludedCell(nextCell);
+    }
+
 }
 
 
