@@ -366,18 +366,21 @@ public class CellFromStart : MonoBehaviour
             return;
         }
 
-        // ★ 追加：Excluded セルへ入ろうとしていたらブロック（Collider不要）
         Vector3 nextSnap = SnapToGrid(next);
         Vector2Int nextCell = WorldToCell(nextSnap);
 
-        if (IsExcludedCell(nextCell))
+        // ★ 次セルに「既存の Excluded Node があるか？」だけを見る
+        MapNode nextNode = MapNode.FindByCell(nextCell);
+
+        if (nextNode != null && nextNode.isExcluded)
         {
             if (debugLog)
-                Debug.Log($"[MOVE][BLOCK_EX] pos={transform.position} -> nextCell={nextCell} dir={moveDir}");
+                Debug.Log($"[MOVE][BLOCK_EX_NODE] {currentNode?.name} -> {nextNode.name}");
 
-            isMoving = false;  // 次フレームに TryExploreMove 側で別方向を選び直させる
+            isMoving = false;
             return;
         }
+
 
         targetPos = nextSnap;
         isMoving = true;
@@ -819,7 +822,13 @@ public class CellFromStart : MonoBehaviour
         dirs = dirs.Where(d => !IsWall(node, d)).ToList();
 
         // ★追加：Excluded 方向（次セルが Excluded）も除外
-        dirs = dirs.Where(d => !IsExcludedNeighbor(node, d)).ToList();
+        //dirs = dirs.Where(d => !IsExcludedNeighbor(node, d)).ToList();
+        dirs = dirs.Where(d =>
+        {
+            Vector2Int c = node.cell + DirToCellDelta(d);
+            MapNode n = MapNode.FindByCell(c);
+            return n == null || !n.isExcluded;
+        }).ToList();
 
         if (dirs.Count == 0)
             return null;
@@ -885,7 +894,14 @@ public class CellFromStart : MonoBehaviour
         dirs = dirs.Where(d => !IsWall(node, d)).ToList();
 
         // ★追加：Excluded 方向（次セルが Excluded）も除外
-        dirs = dirs.Where(d => !IsExcludedNeighbor(node, d)).ToList();
+        //dirs = dirs.Where(d => !IsExcludedNeighbor(node, d)).ToList();
+        dirs = dirs.Where(d =>
+        {
+            Vector2Int c = node.cell + DirToCellDelta(d);
+            MapNode n = MapNode.FindByCell(c);
+            return n == null || !n.isExcluded;
+        }).ToList();
+
 
         if (dirs.Count == 0) return null;
         if (dirs.Count == 1) return dirs[0];
