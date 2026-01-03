@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fa970f044eea104a9f73c4f26d1db62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  moveSpeed: 3
   cellSize: 1
   rayDistance: 1
   wallLayer:
@@ -152,6 +152,8 @@ MonoBehaviour:
   exploreMaterial: {fileID: 2100000, guid: acf7ff37ebb90214cb86cbf4c62185b3, type: 2}
   playerId: 0
   fallbackCooldownSteps: 6
+  tempAvoidSteps: 20
+  oscillLimit: 4
   destroyAfterNewNodes: 10
   stepsWalked: 0
   uniqueNodesVisited: 0
@@ -161,6 +163,9 @@ MonoBehaviour:
   unknownSelectMode: 0
   targetUpdateMode: 1
   noUnknownFallbackMode: 1
+  oscillationMemorySize: 6
+  avoidTargetFrames: 90
+  tabooEdgeFrames: 120
 --- !u!114 &6445760909044610146
 MonoBehaviour:
   m_ObjectHideFlags: 0
