@@ -185,6 +185,8 @@ public class CellFromStart : MonoBehaviour
 
     private static FieldInfo _fiIsMustPass;
     private static MethodInfo _miIsMustPassCell;
+    // ★ Playerごと：一度踏んだ MustPass（セル）を記録
+    private HashSet<Vector2Int> visitedMustPassCells = new HashSet<Vector2Int>();
 
     //void Start()
     //{
@@ -628,6 +630,10 @@ public class CellFromStart : MonoBehaviour
         {
             if (currentNode == lastBestTarget)
             {
+                // ★ MustPassなら、このPlayerだけ「踏破済み」にする
+                if (IsMustPassNode(currentNode))
+                    MarkVisitedMustPass(currentNode);
+
                 // 到達したので解除
                 lastBestTarget = null;
                 lastTargetIsFarthest = false;
@@ -1713,7 +1719,11 @@ public class CellFromStart : MonoBehaviour
 
         // Excluded は BFS_NearNodes 側で除外済み
         var candidates = nearNodes
-            .Where(n => n != null && IsMustPassNode(n) && !IsAvoidedTarget(n))
+            //.Where(n => n != null && IsMustPassNode(n) && !IsAvoidedTarget(n))
+            .Where(n => n != null
+            && IsMustPassNode(n)
+            && !IsVisitedMustPass(n)      // ★ 追加：このPlayerが未踏のみ
+            && !IsAvoidedTarget(n))
             .ToList();
 
         if (candidates.Count == 0) return null;
@@ -1787,6 +1797,18 @@ public class CellFromStart : MonoBehaviour
         }
 
         return int.MaxValue;
+    }
+
+    private bool IsVisitedMustPass(MapNode node)
+    {
+        if (node == null) return false;
+        return visitedMustPassCells.Contains(node.cell);
+    }
+
+    private void MarkVisitedMustPass(MapNode node)
+    {
+        if (node == null) return;
+        visitedMustPassCells.Add(node.cell);
     }
 
     private MapNode TryPlaceNode(Vector3 pos)
