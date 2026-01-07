@@ -36,7 +36,23 @@ public class EnemyAttack : MonoBehaviour
         var health = selector.CurrentTarget.GetComponent<PlayerHealth>();
         if (health != null)
         {
+            // ★ここを追加：被弾位置を渡して MustPass 化（ログも CellFromStart 側で出す）
+            var cfs = selector.CurrentTarget.GetComponent<CellFromStart>();
+            if (cfs != null)
+                cfs.SetMustPassAtHitWorldPos(selector.CurrentTarget.position);
+
             health.TakeDamage(attackDamage);
+
+            // ★追加：被弾した瞬間の「そのPlayerがいたNode」をMustPass化（ログはCellFromStart側で出す）
+            //var cfs = selector.CurrentTarget.GetComponent<CellFromStart>();
+            if (cfs != null)
+            {
+                cfs.SetMustPassAtCurrentNode_Damaged();
+            }
+            else if (debugLog)
+            {
+                Debug.Log($"[EnemyAttack] CellFromStart not found on {selector.CurrentTarget.name}");
+            }
 
             if (debugLog)
                 Debug.Log($"[EnemyAttack] Hit {selector.CurrentTarget.name} for {attackDamage}. HP={health.currentHP}/{health.maxHP}");

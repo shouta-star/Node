@@ -19,6 +19,8 @@ public class PlayerHealth : MonoBehaviour
     [Tooltip("Total damage taken (optional debug/analytics).")]
     public int totalDamageTaken = 0;
 
+    private CellFromStart cfs;
+
     private void Awake()
     {
         if (currentHP <= 0) currentHP = maxHP;
@@ -31,6 +33,10 @@ public class PlayerHealth : MonoBehaviour
         currentHP = Mathf.Max(0, currentHP - dmg);
         totalDamageTaken += dmg;
         lastDamagedTime = Time.time;
+
+        // š ”í’e‚µ‚½uŠÔ‚É‹‚½Node‚ð MustPass ‚É‚·‚é
+        if (cfs != null)
+            cfs.SetMustPassAtCurrentNode_Damaged();
 
         // Optional: add death handling later
         // if (currentHP == 0) { ... }

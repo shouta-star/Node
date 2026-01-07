@@ -124,6 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellSize: 1
+  gridOrigin: {x: 0, y: 0, z: 0}
   wallLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -131,7 +132,7 @@ MonoBehaviour:
   rayHeightOffset: 0.5
   playerTag: Player
   retargetIntervalSec: 0.75
-  debugLog: 0
+  debugLog: 1
 --- !u!114 &-2161690921271254666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,7 +149,7 @@ MonoBehaviour:
   attackRange: 1
   attackCooldownSec: 1
   attackDamage: 1
-  debugLog: 0
+  debugLog: 1
 --- !u!114 &9006207984009038555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,4 +165,4 @@ MonoBehaviour:
   moveSpeed: 1
   arriveEps: 0.05
   repathEverySteps: 3
-  debugLog: 0
+  debugLog: 1

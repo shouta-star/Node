@@ -1811,6 +1811,119 @@ public class CellFromStart : MonoBehaviour
         visitedMustPassCells.Add(node.cell);
     }
 
+    // ★ 追加：被弾した瞬間に居たNodeをMustPassにする（外部から呼ぶ用）
+    // ★追加：被弾位置を受け取って MustPass を立てる（ログもここで出す）
+    public void SetMustPassAtHitWorldPos(Vector3 hitWorldPos)
+    {
+        Vector3 snapped = SnapToGrid(hitWorldPos);
+        Vector2Int cell = WorldToCell(snapped);
+
+        MapNode byCell = MapNode.FindByCell(cell);
+
+        // ★重要：被弾セルにNodeが無いことがある（通路セル等）
+        // → currentNode（到達済みの分岐Node）を優先して fallback
+        MapNode final = byCell;
+        if (final == null)
+            final = (currentNode != null) ? currentNode : MapNode.FindNearest(hitWorldPos);
+
+        Debug.Log(
+            $"[MustPass][Damage][IN] hitWorldPos={hitWorldPos} snapped={snapped} cell={cell} " +
+            $"FindByCell={(byCell != null ? byCell.name : "null")} final={(final != null ? final.name : "null")}");
+
+        if (final == null) return;
+
+        // 念のため：Excluded なら MustPass にしない（好みで外してOK）
+        if (final.isExcluded) return;
+
+        if (!final.isMustPass)
+        {
+            final.isMustPass = true;
+            if (!final.name.Contains("_MP")) final.name += "_MP";
+        }
+
+        // このPlayerは「そのMustPassは経由済み」にしておく（吸い付き防止）
+        MarkVisitedMustPass(final);
+
+        Debug.Log($"[MustPass][Damage][OUT] MustPassSet={final.name} cell={final.cell}");
+    }
+
+    // 互換用：既存呼び出しがあるなら残す（EnemyAttack 側を直した後でもOK）
+    public void SetMustPassAtCurrentNode_Damaged()
+    {
+        SetMustPassAtHitWorldPos(transform.position);
+    }
+
+    //public void SetMustPassAtCurrentNode_Damaged()
+    //{
+    //    // ① 被弾位置（worldPos）
+    //    Vector3 hitWorldPos = transform.position;
+
+    //    // ② 計算した cell（Player側と同じ変換）
+    //    Vector3 snapped = SnapToGrid(hitWorldPos);
+    //    Vector2Int cell = WorldToCell(snapped);
+
+    //    // ③ FindByCell の結果（node名 / null）
+    //    MapNode byCell = MapNode.FindByCell(cell);
+
+    //    // ★ここが重要：通路上で被弾すると byCell が null になりやすいので currentNode をフォールバック
+    //    MapNode final = (byCell != null) ? byCell : currentNode;
+
+    //    if (debugPointLog)
+    //    {
+    //        Debug.Log(
+    //            $"[MustPass][Damage][IN] " +
+    //            $"hitWorldPos={hitWorldPos} snapped={snapped} cell={cell} " +
+    //            $"FindByCell={(byCell != null ? byCell.name : "null")} " +
+    //            $"final={(final != null ? final.name : "null")}"
+    //        );
+    //    }
+
+    //    if (final == null) return;
+    //    if (final.isExcluded) return;
+
+    //    if (!final.isMustPass)
+    //    {
+    //        final.isMustPass = true;
+    //        if (!final.name.Contains("_MP")) final.name += "_MP";
+    //    }
+
+    //    // 自分が自分のMustPassに吸われ続けるのを防ぐ（既存の仕組み）
+    //    MarkVisitedMustPass(final);
+
+    //    // ④ 最終的に MustPass にした node名
+    //    if (debugPointLog)
+    //        Debug.Log($"[MustPass][Damage][OUT] MustPassSet={final.name} cell={final.cell}");
+    //}
+    //public void SetMustPassAtCurrentNode_Damaged()
+    //{
+    //    // Playerの「今のセル」を CellFromStart と同じ方式で求める
+    //    Vector3 snapped = SnapToGrid(transform.position);
+    //    Vector2Int cell = WorldToCell(snapped);
+
+    //    MapNode n = MapNode.FindByCell(cell);
+    //    if (n == null) return;
+
+    //    // 念のため：Excluded なら MustPass にしない（好みで外してOK）
+    //    if (n.isExcluded) return;
+
+    //    // MustPass を立てる（CellFromStart は MapNode.isMustPass を参照する :contentReference[oaicite:4]{index=4}）
+    //    if (!n.isMustPass)
+    //    {
+    //        n.isMustPass = true;
+
+    //        // 目視確認用（不要なら消してOK）
+    //        if (!n.name.Contains("_MP")) n.name += "_MP";
+    //    }
+
+    //    // ★ このPlayerは「そのMustPassは経由済み」にしておく
+    //    // 　→ 自分が自分のいるNodeに吸われ続けるのを防ぐ（仕組みは既にある :contentReference[oaicite:5]{index=5}）
+    //    MarkVisitedMustPass(n);
+
+    //    // 任意ログ
+    //    // Debug.Log($"[MustPass][Damage] set true: {n.name} cell={n.cell}");
+    //}
+
+
     private MapNode TryPlaceNode(Vector3 pos)
     {
         Vector3 snapped = SnapToGrid(pos);
