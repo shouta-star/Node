@@ -24,6 +24,7 @@ public class MapNode : MonoBehaviour
 
     [Header("Node情報")]
     public bool isExcluded = false;
+    public bool isMustPass = false;
 
     [Header("Goal関連情報")]
     public float DistanceFromGoal = Mathf.Infinity;
@@ -78,6 +79,13 @@ public class MapNode : MonoBehaviour
         this.name = "Node_" + nodeCreateCount;
 
         cell = WorldToCell(transform.position);
+
+        if (!isExcluded && NodePointMarker.IsMustPassCell(cell))
+        {
+            isMustPass = true;
+            // 見た目確認用（不要なら消してOK）
+            name += "_MP";
+        }
 
         if (!allNodeCells.Contains(cell))
             allNodeCells.Add(cell);

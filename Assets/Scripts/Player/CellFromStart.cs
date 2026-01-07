@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 public class CellFromStart : MonoBehaviour
 {
@@ -182,6 +183,8 @@ public class CellFromStart : MonoBehaviour
     private readonly Dictionary<MapNode, int> avoidedTargetsUntil = new Dictionary<MapNode, int>();
     private readonly Dictionary<ulong, int> tabooEdgesUntil = new Dictionary<ulong, int>();
 
+    private static FieldInfo _fiIsMustPass;
+    private static MethodInfo _miIsMustPassCell;
 
     //void Start()
     //{
@@ -614,6 +617,63 @@ public class CellFromStart : MonoBehaviour
         currentNode = TryPlaceNode(transform.position);
         currentNode.RecalculateUnknownAndWall();
         RegisterCurrentNode(currentNode);
+
+        // ------------------------------------------------------
+        // ①-2 MustPass（必ず経由）：
+        //   ・一度でも範囲内に入った MustPass は、到達するまで最優先で追う
+        //   ・範囲判定は UnknownReference と同じ（unknownReferenceDepth Hop）
+        // ------------------------------------------------------
+        // 既に MustPass を追跡中なら、範囲外に出ても到達するまで継続
+        if (lastBestTarget != null && IsMustPassNode(lastBestTarget))
+        {
+            if (currentNode == lastBestTarget)
+            {
+                // 到達したので解除
+                lastBestTarget = null;
+                lastTargetIsFarthest = false;
+            }
+            else
+            {
+                MapNode nextMustPass;
+                if (TryGetNextNodeToward(currentNode, lastBestTarget, out nextMustPass) && nextMustPass != null)
+                {
+                    moveDir = DirToNode(currentNode, nextMustPass);
+                    MoveForward();
+                    return;
+                }
+                else
+                {
+                    // 到達不能なら一旦解除（分断されている等）
+                    TemporarilyAvoidTarget(lastBestTarget, "mustPass unreachable");
+                    lastBestTarget = null;
+                    lastTargetIsFarthest = false;
+                }
+            }
+        }
+
+        // 新しく範囲内に MustPass が入ったら、その瞬間から追跡を開始
+        MapNode mustPassTarget = FindMustPassTargetInRange(currentNode, unknownReferenceDepth);
+        if (mustPassTarget != null && mustPassTarget != currentNode)
+        {
+            lastBestTarget = mustPassTarget;
+            lastTargetIsFarthest = false;
+
+            MapNode nextMustPass;
+            if (TryGetNextNodeToward(currentNode, mustPassTarget, out nextMustPass) && nextMustPass != null)
+            {
+                moveDir = DirToNode(currentNode, nextMustPass);
+                MoveForward();
+                return;
+            }
+            else
+            {
+                // 近場に居るのに届かない＝リンクが途切れている等
+                TemporarilyAvoidTarget(mustPassTarget, "mustPass unreachable");
+                lastBestTarget = null;
+                lastTargetIsFarthest = false;
+            }
+        }
+
 
         // ① 現在の Node に Unknown が残っているなら、まずその場で掘る
         //if (currentNode.unknownCount > 0)
@@ -1612,6 +1672,122 @@ public class CellFromStart : MonoBehaviour
         return false;
     }
 
+    private bool IsMustPassNode(MapNode node)
+    {
+        if (node == null) return false;
+
+        // (A) MapNode.isMustPass があればそれを使う
+        if (_fiIsMustPass == null)
+        {
+            _fiIsMustPass = typeof(MapNode).GetField("isMustPass",
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        }
+
+        if (_fiIsMustPass != null && _fiIsMustPass.FieldType == typeof(bool))
+        {
+            return (bool)_fiIsMustPass.GetValue(node);
+        }
+
+        // (B) NodePointMarker.IsMustPassCell(Vector2Int) があればそれを使う
+        if (_miIsMustPassCell == null)
+        {
+            _miIsMustPassCell = typeof(NodePointMarker).GetMethod("IsMustPassCell",
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+        }
+
+        if (_miIsMustPassCell != null)
+        {
+            object ret = _miIsMustPassCell.Invoke(null, new object[] { node.cell });
+            if (ret is bool b) return b;
+        }
+
+        return false;
+    }
+
+    private MapNode FindMustPassTargetInRange(MapNode current, int depth)
+    {
+        if (current == null) return null;
+
+        // UnknownReference と同じ「リンクBFSの深さ」で範囲判定
+        var nearNodes = BFS_NearNodes(current, depth);
+
+        // Excluded は BFS_NearNodes 側で除外済み
+        var candidates = nearNodes
+            .Where(n => n != null && IsMustPassNode(n) && !IsAvoidedTarget(n))
+            .ToList();
+
+        if (candidates.Count == 0) return null;
+
+        // 最短Hop（グラフ距離）で一番近い MustPass を選ぶ
+        return SelectMustPassNode_ByHopDistance(candidates, current, depth);
+    }
+
+    private MapNode SelectMustPassNode_ByHopDistance(List<MapNode> candidates, MapNode current, int maxDepth)
+    {
+        MapNode best = null;
+        int bestHop = int.MaxValue;
+        int bestStartDist = int.MaxValue; // tie-breaker
+
+        foreach (var c in candidates)
+        {
+            if (c == null) continue;
+
+            int hop = GetHopDistanceWithinDepth(current, c, maxDepth);
+            if (hop < bestHop)
+            {
+                best = c;
+                bestHop = hop;
+                bestStartDist = c.distanceFromStart;
+            }
+            else if (hop == bestHop)
+            {
+                // 同距離なら、Startから近い方を優先（挙動を安定させる）
+                if (c.distanceFromStart < bestStartDist)
+                {
+                    best = c;
+                    bestStartDist = c.distanceFromStart;
+                }
+            }
+        }
+
+        return best;
+    }
+
+    private int GetHopDistanceWithinDepth(MapNode start, MapNode target, int maxDepth)
+    {
+        if (start == null || target == null) return int.MaxValue;
+        if (start == target) return 0;
+
+        Queue<(MapNode node, int d)> q = new();
+        HashSet<MapNode> visited = new();
+
+        q.Enqueue((start, 0));
+        visited.Add(start);
+
+        while (q.Count > 0)
+        {
+            var (n, d) = q.Dequeue();
+            if (d >= maxDepth) continue;
+
+            if (n.links == null) continue;
+
+            for (int i = 0; i < n.links.Count; i++)
+            {
+                var nb = n.links[i];
+                if (nb == null) continue;
+                if (nb.isExcluded) continue;
+                if (visited.Contains(nb)) continue;
+
+                int nd = d + 1;
+                if (nb == target) return nd;
+
+                visited.Add(nb);
+                q.Enqueue((nb, nd));
+            }
+        }
+
+        return int.MaxValue;
+    }
 
     private MapNode TryPlaceNode(Vector3 pos)
     {

@@ -1,0 +1,2 @@
+RunIndex,FrameToGoal,StepsWalked,TotalNodeCount,DeadEndNodeCount,BranchNodeCount,AvgPassCount,MaxPassCount,EndReason
+0,7306,39,885,23,666,7.093785,82,GoalReached
