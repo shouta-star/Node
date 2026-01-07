@@ -16340,13 +16340,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -2161690921271254666, guid: 1b374eafcfa11294891ace25bad50e12, type: 3}
+      propertyPath: debugLog
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -623557546645645566, guid: 1b374eafcfa11294891ace25bad50e12, type: 3}
+      propertyPath: debugLog
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 909120521487426562, guid: 1b374eafcfa11294891ace25bad50e12, type: 3}
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 5359303765588197352, guid: 1b374eafcfa11294891ace25bad50e12, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5359303765588197352, guid: 1b374eafcfa11294891ace25bad50e12, type: 3}
       propertyPath: m_LocalPosition.y
@@ -16354,7 +16362,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5359303765588197352, guid: 1b374eafcfa11294891ace25bad50e12, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5359303765588197352, guid: 1b374eafcfa11294891ace25bad50e12, type: 3}
       propertyPath: m_LocalRotation.w
@@ -16387,6 +16395,14 @@ PrefabInstance:
     - target: {fileID: 8826684733137348403, guid: 1b374eafcfa11294891ace25bad50e12, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9006207984009038555, guid: 1b374eafcfa11294891ace25bad50e12, type: 3}
+      propertyPath: debugLog
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9006207984009038555, guid: 1b374eafcfa11294891ace25bad50e12, type: 3}
+      propertyPath: moveSpeed
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
