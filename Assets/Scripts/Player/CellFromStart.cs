@@ -129,6 +129,15 @@ public class CellFromStart : MonoBehaviour
     // ★ 今までにこのPlayerが新規に作ったNode数
     private int newNodeCreatedCount = 0;
 
+    [Header("MustPass (時間失効)")]
+    [SerializeField] private float mustPassLifetimeSec = 8f;          // 例：8秒で失効（0以下なら失効なし）
+    [SerializeField] private float mustPassScanIntervalSec = 0.25f;   // 例：0.25秒ごとに全ノードを軽くスキャン
+    private float _nextMustPassScanTime = 0f;
+
+    // cell -> 失効時刻(Time.time)
+    private readonly Dictionary<Vector2Int, float> mustPassExpireAt = new Dictionary<Vector2Int, float>();
+    private readonly List<Vector2Int> _tmpExpiredMustPassCells = new List<Vector2Int>();
+
     // =============================
     // ★ 評価ログ用（CellFromStart 単体）
     // =============================
@@ -274,6 +283,10 @@ public class CellFromStart : MonoBehaviour
 
     void Update()
     {
+        // MustPass 時間失効
+        //TrackMustPassFlags();
+        //CleanupExpiredMustPasses();
+
         //------------------------------------------------------
         // ① 移動中ならまず位置を更新（★最優先）
         //------------------------------------------------------
@@ -1678,7 +1691,76 @@ public class CellFromStart : MonoBehaviour
         return false;
     }
 
+    //private bool IsMustPassNode(MapNode node)
+    //{
+    //    if (node == null) return false;
+
+    //    // (A) MapNode.isMustPass があればそれを使う
+    //    if (_fiIsMustPass == null)
+    //    {
+    //        _fiIsMustPass = typeof(MapNode).GetField("isMustPass",
+    //            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+    //    }
+
+    //    if (_fiIsMustPass != null && _fiIsMustPass.FieldType == typeof(bool))
+    //    {
+    //        return (bool)_fiIsMustPass.GetValue(node);
+    //    }
+
+    //    // (B) NodePointMarker.IsMustPassCell(Vector2Int) があればそれを使う
+    //    if (_miIsMustPassCell == null)
+    //    {
+    //        _miIsMustPassCell = typeof(NodePointMarker).GetMethod("IsMustPassCell",
+    //            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+    //    }
+
+    //    if (_miIsMustPassCell != null)
+    //    {
+    //        object ret = _miIsMustPassCell.Invoke(null, new object[] { node.cell });
+    //        if (ret is bool b) return b;
+    //    }
+
+    //    return false;
+    //}
     private bool IsMustPassNode(MapNode node)
+    {
+        if (node == null) return false;
+
+        // ① まず “現時点でMustPassか” を既存ロジックで判定（時間は見ない）
+        bool raw = IsMustPassNodeRaw(node);
+
+        // rawが外れているなら、追跡も解除して終了
+        if (!raw)
+        {
+            mustPassExpireAt.Remove(node.cell);
+            return false;
+        }
+
+        // ② raw=true の場合：時間失効チェック
+        if (mustPassLifetimeSec > 0f)
+        {
+            float now = Time.time;
+
+            // 初回検知なら、寿命スタート
+            if (!mustPassExpireAt.TryGetValue(node.cell, out float expAt))
+            {
+                expAt = now + mustPassLifetimeSec;
+                mustPassExpireAt[node.cell] = expAt;
+            }
+
+            // 期限切れなら MustPass 無効化
+            if (now >= expAt)
+            {
+                ClearMustPassFlag(node);      // 可能ならフラグも落とす
+                mustPassExpireAt.Remove(node.cell);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private bool IsMustPassNodeRaw(MapNode node)
     {
         if (node == null) return false;
 
@@ -1709,6 +1791,23 @@ public class CellFromStart : MonoBehaviour
 
         return false;
     }
+
+    private void ClearMustPassFlag(MapNode node)
+    {
+        if (node == null) return;
+
+        if (_fiIsMustPass == null)
+        {
+            _fiIsMustPass = typeof(MapNode).GetField("isMustPass",
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        }
+
+        if (_fiIsMustPass != null && _fiIsMustPass.FieldType == typeof(bool))
+        {
+            _fiIsMustPass.SetValue(node, false);
+        }
+    }
+
 
     private MapNode FindMustPassTargetInRange(MapNode current, int depth)
     {

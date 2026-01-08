@@ -172,6 +172,8 @@ MonoBehaviour:
   tempAvoidSteps: 20
   oscillLimit: 4
   destroyAfterNewNodes: 10
+  mustPassLifetimeSec: 8
+  mustPassScanIntervalSec: 0.25
   stepsWalked: 0
   uniqueNodesVisited: 0
   deadEndEnterCount: 0
