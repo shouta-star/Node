@@ -21,14 +21,25 @@ public class PlayerHealth : MonoBehaviour
 
     private CellFromStart cfs;
 
+    // š ’Ç‰ÁF€–Sˆ—
+    [Header("Death")]
+    public bool destroyOnDeath = true;
+    public float destroyDelay = 0f;
+    private bool isDead = false;
+
     private void Awake()
     {
         if (currentHP <= 0) currentHP = maxHP;
+
+        // š ’Ç‰ÁF“¯‚¶GameObjectã‚É‚ ‚é‚È‚çE‚¤i–³‚¯‚ê‚Înull‚Ì‚Ü‚Üj
+        cfs = GetComponent<CellFromStart>();
     }
 
     public void TakeDamage(int dmg)
     {
         if (dmg <= 0) return;
+
+        if (isDead) return; // š ’Ç‰ÁF€–SŒã‚Í–³‹
 
         currentHP = Mathf.Max(0, currentHP - dmg);
         totalDamageTaken += dmg;
@@ -37,6 +48,18 @@ public class PlayerHealth : MonoBehaviour
         // š ”í’e‚µ‚½uŠÔ‚É‹‚½Node‚ğ MustPass ‚É‚·‚é
         if (cfs != null)
             cfs.SetMustPassAtCurrentNode_Damaged();
+
+        // š ’Ç‰ÁFHP0‚È‚çDestroy
+        if (currentHP == 0)
+        {
+            isDead = true;
+
+            if (destroyOnDeath)
+            {
+                if (destroyDelay <= 0f) Destroy(gameObject);
+                else Destroy(gameObject, destroyDelay);
+            }
+        }
 
         // Optional: add death handling later
         // if (currentHP == 0) { ... }
