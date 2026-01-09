@@ -1937,7 +1937,7 @@ public class CellFromStart : MonoBehaviour
         if (!final.isMustPass)
         {
             final.isMustPass = true;
-            if (!final.name.Contains("_MP")) final.name += "_MP";
+            //if (!final.name.Contains("_MP")) final.name += "_MP";
         }
 
         // このPlayerは「そのMustPassは経由済み」にしておく（吸い付き防止）

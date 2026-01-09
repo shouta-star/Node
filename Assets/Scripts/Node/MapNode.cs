@@ -84,7 +84,7 @@ public class MapNode : MonoBehaviour
         {
             isMustPass = true;
             // 見た目確認用（不要なら消してOK）
-            name += "_MP";
+            //name += "_MP";
         }
 
         if (!allNodeCells.Contains(cell))
