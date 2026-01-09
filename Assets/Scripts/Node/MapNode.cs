@@ -567,18 +567,38 @@ public class MapNode : MonoBehaviour
         colorDirtyThisRun = true;
     }
 
+    //public static void ApplyColorsOnceBeforeScreenshot()
+    //{
+    //    if (colorAppliedThisRun) return;
+
+    //    if (!colorDirtyThisRun)
+    //    {
+    //        colorAppliedThisRun = true;
+    //        return;
+    //    }
+
+    //    UpdateAllNodesColor_ByGlobalAverage();
+    //    colorAppliedThisRun = true;
+    //}
     public static void ApplyColorsOnceBeforeScreenshot()
     {
         if (colorAppliedThisRun) return;
 
-        if (!colorDirtyThisRun)
-        {
-            colorAppliedThisRun = true;
-            return;
-        }
+        ApplyColorsBeforeScreenshot(force: false); // dirtyなら更新、そうでなければ何もしない
+        colorAppliedThisRun = true;                // ★ このRunでは二度とやらない
+    }
+
+
+    // ★ 10秒ごとのスクショ用：色を更新できる版
+    public static void ApplyColorsBeforeScreenshot(bool force = false)
+    {
+        // 変化がないなら何もしない（force=trueなら毎回更新）
+        if (!force && !colorDirtyThisRun) return;
 
         UpdateAllNodesColor_ByGlobalAverage();
-        colorAppliedThisRun = true;
+
+        // ★ 次の差分検知のためにリセット（OnPassed でまた true になる）
+        colorDirtyThisRun = false;
     }
 
     private static void UpdateAllNodesColor_ByGlobalAverage()
