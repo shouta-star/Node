@@ -65,6 +65,11 @@ public class CellFromStart : MonoBehaviour
     private bool arrivedThisNode = false;
     private bool blockTryExploreThisFrame = false;
 
+    [Header("Damage Stop")]
+    [Tooltip("If true, once this player takes damage, it will stop moving permanently (until it is destroyed).")]
+    public bool stopForeverWhenDamaged = true;
+    private bool movementLockedForever = false;
+
     // ★ 追加：今の lastBestTarget が「Start最遠由来」かどうか
     private bool lastTargetIsFarthest = false;
 
@@ -283,9 +288,7 @@ public class CellFromStart : MonoBehaviour
 
     void Update()
     {
-        // MustPass 時間失効
-        //TrackMustPassFlags();
-        //CleanupExpiredMustPasses();
+        if (movementLockedForever) return;
 
         //------------------------------------------------------
         // ① 移動中ならまず位置を更新（★最優先）
@@ -1951,6 +1954,26 @@ public class CellFromStart : MonoBehaviour
     {
         SetMustPassAtHitWorldPos(transform.position);
     }
+
+    /// <summary>
+    /// Called from PlayerHealth when this player takes damage.
+    /// Stops this player's movement permanently (until death) to prevent MustPass from exploding.
+    /// </summary>
+    public void LockMovementForever_OnDamaged()
+    {
+        if (!stopForeverWhenDamaged) return;
+
+        if (movementLockedForever) return;
+        movementLockedForever = true;
+
+        // Immediately stop any in-progress move
+        isMoving = false;
+        blockTryExploreThisFrame = false;
+        arrivedThisNode = false;
+
+        Debug.Log($"[MOVE][LOCK] PlayerId={playerId} movement locked forever (damaged).");
+    }
+
 
     //public void SetMustPassAtCurrentNode_Damaged()
     //{

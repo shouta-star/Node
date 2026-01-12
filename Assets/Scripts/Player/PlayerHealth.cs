@@ -21,6 +21,10 @@ public class PlayerHealth : MonoBehaviour
 
     private CellFromStart cfs;
 
+    [Header("Stop on damage")]
+    [Tooltip("If true, when this player takes damage once, its CellFromStart movement will be permanently locked (until death).")]
+    public bool stopMovementForeverOnFirstDamage = true;
+
     // š ’Ç‰ÁF€–Sˆ—
     [Header("Death")]
     public bool destroyOnDeath = true;
@@ -48,6 +52,9 @@ public class PlayerHealth : MonoBehaviour
         // š ”í’e‚µ‚½uŠÔ‚É‹‚½Node‚ğ MustPass ‚É‚·‚é
         if (cfs != null)
             cfs.SetMustPassAtCurrentNode_Damaged();
+
+        if (cfs != null && stopMovementForeverOnFirstDamage)
+            cfs.LockMovementForever_OnDamaged();
 
         // š ’Ç‰ÁFHP0‚È‚çDestroy
         if (currentHP == 0)
