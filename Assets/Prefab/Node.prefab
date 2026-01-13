@@ -124,6 +124,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cell: {x: 0, y: 0}
   links: []
+  isExcluded: 0
+  isMustPass: 0
   DistanceFromGoal: 0
   value: 0
   distanceFromStart: 0

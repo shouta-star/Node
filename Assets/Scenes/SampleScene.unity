@@ -10827,6 +10827,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 286847407677603923, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
+      propertyPath: cell.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 286847407677603923, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
+      propertyPath: cell.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 286847407677603923, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -10895,7 +10903,19 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1557108063541798161, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
+      propertyPath: cell.x
+      value: 39
+      objectReference: {fileID: 0}
+    - target: {fileID: 1557108063541798161, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
+      propertyPath: cell.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1557108063541798161, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1557108063541798161, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
+      propertyPath: passCount
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1557108063541798161, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
@@ -16387,7 +16407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9006207984009038555, guid: 1b374eafcfa11294891ace25bad50e12, type: 3}
       propertyPath: moveSpeed
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -34106,6 +34126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67b8e43c31a68e04ebbf4bf577ca27cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enablePeriodicSnapshots: 1
+  snapshotIntervalSec: 1
 --- !u!4 &1919655651
 Transform:
   m_ObjectHideFlags: 0
@@ -38874,7 +38896,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2098698226
 MonoBehaviour:
   m_ObjectHideFlags: 0

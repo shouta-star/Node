@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fa970f044eea104a9f73c4f26d1db62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 10
   cellSize: 1
   rayDistance: 1
   wallLayer:
@@ -163,7 +163,7 @@ MonoBehaviour:
   unknownReferenceDepth: 5
   weightUnknown: 1
   weightDistance: 1
-  linkRayMaxSteps: 100
+  linkRayMaxSteps: 10
   pointGridOrigin: {x: 0, y: 0, z: 0}
   pointCellSize: 1
   debugPointLog: 1
@@ -178,7 +178,7 @@ MonoBehaviour:
   fallbackCooldownSteps: 6
   tempAvoidSteps: 20
   oscillLimit: 4
-  destroyAfterNewNodes: 10
+  destroyAfterNewNodes: 1000
   mustPassLifetimeSec: 8
   mustPassScanIntervalSec: 0.25
   stepsWalked: 0
@@ -209,7 +209,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   nodePrefab: {fileID: -5807446751301946216, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
-  moveSpeed: 4
+  moveSpeed: 10
   arriveEpsilon: 0.02
   probeHeight: 0.3
   probeRadius: 0.3
