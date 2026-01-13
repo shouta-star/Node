@@ -17,6 +17,12 @@ public class CellFromStart : MonoBehaviour
     public Vector3 gridOrigin = Vector3.zero;
     public GameObject nodePrefab;
 
+    [Header("Damage Stop (No-damage resume)")]
+    public bool stopMoveWhileRecentlyDamaged = true;
+
+    [Tooltip("Movement is paused until Time.time >= damageStopUntilTime")]
+    private float damageStopUntilTime = -1f;
+
     [Header("探索パラメータ")]
     public int unknownReferenceDepth = 3; // ★ BFS探索深さとして使用
 
@@ -288,6 +294,12 @@ public class CellFromStart : MonoBehaviour
 
     void Update()
     {
+        // 被弾後、一定時間ノーダメなら再開（その間は完全停止）
+        if (stopMoveWhileRecentlyDamaged && Time.time < damageStopUntilTime)
+        {
+            return;
+        }
+
         if (movementLockedForever) return;
 
         //------------------------------------------------------
@@ -1953,6 +1965,20 @@ public class CellFromStart : MonoBehaviour
     public void SetMustPassAtCurrentNode_Damaged()
     {
         SetMustPassAtHitWorldPos(transform.position);
+    }
+
+    public void LockMovementUntilNoDamage(float noDamageSeconds)
+    {
+        if (!stopMoveWhileRecentlyDamaged) return;
+
+        noDamageSeconds = Mathf.Max(0f, noDamageSeconds);
+
+        // 今この瞬間から「noDamageSeconds」の間は停止
+        float until = Time.time + noDamageSeconds;
+
+        // すでに停止中なら、解除時刻を後ろに伸ばす（被弾が続くほど停止が延長される）
+        if (until > damageStopUntilTime)
+            damageStopUntilTime = until;
     }
 
     /// <summary>

@@ -19,6 +19,12 @@ public class PlayerHealth : MonoBehaviour
     [Tooltip("Total damage taken (optional debug/analytics).")]
     public int totalDamageTaken = 0;
 
+    [Header("Stop/Resume on damage")]
+    public bool stopMoveOnDamage = true;
+
+    [Tooltip("If no additional damage occurs for this many seconds, movement resumes.")]
+    public float resumeMoveAfterNoDamageSeconds = 2f;
+
     private CellFromStart cfs;
 
     [Header("Stop on damage")]
@@ -53,8 +59,11 @@ public class PlayerHealth : MonoBehaviour
         if (cfs != null)
             cfs.SetMustPassAtCurrentNode_Damaged();
 
-        if (cfs != null && stopMovementForeverOnFirstDamage)
-            cfs.LockMovementForever_OnDamaged();
+        if (cfs != null && stopMoveOnDamage)
+            cfs.LockMovementUntilNoDamage(resumeMoveAfterNoDamageSeconds);
+
+        //if (cfs != null && stopMovementForeverOnFirstDamage)
+        //    cfs.LockMovementForever_OnDamaged();
 
         // Åö í«â¡ÅFHP0Ç»ÇÁDestroy
         if (currentHP == 0)

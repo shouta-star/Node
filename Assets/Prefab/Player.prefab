@@ -130,6 +130,11 @@ MonoBehaviour:
   currentHP: 10
   lastDamagedTime: -1
   totalDamageTaken: 0
+  stopMoveOnDamage: 1
+  resumeMoveAfterNoDamageSeconds: 3
+  stopMovementForeverOnFirstDamage: 1
+  destroyOnDeath: 1
+  destroyDelay: 0
 --- !u!114 &1276717745442702468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +159,7 @@ MonoBehaviour:
   startDirection: {x: 0, y: 0, z: 0}
   gridOrigin: {x: 0, y: 0, z: 0}
   nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
+  stopMoveWhileRecentlyDamaged: 1
   unknownReferenceDepth: 5
   weightUnknown: 1
   weightDistance: 1
@@ -168,6 +174,7 @@ MonoBehaviour:
   bodyRenderer: {fileID: 1227592138390721517}
   exploreMaterial: {fileID: 2100000, guid: acf7ff37ebb90214cb86cbf4c62185b3, type: 2}
   playerId: 0
+  stopForeverWhenDamaged: 1
   fallbackCooldownSteps: 6
   tempAvoidSteps: 20
   oscillLimit: 4
