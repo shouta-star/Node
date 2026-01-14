@@ -163,6 +163,13 @@ MonoBehaviour:
   unknownReferenceDepth: 5
   weightUnknown: 1
   weightDistance: 1
+  useLocalNextStepOnly: 1
+  weightToTarget: 1
+  backtrackPenalty: 1000
+  localUseReverseLinkRescue: 1
+  localWriteWeightToNode: 1
+  mustPassScoreScale: 10
+  revisitPenaltyPerVisit: 5
   linkRayMaxSteps: 10
   pointGridOrigin: {x: 0, y: 0, z: 0}
   pointCellSize: 1
@@ -178,9 +185,12 @@ MonoBehaviour:
   fallbackCooldownSteps: 6
   tempAvoidSteps: 20
   oscillLimit: 4
-  destroyAfterNewNodes: 1000
+  destroyAfterNewNodes: 10
   mustPassLifetimeSec: 8
   mustPassScanIntervalSec: 0.25
+  useMustPassAsWeight: 1
+  normalEnterCost: 1
+  mustPassEnterCost: 0.25
   stepsWalked: 0
   uniqueNodesVisited: 0
   deadEndEnterCount: 0
