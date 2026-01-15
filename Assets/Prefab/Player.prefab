@@ -214,7 +214,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6997970435145029357}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a95e31afb768db44849147cf36bc09a, type: 3}
   m_Name: 
@@ -224,7 +224,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   nodePrefab: {fileID: -5807446751301946216, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
-  moveSpeed: 10
+  moveSpeed: 3
   arriveEpsilon: 0.02
   probeHeight: 0.3
   probeRadius: 0.3
@@ -239,6 +239,14 @@ MonoBehaviour:
   goalTransform: {fileID: 1343801100588082762, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
   triggerRestartOnGoal: 1
   playerId: 0
+  stopOnDamage: 1
+  stopDurationSec: 2
+  debugDamageStop: 0
+  chaseEnemyIfNear: 1
+  enemyTag: Enemy
+  chaseStartRange: 8
+  chaseStopRange: 10
+  enemyScanInterval: 0.2
   goalNodeTag: Goal
   autoFindGoalTransform: 1
 --- !u!114 &-11731101771326339
@@ -248,7 +256,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6997970435145029357}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27367c45c57841743882e0a532ddb71d, type: 3}
   m_Name: 

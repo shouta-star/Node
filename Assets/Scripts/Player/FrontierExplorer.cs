@@ -40,6 +40,27 @@ public class FrontierExplorer : MonoBehaviour
     public int playerId = 0;
     private static int nextPlayerId = 0;
 
+    [Header("Damage Stop (CellFromStart style)")]
+    public bool stopOnDamage = true;
+    public float stopDurationSec = 2.0f;
+    public bool debugDamageStop = false;
+
+    private PlayerHealth _health;
+    private int _lastHP = int.MinValue;
+    private float _stopUntilTime = -1f;
+    private bool _wasStopped = false;
+
+    [Header("Chase Enemy If Near (like Baseline)")]
+    public bool chaseEnemyIfNear = true;
+    public string enemyTag = "Enemy";
+    public float chaseStartRange = 8f;
+    public float chaseStopRange = 10f; // startより大きく
+    public float enemyScanInterval = 0.2f;
+
+    private Transform _chaseEnemy;
+    private bool _isChasingEnemy = false;
+    private float _nextEnemyScanTime = 0f;
+
     [Header("Goal (CellFromStart style)")]
     public string goalNodeTag = "Goal";
     public bool autoFindGoalTransform = true; // GoalオブジェクトをTagで自動取得
@@ -99,6 +120,9 @@ public class FrontierExplorer : MonoBehaviour
         FrontierEvaluationLogger.SetGoalCell(goalCell);
         runStartTime = Time.time;
 
+        _health = GetComponent<PlayerHealth>();
+        if (_health != null) _lastHP = _health.currentHP;
+
         currentCell = FrontierNode.WorldToCell(transform.position, cellSize);
         transform.position = CellCenterWorld(currentCell);
 
@@ -130,6 +154,9 @@ public class FrontierExplorer : MonoBehaviour
     {
         frameCount++;
 
+        if (HandleDamageStop())
+            return;
+
         if (isMoving)
         {
             StepMove();
@@ -137,6 +164,20 @@ public class FrontierExplorer : MonoBehaviour
         }
 
         if (currentNode == null) return;
+
+        // 追跡状態の更新
+        UpdateChaseEnemyState();
+
+        // 追跡中なら「敵に近づく1手」を優先
+        if (_isChasingEnemy && _chaseEnemy != null)
+        {
+            if (TryPickChaseStepCell(out var chaseStep))
+            {
+                StartMoveToCell(chaseStep);
+                return;
+            }
+            // 追いかけられない（壁で詰むなど）なら、通常の探索ロジックへフォールバック
+        }
 
         // ① 今いるNodeから「未リンクで通れそう」な方向があれば、そこへ1歩（既知化=リンク化しに行く）
         if (TryPickUnknownNeighborCell(currentNode, out var exploreTo))
@@ -756,5 +797,146 @@ public class FrontierExplorer : MonoBehaviour
     private int GetRunIndexSafe()
     {
         return FrontierRestartManager.Instance != null ? FrontierRestartManager.Instance.GetRunIndex() : 1;
+    }
+
+    private bool HandleDamageStop()
+    {
+        if (!stopOnDamage) return false;
+        if (_health == null) return false;
+
+        int hp = _health.currentHP;
+        if (_lastHP == int.MinValue) _lastHP = hp;
+
+        // HPが減ったら停止時間を更新（停止中にさらに減ったら延長）
+        if (hp < _lastHP)
+        {
+            _stopUntilTime = Time.time + Mathf.Max(0.01f, stopDurationSec);
+            _wasStopped = true;
+
+            if (debugDamageStop)
+                Debug.Log($"[FE][DMG] stop until={_stopUntilTime:F2} hp={hp}/{_health.maxHP} playerId={playerId}");
+        }
+
+        _lastHP = hp;
+
+        // 停止中
+        if (Time.time < _stopUntilTime)
+            return true;
+
+        // 停止終了の瞬間に一度だけログ（必要ならここで計画リセットも可）
+        if (_wasStopped)
+        {
+            _wasStopped = false;
+
+            if (debugDamageStop)
+                Debug.Log($"[FE][RESUME] hp={hp}/{_health.maxHP} playerId={playerId}");
+
+            // フロンティア探索は到着時に target/path を都度クリアしてるので、
+            // ここでの特別なリセットは基本不要。必要なら：
+            // target = null; path.Clear();
+        }
+
+        return false;
+    }
+
+    private void UpdateChaseEnemyState()
+    {
+        if (!chaseEnemyIfNear)
+        {
+            _isChasingEnemy = false;
+            _chaseEnemy = null;
+            return;
+        }
+
+        if (Time.time < _nextEnemyScanTime) return;
+        _nextEnemyScanTime = Time.time + Mathf.Max(0.01f, enemyScanInterval);
+
+        var enemies = GameObject.FindGameObjectsWithTag(enemyTag);
+        if (enemies == null || enemies.Length == 0)
+        {
+            _isChasingEnemy = false;
+            _chaseEnemy = null;
+            return;
+        }
+
+        Transform best = null;
+        float bestD2 = float.PositiveInfinity;
+        Vector3 me = transform.position;
+
+        foreach (var e in enemies)
+        {
+            if (e == null) continue;
+            float d2 = (e.transform.position - me).sqrMagnitude;
+            if (d2 < bestD2)
+            {
+                bestD2 = d2;
+                best = e.transform;
+            }
+        }
+
+        float bestD = Mathf.Sqrt(bestD2);
+
+        if (!_isChasingEnemy)
+        {
+            if (best != null && bestD <= chaseStartRange)
+            {
+                _isChasingEnemy = true;
+                _chaseEnemy = best;
+            }
+        }
+        else
+        {
+            if (best == null || bestD >= chaseStopRange)
+            {
+                _isChasingEnemy = false;
+                _chaseEnemy = null;
+            }
+            else
+            {
+                _chaseEnemy = best;
+            }
+        }
+    }
+
+    private bool TryPickChaseStepCell(out Vector2Int destCell)
+    {
+        destCell = default;
+        if (_chaseEnemy == null) return false;
+
+        Vector2Int enemyCell = FrontierNode.WorldToCell(_chaseEnemy.position, cellSize);
+
+        int curDist = Mathf.Abs(enemyCell.x - currentCell.x) + Mathf.Abs(enemyCell.y - currentCell.y);
+
+        Vector2Int best = default;
+        int bestDist = curDist;
+        bool found = false;
+
+        for (int i = 0; i < 4; i++)
+        {
+            var nb = currentCell + DirC[i];
+
+            // 壁セル/辺ブロックは既存判定を使う
+            if (IsWallCell(CellCenterWorld(nb))) continue;
+            if (IsEdgeBlocked(currentCell, nb, out _)) continue;
+
+            int d = Mathf.Abs(enemyCell.x - nb.x) + Mathf.Abs(enemyCell.y - nb.y);
+
+            // より近づく手を優先
+            if (d < bestDist)
+            {
+                bestDist = d;
+                best = nb;
+                found = true;
+            }
+        }
+
+        if (found)
+        {
+            destCell = best;
+            return true;
+        }
+
+        // 近づける手が無い（袋小路など）→ false で通常探索に戻す
+        return false;
     }
 }
