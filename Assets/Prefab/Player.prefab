@@ -263,6 +263,16 @@ MonoBehaviour:
     m_Bits: 64
   wallCheckMargin: 0.45
   goal: {fileID: 0}
+  stopOnDamage: 1
+  stopDurationSec: 2
+  rebuildPathOnResume: 1
+  debugDamageStop: 0
   enableNodeVisitLog: 1
   nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
   playerId: 0
+  chaseEnemyIfNear: 1
+  enemyTag: Enemy
+  chaseStartRange: 10
+  chaseStopRange: 12
+  enemyScanInterval: 0.2
+  repathEveryFramesWhileChasing: 15

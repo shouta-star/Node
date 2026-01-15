@@ -46,6 +46,27 @@ public class BaselineAgent : MonoBehaviour
     public GameObject nodePrefab;
     public int playerId = 1;
 
+    [Header("Chase Enemy If Near (Player behavior)")]
+    public bool chaseEnemyIfNear = true;
+    public string enemyTag = "Enemy";
+
+    [Tooltip("この距離以内に敵がいれば追跡開始（ワールド距離）")]
+    public float chaseStartRange = 8f;
+
+    [Tooltip("追跡解除距離（開始より少し大きくしてバタつき防止）")]
+    public float chaseStopRange = 10f;
+
+    [Tooltip("敵検索の間隔（秒）")]
+    public float enemyScanInterval = 0.2f;
+
+    [Tooltip("追跡中、何フレームごとにA*を組み直すか（敵が動くなら有効）")]
+    public int repathEveryFramesWhileChasing = 15;
+
+    private Transform _chaseEnemy;
+    private bool _isChasingEnemy = false;
+    private float _nextEnemyScanTime = 0f;
+    private Vector2Int _lastDesiredGoalCell = new Vector2Int(int.MaxValue, int.MaxValue);
+
     // ★ PlayerID を「スポーン順 1,2,3...」にするためのカウンタ
     private static int nextPlayerId = 1;
  
@@ -133,6 +154,28 @@ public class BaselineAgent : MonoBehaviour
         {
             LogVisitAtCell(CurrentCell);
             return;
+        }
+
+        // 追跡状態の更新（近くに敵がいれば追跡）
+        UpdateChaseEnemyState();
+
+        // A*モードの場合：目的地が変わったら経路を作り直す
+        if (mode == BaselineMode.AStarOracle)
+        {
+            Vector2Int desired = GetDesiredGoalCell();
+
+            // 目的地セルが変わった（追跡ON/OFF切替、敵が別セルへ移動など）
+            if (desired != _lastDesiredGoalCell)
+            {
+                BuildAStarPath(desired);
+                _lastDesiredGoalCell = desired;
+            }
+            else if (_isChasingEnemy && repathEveryFramesWhileChasing > 0 &&
+                     (Time.frameCount % repathEveryFramesWhileChasing == 0))
+            {
+                // 追跡中は定期的に組み直し（敵が動くなら）
+                BuildAStarPath(desired);
+            }
         }
 
         if (mode == BaselineMode.AStarOracle)
@@ -226,10 +269,31 @@ public class BaselineAgent : MonoBehaviour
     // A* Oracle move
     // =========================
 
+    //void BuildAStarPath()
+    //{
+    //    Vector2Int start = CurrentCell;
+    //    Vector2Int goalCell = GoalCell;
+
+    //    // A* (grid)
+    //    pathCells = AStar(start, goalCell);
+    //    if (pathCells == null || pathCells.Count == 0)
+    //    {
+    //        Debug.LogWarning($"[{name}] A* path not found. Check bounds or wall settings.");
+    //        pathIndex = 0;
+    //        return;
+    //    }
+
+    //    pathIndex = 0;
+    //    if (pathCells[0] == start && pathCells.Count > 1) pathIndex = 1;
+    //}
     void BuildAStarPath()
     {
+        BuildAStarPath(GoalCell);
+    }
+
+    void BuildAStarPath(Vector2Int goalCell)
+    {
         Vector2Int start = CurrentCell;
-        Vector2Int goalCell = GoalCell;
 
         // A* (grid)
         pathCells = AStar(start, goalCell);
@@ -241,8 +305,13 @@ public class BaselineAgent : MonoBehaviour
         }
 
         pathIndex = 0;
-        if (pathCells[0] == start && pathCells.Count > 1) pathIndex = 1;
+
+        // 先頭が現在地セルならスキップ（すぐ同じセルに向かって足踏みするのを防ぐ）
+        if (pathCells[0] == start && pathCells.Count > 1)
+            pathIndex = 1;
     }
+
+
 
     void UpdateAStarMove()
     {
@@ -521,6 +590,75 @@ public class BaselineAgent : MonoBehaviour
         }
 
         return false;
+    }
+
+    private Vector2Int GetDesiredGoalCell()
+    {
+        if (_isChasingEnemy && _chaseEnemy != null)
+        {
+            Vector3 p = _chaseEnemy.position;
+            int x = Mathf.RoundToInt(p.x / cellSize);
+            int z = Mathf.RoundToInt(p.z / cellSize);
+            return new Vector2Int(x, z);
+        }
+        return GoalCell;
+    }
+
+    private void UpdateChaseEnemyState()
+    {
+        if (!chaseEnemyIfNear) { _isChasingEnemy = false; _chaseEnemy = null; return; }
+        if (Time.time < _nextEnemyScanTime) return;
+        _nextEnemyScanTime = Time.time + Mathf.Max(0.01f, enemyScanInterval);
+
+        // 近い敵を探す（ワールド距離）
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTag);
+        if (enemies == null || enemies.Length == 0)
+        {
+            _isChasingEnemy = false;
+            _chaseEnemy = null;
+            return;
+        }
+
+        Transform best = null;
+        float bestD2 = float.PositiveInfinity;
+        Vector3 me = transform.position;
+
+        foreach (var e in enemies)
+        {
+            if (e == null) continue;
+            float d2 = (e.transform.position - me).sqrMagnitude;
+            if (d2 < bestD2)
+            {
+                bestD2 = d2;
+                best = e.transform;
+            }
+        }
+
+        float bestD = Mathf.Sqrt(bestD2);
+
+        if (!_isChasingEnemy)
+        {
+            // 追跡開始
+            if (best != null && bestD <= chaseStartRange)
+            {
+                _isChasingEnemy = true;
+                _chaseEnemy = best;
+            }
+        }
+        else
+        {
+            // 追跡解除（敵が消えた or 遠い）
+            if (best == null || bestD >= chaseStopRange)
+            {
+                _isChasingEnemy = false;
+                _chaseEnemy = null;
+            }
+            else
+            {
+                // 追跡継続中：対象を更新（最も近い敵）
+                _chaseEnemy = best;
+            }
+        }
     }
 
 }
