@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fa970f044eea104a9f73c4f26d1db62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  moveSpeed: 3
   cellSize: 1
   rayDistance: 1
   wallLayer:
@@ -170,6 +170,11 @@ MonoBehaviour:
   localWriteWeightToNode: 1
   mustPassScoreScale: 10
   revisitPenaltyPerVisit: 5
+  targetFieldMax: 1000
+  targetFieldSlope: 10
+  mustPassFieldBase: 200
+  mustPassFieldDecay: 0.85
+  mustPassCacheRefreshFrames: 30
   linkRayMaxSteps: 10
   pointGridOrigin: {x: 0, y: 0, z: 0}
   pointCellSize: 1

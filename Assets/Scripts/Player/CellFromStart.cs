@@ -49,9 +49,33 @@ public class CellFromStart : MonoBehaviour
     [Tooltip("MustPass score scale when using local next-step. (Uses normalEnterCost - GetEnterCost(node)) * scale")]
     public float mustPassScoreScale = 10f;
 
-
     [Tooltip("Penalty applied per prior visit to a candidate node (per player). Higher = avoids revisiting.")]
     public float revisitPenaltyPerVisit = 5f;
+
+    // -----------------------------
+    // Weight Field Params (Manhattan)
+    // -----------------------------
+    [Header("Weight Field (Manhattan)")]
+    [Tooltip("BestTarget weight at the target (the maximum).")]
+    public float targetFieldMax = 1000f;
+
+    [Tooltip("How much the BestTarget weight decreases per Manhattan step.")]
+    public float targetFieldSlope = 10f;
+
+    [Tooltip("MustPass peak bonus at MustPass node (keep smaller than targetFieldMax).")]
+    public float mustPassFieldBase = 200f;
+
+    [Tooltip("MustPass bonus decay per Manhattan step (0-1). Higher = longer reach.")]
+    [Range(0.5f, 0.99f)]
+    public float mustPassFieldDecay = 0.85f;
+
+    [Tooltip("How often (frames) to rebuild MustPass cache. (For 10+ MustPass, 30 is a good start.)")]
+    public int mustPassCacheRefreshFrames = 30;
+
+    // MustPass cache
+    private readonly List<MapNode> _mustPassCache = new List<MapNode>(64);
+    private int _mustPassCacheLastFrame = -999999;
+    private int _mustPassCacheLastAllNodesCount = -1;
 
     [Header("Ray設定")]
     public int linkRayMaxSteps = 100;
@@ -1609,28 +1633,91 @@ public class CellFromStart : MonoBehaviour
         tabooEdges.Add(key);
     }
 
+    //private bool TryGetNextNodeToward(MapNode from, MapNode target, out MapNode nextNode)
+    //{
+    //    nextNode = null;
+    //    if (from == null || target == null) return false;
+
+    //    // -----------------------------
+    //    // A) 従来：フル経路（Dijkstra）で1手目を取る
+    //    // -----------------------------
+    //    if (!useLocalNextStepOnly)
+    //    {
+    //        var p2 = BuildShortestPath(from, target);
+    //        if (p2 != null && p2.Count >= 2)
+    //        {
+    //            nextNode = p2[1];
+    //            return true;
+    //        }
+    //        return false;
+    //    }
+
+    //    // -----------------------------
+    //    // B) 新方式：隣接ノードだけを評価して次の1手を決める（軽量）
+    //    // -----------------------------
+    //    List<MapNode> candidates = new List<MapNode>();
+
+    //    if (from.links != null && from.links.Count > 0)
+    //    {
+    //        candidates.AddRange(from.links);
+    //    }
+    //    else if (localUseReverseLinkRescue)
+    //    {
+    //        // 逆リンク救済：from.links が空のときだけ走らせてコストを抑える
+    //        foreach (var other in MapNode.allNodes)
+    //        {
+    //            if (other == null) continue;
+    //            if (other.links == null) continue;
+    //            if (other.links.Contains(from))
+    //                candidates.Add(other);
+    //        }
+    //    }
+
+    //    if (candidates.Count == 0) return false;
+
+    //    MapNode best = null;
+    //    float bestScore = float.NegativeInfinity;
+
+    //    for (int i = 0; i < candidates.Count; i++)
+    //    {
+    //        MapNode c = candidates[i];
+    //        if (c == null) continue;
+    //        if (c == from) continue;
+
+    //        // Excluded（壁扱い）は通れない（ただし target は例外で通す）
+    //        if (c.isExcluded && c != target) continue;
+
+    //        // Avoid / Taboo / TempForbid は候補から除外
+    //        if (IsAvoidedTarget(c)) continue;
+    //        if (IsTabooEdge(from, c)) continue;
+    //        if (hasTempForbidEdge && from == tempForbidFrom && c == tempForbidTo) continue;
+
+    //        float score = ComputeLocalStepScore(from, c, target);
+
+    //        // 即時の往復は強く抑制
+    //        if (c == prevVisitedNode)
+    //            score -= backtrackPenalty;
+
+    //        if (score > bestScore)
+    //        {
+    //            bestScore = score;
+    //            best = c;
+    //        }
+    //    }
+
+    //    if (best == null) return false;
+
+    //    nextNode = best;
+    //    return true;
+    //}
     private bool TryGetNextNodeToward(MapNode from, MapNode target, out MapNode nextNode)
     {
         nextNode = null;
         if (from == null || target == null) return false;
 
-        // -----------------------------
-        // A) 従来：フル経路（Dijkstra）で1手目を取る
-        // -----------------------------
-        if (!useLocalNextStepOnly)
-        {
-            var p2 = BuildShortestPath(from, target);
-            if (p2 != null && p2.Count >= 2)
-            {
-                nextNode = p2[1];
-                return true;
-            }
-            return false;
-        }
+        // Dijkstra / BuildShortestPath は一切使わない
+        // 常に「隣接ノード評価のみ」で1手を決める
 
-        // -----------------------------
-        // B) 新方式：隣接ノードだけを評価して次の1手を決める（軽量）
-        // -----------------------------
         List<MapNode> candidates = new List<MapNode>();
 
         if (from.links != null && from.links.Count > 0)
@@ -1650,6 +1737,9 @@ public class CellFromStart : MonoBehaviour
         }
 
         if (candidates.Count == 0) return false;
+
+        // MustPass が10個以上になる想定なのでキャッシュを使う
+        RefreshMustPassCacheIfNeeded();
 
         MapNode best = null;
         float bestScore = float.NegativeInfinity;
@@ -1687,6 +1777,52 @@ public class CellFromStart : MonoBehaviour
         return true;
     }
 
+
+    private void RefreshMustPassCacheIfNeeded()
+    {
+        int frame = Time.frameCount;
+        int allCount = (MapNode.allNodes != null) ? MapNode.allNodes.Count : 0;
+
+        bool needRebuild =
+            _mustPassCache.Count == 0 ||
+            _mustPassCacheLastAllNodesCount != allCount ||
+            (frame - _mustPassCacheLastFrame) >= mustPassCacheRefreshFrames;
+
+        if (!needRebuild) return;
+
+        _mustPassCache.Clear();
+        if (MapNode.allNodes != null)
+        {
+            for (int i = 0; i < MapNode.allNodes.Count; i++)
+            {
+                var n = MapNode.allNodes[i];
+                if (n == null) continue;
+                if (IsMustPassNode(n)) _mustPassCache.Add(n);
+            }
+        }
+
+        _mustPassCacheLastAllNodesCount = allCount;
+        _mustPassCacheLastFrame = frame;
+    }
+
+    private int GetNearestUnvisitedMustPassDistance(Vector2Int fromCell)
+    {
+        int best = int.MaxValue;
+
+        for (int i = 0; i < _mustPassCache.Count; i++)
+        {
+            var m = _mustPassCache[i];
+            if (m == null) continue;
+            if (IsVisitedMustPass(m)) continue; // このPlayerが既に踏破済みなら除外
+
+            int d = ManhattanDistance(fromCell, m.cell);
+            if (d < best) best = d;
+            if (best == 0) break;
+        }
+
+        return best;
+    }
+
     private int GetVisitCount(MapNode node)
     {
         if (node == null) return 0;
@@ -1708,34 +1844,76 @@ public class CellFromStart : MonoBehaviour
         return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
     }
 
+    //private float ComputeLocalStepScore(MapNode from, MapNode candidate, MapNode target)
+    //{
+    //    if (candidate == null || target == null) return float.NegativeInfinity;
+
+    //    // 1) ターゲットへの「近さ」（近いほどスコアが高い）
+    //    int d = ManhattanDistance(candidate.cell, target.cell);
+    //    float score = weightToTarget * (-d);
+
+
+    //    // 1.5) Revisit penalty (per player): nodes already reached become more expensive
+    //    int visits = GetVisitCount(candidate);
+    //    if (visits > 0)
+    //        score -= revisitPenaltyPerVisit * visits;
+
+    //    // 2) 探索寄りにしたい場合は Unknown を加点（既存パラメータを流用）
+    //    score += weightUnknown * candidate.unknownCount;
+
+    //    // 3) MustPass は軽量に“寄せる”だけ（強制追跡はしない）
+    //    if (useMustPassAsWeight && IsMustPassNode(candidate) && !IsVisitedMustPass(candidate))
+    //    {
+    //        // GetEnterCost が安いほどプラス（例：normal(1.0) - must(0.25) = 0.75）
+    //        score += (normalEnterCost - GetEnterCost(candidate)) * mustPassScoreScale;
+    //    }
+
+    //    // デバッグ可視化：ノードに書き込む（色付け等に使える）
+    //    if (localWriteWeightToNode)
+    //    {
+    //        candidate.DistanceFromGoal = d;  // “goal” の代わりに “bestTarget” までの距離
+    //        candidate.value = score;
+    //    }
+
+    //    return score;
+    //}
     private float ComputeLocalStepScore(MapNode from, MapNode candidate, MapNode target)
     {
         if (candidate == null || target == null) return float.NegativeInfinity;
 
-        // 1) ターゲットへの「近さ」（近いほどスコアが高い）
-        int d = ManhattanDistance(candidate.cell, target.cell);
-        float score = weightToTarget * (-d);
+        // ------------------------------------------------------------
+        // score = TargetField(Manhattan to BestTarget) + MustPassField(Manhattan to nearest unvisited MustPass)
+        //        - revisit penalty
+        //        + unknown bonus (optional)
+        // ------------------------------------------------------------
 
+        // 1) BestTarget field（最強）：近いほど高い / BestTargetが最大
+        int dT = ManhattanDistance(candidate.cell, target.cell);
+        float score = targetFieldMax - targetFieldSlope * dT;
 
-        // 1.5) Revisit penalty (per player): nodes already reached become more expensive
+        // 2) MustPass field（弱めだが集まる）：最寄り未踏MustPassが近いほどボーナス
+        if (useMustPassAsWeight && _mustPassCache.Count > 0)
+        {
+            int dM = GetNearestUnvisitedMustPassDistance(candidate.cell);
+            if (dM != int.MaxValue)
+            {
+                float mustBonus = mustPassFieldBase * Mathf.Pow(mustPassFieldDecay, dM);
+                score += mustBonus;
+            }
+        }
+
+        // 3) Revisit penalty（Playerごと）
         int visits = GetVisitCount(candidate);
         if (visits > 0)
             score -= revisitPenaltyPerVisit * visits;
 
-        // 2) 探索寄りにしたい場合は Unknown を加点（既存パラメータを流用）
+        // 4) Optional: Unknown bonus
         score += weightUnknown * candidate.unknownCount;
 
-        // 3) MustPass は軽量に“寄せる”だけ（強制追跡はしない）
-        if (useMustPassAsWeight && IsMustPassNode(candidate) && !IsVisitedMustPass(candidate))
-        {
-            // GetEnterCost が安いほどプラス（例：normal(1.0) - must(0.25) = 0.75）
-            score += (normalEnterCost - GetEnterCost(candidate)) * mustPassScoreScale;
-        }
-
-        // デバッグ可視化：ノードに書き込む（色付け等に使える）
+        // Debug visualization
         if (localWriteWeightToNode)
         {
-            candidate.DistanceFromGoal = d;  // “goal” の代わりに “bestTarget” までの距離
+            candidate.DistanceFromGoal = dT;
             candidate.value = score;
         }
 
