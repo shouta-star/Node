@@ -30,6 +30,17 @@ public class BaselineAgent : MonoBehaviour
     [Tooltip("未指定なら Tag=Goal を探す")]
     public Transform goal;
 
+    [Header("Damage Stop (like CellFromStart)")]
+    public bool stopOnDamage = true;
+    public float stopDurationSec = 2.0f;
+    public bool rebuildPathOnResume = true;
+    public bool debugDamageStop = false;
+
+    private PlayerHealth _health;
+    private int _lastHP = int.MinValue;
+    private float _stopUntilTime = -1f;
+    private bool _wasStopped = false;
+
     [Header("Node logging")]
     public bool enableNodeVisitLog = true;
     public GameObject nodePrefab;
@@ -44,8 +55,8 @@ public class BaselineAgent : MonoBehaviour
         nextPlayerId = 1;
     }
 
-// internal
-private Vector2Int currentTargetCell;
+    // internal
+    private Vector2Int currentTargetCell;
     private Vector3 currentTargetWorld;
     private bool hasTarget = false;
 
@@ -98,6 +109,10 @@ private Vector2Int currentTargetCell;
             if (g != null) goal = g.transform;
         }
 
+        _health = GetComponent<PlayerHealth>();
+        if (_health != null)
+            _lastHP = _health.currentHP;
+
         // 初期セルのログ
         if (enableNodeVisitLog)
             LogVisitAtCell(CurrentCell);
@@ -109,6 +124,9 @@ private Vector2Int currentTargetCell;
     void Update()
     {
         if (restartTriggered) return;
+
+        if (HandleDamageStop())
+            return;
 
         // ★ 先にゴール到達を確実に拾う（下の各モード内の早期returnで取り逃がさない）
         if (goal != null && CurrentCell == GoalCell)
@@ -446,6 +464,65 @@ private Vector2Int currentTargetCell;
         total.Reverse();
         return total;
     }
+
+    /// <summary>
+    /// HPが減ったら一定時間停止し、一定期間減らなければ復帰する（CellFromStartと同じ系）
+    /// true を返した場合：今フレームは停止中なので Update を抜ける
+    /// </summary>
+    private bool HandleDamageStop()
+    {
+        if (!stopOnDamage) return false;
+        if (_health == null) return false;
+
+        int hp = _health.currentHP;
+
+        // 初回だけ lastHP を合わせる
+        if (_lastHP == int.MinValue)
+            _lastHP = hp;
+
+        // HP減少を検知したら「停止タイマー」を更新（停止中にさらに減っても延長される）
+        if (hp < _lastHP)
+        {
+            _stopUntilTime = Time.time + Mathf.Max(0.01f, stopDurationSec);
+            _wasStopped = true;
+
+            // 移動中の状態をリセット（復帰後に変な途中状態で続かないように）
+            hasTarget = false;       // RandomWalk用
+            pathIndex = 0;           // A*Oracle用（復帰時に組み直す）
+
+            if (debugDamageStop)
+                Debug.Log($"[BaselineAgent] DAMAGED -> STOP until={_stopUntilTime:F2} HP {hp}/{_health.maxHP} PlayerID={playerId}");
+        }
+
+        _lastHP = hp;
+
+        // 停止中
+        if (Time.time < _stopUntilTime)
+            return true;
+
+        // 停止が終わった瞬間に一度だけ復帰処理
+        if (_wasStopped)
+        {
+            _wasStopped = false;
+
+            if (debugDamageStop)
+                Debug.Log($"[BaselineAgent] RESUME HP={hp}/{_health.maxHP} PlayerID={playerId}");
+
+            if (mode == BaselineMode.AStarOracle)
+            {
+                if (rebuildPathOnResume)
+                    BuildAStarPath();
+            }
+            else
+            {
+                // RandomWalk: 次のターゲットを選び直す
+                hasTarget = false;
+            }
+        }
+
+        return false;
+    }
+
 }
 
 
