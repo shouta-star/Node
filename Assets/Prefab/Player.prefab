@@ -12,10 +12,11 @@ GameObject:
   - component: {fileID: 6797595984987093649}
   - component: {fileID: 1227592138390721517}
   - component: {fileID: 5242177830911053058}
-  - component: {fileID: 2377821912756318775}
   - component: {fileID: 1276717745442702468}
   - component: {fileID: 6445760909044610146}
   - component: {fileID: -11731101771326339}
+  - component: {fileID: 2377821912756318775}
+  - component: {fileID: -4458150588479982806}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -114,27 +115,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2377821912756318775
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6997970435145029357}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 117051c4d669caf44964a083feb214e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHP: 10
-  currentHP: 10
-  lastDamagedTime: -1
-  totalDamageTaken: 0
-  stopMoveOnDamage: 1
-  resumeMoveAfterNoDamageSeconds: 3
-  stopMovementForeverOnFirstDamage: 1
-  destroyOnDeath: 1
-  destroyDelay: 0
 --- !u!114 &1276717745442702468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,7 +122,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6997970435145029357}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fa970f044eea104a9f73c4f26d1db62, type: 3}
   m_Name: 
@@ -214,7 +194,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6997970435145029357}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a95e31afb768db44849147cf36bc09a, type: 3}
   m_Name: 
@@ -284,3 +264,43 @@ MonoBehaviour:
   chaseStopRange: 12
   enemyScanInterval: 0.2
   repathEveryFramesWhileChasing: 15
+--- !u!114 &2377821912756318775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6997970435145029357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 117051c4d669caf44964a083feb214e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 10
+  currentHP: 10
+  lastDamagedTime: -1
+  totalDamageTaken: 0
+  stopMoveOnDamage: 1
+  resumeMoveAfterNoDamageSeconds: 3
+  stopMovementForeverOnFirstDamage: 1
+  destroyOnDeath: 1
+  destroyDelay: 0
+--- !u!114 &-4458150588479982806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6997970435145029357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13b206fe92e5847448da1c8ff619379b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableAttack: 1
+  enemyTag: Enemy
+  attackRange: 1
+  attackCooldownSec: 1
+  attackDamage: 1
+  scanIntervalSec: 0.15
+  debugLog: 0
