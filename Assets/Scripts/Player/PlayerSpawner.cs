@@ -48,32 +48,94 @@ public class PlayerSpawner : MonoBehaviour
     //{
     //    do
     //    {
-    //        for (int i = 0; i < spawnCount; i++)
+    //        // 基準スポーン位置（spawnPointがあればそれ、無ければ従来の固定座標）
+    //        Vector3 basePos = (spawnPoint != null)
+    //            ? spawnPoint.position
+    //            : new Vector3(19f, 0f, 10f);
+
+    //        // 上/下/左/右
+    //        Vector3[] dirs = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+
+    //        // 4体に固定（spawnCountはInspectorで4にしておくのが基本）
+    //        int count = Mathf.Min(spawnCount, 4);
+
+    //        for (int i = 0; i < count; i++)
     //        {
-    //            Vector3 pos = new Vector3(-10f, 0f, -5f);
+    //            Vector3 dir = dirs[i];
 
-    //            // ★ Instantiate の戻り値を受け取る
-    //            GameObject obj = Instantiate(playerPrefab, pos, Quaternion.identity);
+    //            // いったん基準位置で生成（Startが走る前に位置/方向を設定する）
+    //            GameObject obj = Instantiate(playerPrefab, basePos, Quaternion.LookRotation(dir, Vector3.up));
 
-    //            // ★ CellFromStart を取得してモードを設定
     //            var cfs = obj.GetComponent<CellFromStart>();
+    //            float cell = (cfs != null) ? cfs.cellSize : 1f;
+
+    //            // 重なり防止：基準位置から1マスずらす（上/下/左/右に配置）
+    //            obj.transform.position = basePos + dir * cell;
+    //            obj.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+
     //            if (cfs != null)
     //            {
+    //                // ★ここが本命：初期進行方向を個体ごとに設定
+    //                cfs.startDirection = dir;
+
+    //                // 既存のモード設定はそのまま
     //                if (unknownSelectModeOptions != null && unknownSelectModeOptions.Count > 0)
     //                    cfs.unknownSelectMode = ChooseUnknownSelectMode();
 
     //                if (targetUpdateModeOptions != null && targetUpdateModeOptions.Count > 0)
     //                    cfs.targetUpdateMode = ChooseTargetUpdateMode();
     //            }
+    //        }
 
-    //            // ★ UnknownQuantity を取得
-    //            UnknownQuantity uq = obj.GetComponent<UnknownQuantity>();
-    //            //Debug.Log($"[Spawner] Player spawned at {pos}, uq={uq}");
+    //        yield return new WaitForSeconds(spawnInterval);
 
-    //            if (uq != null)
+    //    } while (loop);
+    //}
+    //private IEnumerator SpawnPlayers()
+    //{
+    //    do
+    //    {
+    //        // 基準スポーン位置（spawnPoint があればそれ、無ければ従来の固定座標）
+    //        Vector3 basePos = (spawnPoint != null)
+    //            ? spawnPoint.position
+    //            : new Vector3(19f, 0f, 10f);
+
+    //        // 上/下/左/右（4方向を使い回す）
+    //        Vector3[] dirs = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+
+    //        // 4体制限を撤廃：spawnCount の数だけ出す
+    //        int count = Mathf.Max(0, spawnCount);
+
+    //        for (int i = 0; i < count; i++)
+    //        {
+    //            // 方向は4方向を循環
+    //            Vector3 dir = dirs[i % dirs.Length];
+
+    //            // いったん基準位置で生成（Start が走る前に位置/方向を設定する）
+    //            GameObject obj = Instantiate(playerPrefab, basePos, Quaternion.LookRotation(dir, Vector3.up));
+
+    //            var cfs = obj.GetComponent<CellFromStart>();
+    //            float cell = (cfs != null) ? cfs.cellSize : 1f;
+
+    //            // 5体目以降は外側へ（1マス/2マス/3マス…）
+    //            // 0-3 => ring=1, 4-7 => ring=2, 8-11 => ring=3...
+    //            int ring = (i / dirs.Length) + 1;
+
+    //            // 配置
+    //            obj.transform.position = basePos + dir * cell * ring;
+    //            obj.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+
+    //            if (cfs != null)
     //            {
-    //                //Debug.Log($"[Spawner] uq.CurrentNode = {uq.CurrentNode}");
-    //                //Debug.Log($"[Spawner] MapNode.StartNode = {MapNode.StartNode}");
+    //                // 初期進行方向を個体ごとに設定
+    //                cfs.startDirection = dir;
+
+    //                // 既存のモード設定はそのまま
+    //                if (unknownSelectModeOptions != null && unknownSelectModeOptions.Count > 0)
+    //                    cfs.unknownSelectMode = ChooseUnknownSelectMode();
+
+    //                if (targetUpdateModeOptions != null && targetUpdateModeOptions.Count > 0)
+    //                    cfs.targetUpdateMode = ChooseTargetUpdateMode();
     //            }
     //        }
 
@@ -85,34 +147,32 @@ public class PlayerSpawner : MonoBehaviour
     {
         do
         {
-            // 基準スポーン位置（spawnPointがあればそれ、無ければ従来の固定座標）
+            // 基準スポーン位置（spawnPoint があればそれ、無ければ固定座標）
             Vector3 basePos = (spawnPoint != null)
                 ? spawnPoint.position
                 : new Vector3(19f, 0f, 10f);
 
-            // 上/下/左/右
+            // 上/下/左/右（方向は使い回す）
             Vector3[] dirs = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
 
-            // 4体に固定（spawnCountはInspectorで4にしておくのが基本）
-            int count = Mathf.Min(spawnCount, 4);
+            // spawnCount の数だけ出す（5体以上OK）
+            int count = Mathf.Max(0, spawnCount);
 
             for (int i = 0; i < count; i++)
             {
-                Vector3 dir = dirs[i];
+                Vector3 dir = dirs[i % dirs.Length];
 
-                // いったん基準位置で生成（Startが走る前に位置/方向を設定する）
+                // 生成（位置は全員 basePos 固定）
                 GameObject obj = Instantiate(playerPrefab, basePos, Quaternion.LookRotation(dir, Vector3.up));
 
-                var cfs = obj.GetComponent<CellFromStart>();
-                float cell = (cfs != null) ? cfs.cellSize : 1f;
-
-                // 重なり防止：基準位置から1マスずらす（上/下/左/右に配置）
-                obj.transform.position = basePos + dir * cell;
+                // 念のため明示的に固定（Prefab側でズレてても潰す）
+                obj.transform.position = basePos;
                 obj.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
 
+                var cfs = obj.GetComponent<CellFromStart>();
                 if (cfs != null)
                 {
-                    // ★ここが本命：初期進行方向を個体ごとに設定
+                    // 初期進行方向だけ個体ごとに設定
                     cfs.startDirection = dir;
 
                     // 既存のモード設定はそのまま
