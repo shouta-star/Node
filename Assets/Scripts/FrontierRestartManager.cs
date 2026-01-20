@@ -313,13 +313,33 @@ public class FrontierRestartManager : MonoBehaviour
 
 
 
+    //private string GetBaseDir()
+    //{
+    //    string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+    //    string dir = Path.Combine(projectRoot, outputSubFolder);
+    //    Directory.CreateDirectory(dir);
+    //    return dir;
+    //}
     private string GetBaseDir()
     {
-        string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
-        string dir = Path.Combine(projectRoot, outputSubFolder);
+        string dir;
+
+        // ★ outputSubFolder が絶対パスならそれをそのまま使う
+        if (!string.IsNullOrEmpty(outputSubFolder) && Path.IsPathRooted(outputSubFolder))
+        {
+            dir = outputSubFolder;
+        }
+        else
+        {
+            // 従来どおり：プロジェクト直下 + outputSubFolder
+            string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+            dir = Path.Combine(projectRoot, outputSubFolder);
+        }
+
         Directory.CreateDirectory(dir);
         return dir;
     }
+
 
     private void WriteFrontierNodeCsv(int runIdx)
     {
