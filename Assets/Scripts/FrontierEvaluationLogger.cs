@@ -602,4 +602,46 @@ public static class FrontierEvaluationLogger
             sw.WriteLine(line);
         }
     }
+
+    public static void CaptureRunScreenshot()
+    {
+        CaptureRunScreenshot(null);
+    }
+
+    /// <summary>
+    /// Run中のスクショを保存する（tag を付けるとファイル名が上書きされない）
+    /// 例: 20260120_120001.csv → 20260120_120001_S000.png
+    /// </summary>
+    public static void CaptureRunScreenshot(string tag)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(nodeVisitFilePath))
+            {
+                Debug.LogWarning("[FrontierEvaluationLogger] Screenshot skipped: nodeVisitFilePath is null or empty.");
+                return;
+            }
+
+            string basePath = Path.ChangeExtension(nodeVisitFilePath, null);
+
+            string safeTag = "";
+            if (!string.IsNullOrEmpty(tag))
+            {
+                string t = tag;
+                foreach (char c in Path.GetInvalidFileNameChars())
+                    t = t.Replace(c, '_');
+
+                safeTag = "_" + t;
+            }
+
+            string pngPath = basePath + safeTag + ".png";
+            ScreenCapture.CaptureScreenshot(pngPath);
+            Debug.Log($"[FrontierEvaluationLogger] Screenshot saved: {pngPath}");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[FrontierEvaluationLogger] Screenshot capture failed: {ex}");
+        }
+    }
+
 }

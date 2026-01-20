@@ -22,6 +22,14 @@ public class FrontierRestartManager : MonoBehaviour
     // ���u���݂�Run�ԍ��v(1�n�܂�)
     private int runIndex = 1;
 
+    [Header("Periodic Snapshot (Color + Screenshot)")]
+    [SerializeField] private bool enablePeriodicSnapshots = true;
+    [SerializeField] private float snapshotIntervalSec = 1.0f;
+
+    private float nextSnapshotTime = 0f;
+    private int snapshotSeq = 0;
+    private bool snapshotInProgress = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -38,6 +46,24 @@ public class FrontierRestartManager : MonoBehaviour
     {
         FrontierEvaluationLogger.EnsureBaseDir(GetBaseDir());
         FrontierEvaluationLogger.ResetNodeVisitLog(filePrefix, runIndex);
+
+        // ★ 追加：CellFromStart と同じ「一定間隔スナップショット」初期化
+        snapshotSeq = 0;
+        snapshotInProgress = false;
+        nextSnapshotTime = Time.time + Mathf.Max(0.1f, snapshotIntervalSec);
+    }
+
+    private void Update()
+    {
+        if (!enablePeriodicSnapshots) return;
+        if (isRestarting) return;              // リスタート中は撮らない
+        if (snapshotInProgress) return;        // 多重起動防止
+
+        if (Time.time >= nextSnapshotTime)
+        {
+            nextSnapshotTime = Time.time + Mathf.Max(0.1f, snapshotIntervalSec);
+            StartCoroutine(CaptureSnapshotEndOfFrame());
+        }
     }
 
     public int GetRunIndex() => runIndex;
@@ -176,6 +202,17 @@ public class FrontierRestartManager : MonoBehaviour
             Debug.LogError($"[FRM][Flow][A] ApplyColors failed: {ex}");
         }
 
+        // ★ ここを追加：描画完了後にスクショ
+        yield return new WaitForEndOfFrame();
+        try
+        {
+            FrontierEvaluationLogger.CaptureRunScreenshot($"S{finishedRun:000}");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[FRM][Flow] CaptureRunScreenshot failed: {ex}");
+        }
+
         // B) CSV 出力（失敗してもリロードは止めない）
         Debug.Log("[FRM][Flow][B1] WriteFrontierNodeCsv start");
         try
@@ -227,6 +264,11 @@ public class FrontierRestartManager : MonoBehaviour
         {
             Debug.LogError($"[FRM][Flow][C] ResetNodeVisitLog failed: {ex}");
         }
+
+        // ★★★ ここに追加：次Runのスナップショット連番をリセット ★★★
+        snapshotSeq = 0;
+        snapshotInProgress = false;
+        nextSnapshotTime = Time.time + Mathf.Max(0.1f, snapshotIntervalSec);
 
         // D) Player 削除（任意）
         Debug.Log($"[FRM][Flow][D] destroyPlayersBeforeReload={destroyPlayersBeforeReload}");
@@ -343,4 +385,43 @@ public class FrontierRestartManager : MonoBehaviour
 
         File.AppendAllText(path, line);
     }
+
+    private IEnumerator CaptureSnapshotEndOfFrame()
+    {
+        snapshotInProgress = true;
+
+        try
+        {
+            // 1) 色更新
+            try
+            {
+                FrontierNode.ApplyColorsOnceBeforeScreenshot();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[FRM][SNAP] ApplyColors failed: {ex}");
+            }
+
+            // 2) 描画完了待ち
+            yield return new WaitForEndOfFrame();
+
+            // 3) スクショ（同一Run内で上書きされないよう連番）
+            string tag = $"S{snapshotSeq:000}";
+            snapshotSeq++;
+
+            try
+            {
+                FrontierEvaluationLogger.CaptureRunScreenshot(tag);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[FRM][SNAP] CaptureRunScreenshot failed: {ex}");
+            }
+        }
+        finally
+        {
+            snapshotInProgress = false;
+        }
+    }
+
 }

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -623557546645645566}
   - component: {fileID: -2161690921271254666}
   - component: {fileID: 9006207984009038555}
+  - component: {fileID: 1908484801500336057}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -166,3 +167,19 @@ MonoBehaviour:
   arriveEps: 0.05
   repathEverySteps: 3
   debugLog: 1
+--- !u!114 &1908484801500336057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909120521487426562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a09cceb5b9bb09b40a96ca11d72686d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 5
+  currentHP: 5
+  destroyOnDeath: 1
+  debugLog: 0

@@ -143,6 +143,51 @@ public class PlayerSpawner : MonoBehaviour
 
     //    } while (loop);
     //}
+    //private IEnumerator SpawnPlayers()
+    //{
+    //    do
+    //    {
+    //        // 基準スポーン位置（spawnPoint があればそれ、無ければ固定座標）
+    //        Vector3 basePos = (spawnPoint != null)
+    //            ? spawnPoint.position
+    //            : new Vector3(19f, 0f, 10f);
+
+    //        // 上/下/左/右（方向は使い回す）
+    //        Vector3[] dirs = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+
+    //        // spawnCount の数だけ出す（5体以上OK）
+    //        int count = Mathf.Max(0, spawnCount);
+
+    //        for (int i = 0; i < count; i++)
+    //        {
+    //            Vector3 dir = dirs[i % dirs.Length];
+
+    //            // 生成（位置は全員 basePos 固定）
+    //            GameObject obj = Instantiate(playerPrefab, basePos, Quaternion.LookRotation(dir, Vector3.up));
+
+    //            // 念のため明示的に固定（Prefab側でズレてても潰す）
+    //            obj.transform.position = basePos;
+    //            obj.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+
+    //            var cfs = obj.GetComponent<CellFromStart>();
+    //            if (cfs != null)
+    //            {
+    //                // 初期進行方向だけ個体ごとに設定
+    //                cfs.startDirection = dir;
+
+    //                // 既存のモード設定はそのまま
+    //                if (unknownSelectModeOptions != null && unknownSelectModeOptions.Count > 0)
+    //                    cfs.unknownSelectMode = ChooseUnknownSelectMode();
+
+    //                if (targetUpdateModeOptions != null && targetUpdateModeOptions.Count > 0)
+    //                    cfs.targetUpdateMode = ChooseTargetUpdateMode();
+    //            }
+    //        }
+
+    //        yield return new WaitForSeconds(spawnInterval);
+
+    //    } while (loop);
+    //}
     private IEnumerator SpawnPlayers()
     {
         do
@@ -162,17 +207,22 @@ public class PlayerSpawner : MonoBehaviour
             {
                 Vector3 dir = dirs[i % dirs.Length];
 
-                // 生成（位置は全員 basePos 固定）
+                // ★ 1周(4体)ごとに距離を1マス増やす：1,1,1,1, 2,2,2,2, 3,3,3,3...
+                int ring = (i / dirs.Length) + 1;
+
+                // いったん基準位置で生成（Startが走る前に位置/方向を設定する）
                 GameObject obj = Instantiate(playerPrefab, basePos, Quaternion.LookRotation(dir, Vector3.up));
 
-                // 念のため明示的に固定（Prefab側でズレてても潰す）
-                obj.transform.position = basePos;
+                var cfs = obj.GetComponent<CellFromStart>();
+                float cell = (cfs != null) ? cfs.cellSize : 1f;
+
+                // ★ 上の関数に合わせる：基準位置から ring マスずらす
+                obj.transform.position = basePos + dir * (cell * ring);
                 obj.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
 
-                var cfs = obj.GetComponent<CellFromStart>();
                 if (cfs != null)
                 {
-                    // 初期進行方向だけ個体ごとに設定
+                    // 初期進行方向を個体ごとに設定
                     cfs.startDirection = dir;
 
                     // 既存のモード設定はそのまま
@@ -188,6 +238,7 @@ public class PlayerSpawner : MonoBehaviour
 
         } while (loop);
     }
+
 
 
     // ★ UnknownSelectMode を重み付きランダムで 1 つ選ぶ
