@@ -126,9 +126,12 @@ public static class EvaluationLogger
             //string baseDir = @"D:\GitHub\Node\CSV\MostUnknown_OnArrival_FarthestFromStart";
             //string baseDir = @"D:\GitHub\Node\CSV\Test";
             //string baseDir = @"D:\GitHub\Node\CSV\0120";
-            string baseDir = @"D:\GitHub\Node\CSV\0120\CellFromStartNoWallNoEnemy";
-            //string baseDir = @"D:\GitHub\Node\CSV\0120\CellFromStartYesWallNoEnemy";
-            //string baseDir = @"D:\GitHub\Node\CSV\0120\CellFromStartYesWallYesEnemy";
+            //string baseDir = @"D:\GitHub\Node\CSV\NoWallNoDisappearingwallNoEnemy\CellFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\NoWallNoDisappearingwallNoEnemy\AStar";
+            //string baseDir = @"D:\GitHub\Node\CSV\NoWallYesDisappearingwallYesEnemy\CellFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\NoWallYesDisappearingwallYesEnemy\AStar";
+            //string baseDir = @"D:\GitHub\Node\CSV\YesWallNoDisappearingwallYesEnemy\CellFromStart";
+            string baseDir = @"D:\GitHub\Node\CSV\YesWallNoDisappearingwallYesEnemy\AStar";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);
@@ -271,9 +274,12 @@ public static class EvaluationLogger
             //string baseDir = @"D:\GitHub\Node\CSV\Farthest_OnArrival_NewestNode";
             //string baseDir = @"D:\GitHub\Node\CSV\MostUnknown_OnArrival_FarthestFromStart";
             //string baseDir = @"D:\GitHub\Node\CSV\Test";
-            string baseDir = @"D:\GitHub\Node\CSV\0120\CellFromStartNoWallNoEnemy";
-            //string baseDir = @"D:\GitHub\Node\CSV\0120\CellFromStartYesWallNoEnemy";
-            //string baseDir = @"D:\GitHub\Node\CSV\0120\CellFromStartYesWallYesEnemy";
+            //string baseDir = @"D:\GitHub\Node\CSV\NoWallNoDisappearingwallNoEnemy\CellFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\NoWallNoDisappearingwallNoEnemy\AStar";
+            //string baseDir = @"D:\GitHub\Node\CSV\NoWallYesDisappearingwallYesEnemy\CellFromStart";
+            //string baseDir = @"D:\GitHub\Node\CSV\NoWallYesDisappearingwallYesEnemy\AStar";
+            //string baseDir = @"D:\GitHub\Node\CSV\YesWallNoDisappearingwallYesEnemy\CellFromStart";
+            string baseDir = @"D:\GitHub\Node\CSV\YesWallNoDisappearingwallYesEnemy\AStar";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);
