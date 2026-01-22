@@ -42322,7 +42322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e60adcd603e8b44e9420fb25b5696a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outputSubFolder: D:\GitHub\Node\CSV\NoWallNoDisappearingwallNoEnemy\Frontier
+  outputSubFolder: D:\GitHub\Node\CSV\Test"
   filePrefix: Frontier
   destroyPlayersBeforeReload: 1
   enablePeriodicSnapshots: 1

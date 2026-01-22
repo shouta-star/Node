@@ -12,14 +12,14 @@ public class CellFromStart : MonoBehaviour
     public LayerMask wallLayer;
     public LayerMask nodeLayer;
 
-    //[Header("初期設定")]
-    public enum StartDirectionMode
-    {
-        Manual,
-        AutoFromSpawnRelativeToOrigin,
-        AutoFromSpawnRelativeToStartNode,
-        AutoByPlayerId
-    }
+    ////[Header("初期設定")]
+    //public enum StartDirectionMode
+    //{
+    //    Manual,
+    //    AutoFromSpawnRelativeToOrigin,
+    //    AutoFromSpawnRelativeToStartNode,
+    //    AutoByPlayerId
+    //}
 
     [Tooltip("startDirectionMode が Manual のときのみ使用。Auto のときは起動時に上書きされます。")]
     public Vector3 startDirection = Vector3.forward;
@@ -27,7 +27,7 @@ public class CellFromStart : MonoBehaviour
     [Tooltip("Auto で決めた方向を反転（外向き⇔内向き）したい場合にON。")]
     public bool invertAutoStartDirection = false;
 
-    public StartDirectionMode startDirectionMode = StartDirectionMode.AutoFromSpawnRelativeToOrigin;
+    //public StartDirectionMode startDirectionMode = StartDirectionMode.AutoFromSpawnRelativeToOrigin;
 
     [Tooltip("AutoFromSpawnRelativeToOrigin の基準点。ここが入っている場合は gridOrigin より優先してこのTransform位置を基準にします（PlayerSpawner / spawnPoint を想定）。")]
     public Transform startDirectionOrigin;
@@ -284,11 +284,15 @@ public class CellFromStart : MonoBehaviour
     // ★ Playerごと：一度踏んだ MustPass（セル）を記録
     private HashSet<Vector2Int> visitedMustPassCells = new HashSet<Vector2Int>();
 
+    private System.Random dirRng;
+
     void Start()
     {
         playerId = nextPlayerId;
         nextPlayerId++;
         gameObject.name = $"Player_{playerId}";
+
+        dirRng = new System.Random(playerId * 10007 + 12345);
 
         // プレイヤー座標をスナップ
         Vector3 snapped = SnapToGrid(transform.position);
@@ -355,34 +359,54 @@ public class CellFromStart : MonoBehaviour
     // =============================
     // StartDirection auto assignment
     // =============================
+    //private void ApplyAutoStartDirection(Vector3 snappedWorldPos)
+    //{
+    //    if (startDirectionMode == StartDirectionMode.Manual)
+    //        return;
+
+    //    Vector3 dir = Vector3.forward;
+
+    //    if (startDirectionMode == StartDirectionMode.AutoByPlayerId)
+    //    {
+    //        dir = DirectionFromPlayerId(playerId);
+    //    }
+    //    else
+    //    {
+    //        Vector3 refPos = (startDirectionOrigin != null) ? startDirectionOrigin.position : gridOrigin;
+
+    //        if (startDirectionMode == StartDirectionMode.AutoFromSpawnRelativeToStartNode)
+    //        {
+    //            if (MapNode.StartNode != null)
+    //                refPos = MapNode.StartNode.transform.position;
+    //        }
+
+    //        Vector3 delta = snappedWorldPos - refPos;
+    //        dir = CardinalFromDeltaXZ(delta);
+
+    //        // スポーンが基準と同じ位置（delta=0）になった場合の保険
+    //        if (dir.sqrMagnitude < 1e-6f)
+    //            dir = DirectionFromPlayerId(playerId);
+    //    }
+
+    //    if (invertAutoStartDirection)
+    //        dir = -dir;
+
+    //    startDirection = dir;
+
+    //    if (debugLog)
+    //        Debug.Log($"[CFS][STARTDIR] playerId={playerId} mode={startDirectionMode} dir={startDirection}");
+    //}
     private void ApplyAutoStartDirection(Vector3 snappedWorldPos)
     {
-        if (startDirectionMode == StartDirectionMode.Manual)
-            return;
+        // PlayerSpawner から渡される想定の基準点
+        Vector3 refPos = (startDirectionOrigin != null) ? startDirectionOrigin.position : gridOrigin;
 
-        Vector3 dir = Vector3.forward;
+        Vector3 delta = snappedWorldPos - refPos;
+        Vector3 dir = CardinalFromDeltaXZ(delta);
 
-        if (startDirectionMode == StartDirectionMode.AutoByPlayerId)
-        {
+        // 基準点と同位置になった保険（ゼロ方向回避）
+        if (dir.sqrMagnitude < 1e-6f)
             dir = DirectionFromPlayerId(playerId);
-        }
-        else
-        {
-            Vector3 refPos = (startDirectionOrigin != null) ? startDirectionOrigin.position : gridOrigin;
-
-            if (startDirectionMode == StartDirectionMode.AutoFromSpawnRelativeToStartNode)
-            {
-                if (MapNode.StartNode != null)
-                    refPos = MapNode.StartNode.transform.position;
-            }
-
-            Vector3 delta = snappedWorldPos - refPos;
-            dir = CardinalFromDeltaXZ(delta);
-
-            // スポーンが基準と同じ位置（delta=0）になった場合の保険
-            if (dir.sqrMagnitude < 1e-6f)
-                dir = DirectionFromPlayerId(playerId);
-        }
 
         if (invertAutoStartDirection)
             dir = -dir;
@@ -390,8 +414,9 @@ public class CellFromStart : MonoBehaviour
         startDirection = dir;
 
         if (debugLog)
-            Debug.Log($"[CFS][STARTDIR] playerId={playerId} mode={startDirectionMode} dir={startDirection}");
+            Debug.Log($"[CFS][STARTDIR] playerId={playerId} origin={(startDirectionOrigin ? startDirectionOrigin.name : "gridOrigin")} dir={startDirection}");
     }
+
 
     private Vector3 DirectionFromPlayerId(int id)
     {
@@ -1056,27 +1081,48 @@ public class CellFromStart : MonoBehaviour
 
 
     // ★ Unknown方向を選ぶ（Excluded Node 方向は「壁扱い」で除外）
+    //private Vector3? GetLocalUnknownDirection(MapNode node)
+    //{
+    //    if (node == null) return null;
+
+    //    Vector3[] dirs = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+
+    //    foreach (var dir in dirs)
+    //    {
+    //        // 既にリンクがあるなら Unknown ではない
+    //        if (IsLinkedDirection(node, dir))
+    //            continue;
+
+    //        // 壁 or Excluded Node なら掘れない（Unknownにしない）
+    //        if (IsWall(node, dir))
+    //            continue;
+
+    //        return dir;
+    //    }
+
+    //    return null;
+    //}
     private Vector3? GetLocalUnknownDirection(MapNode node)
     {
-        if (node == null) return null;
-
+        // 4方向（順番はもう意味を持たない）
         Vector3[] dirs = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
 
+        // 条件を満たす候補を集める
+        List<Vector3> candidates = new List<Vector3>(4);
         foreach (var dir in dirs)
         {
-            // 既にリンクがあるなら Unknown ではない
-            if (IsLinkedDirection(node, dir))
-                continue;
-
-            // 壁 or Excluded Node なら掘れない（Unknownにしない）
-            if (IsWall(node, dir))
-                continue;
-
-            return dir;
+            if (IsLinkedDirection(node, dir)) continue;
+            if (IsWall(node, dir)) continue;
+            candidates.Add(dir);
         }
 
-        return null;
+        if (candidates.Count == 0) return null;
+
+        // 候補からランダムに1つ
+        int idx = dirRng.Next(candidates.Count);
+        return candidates[idx];
     }
+
 
     private MapNode SelectUnknownNode(List<MapNode> unknownNodes, MapNode current)
     {
