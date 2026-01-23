@@ -70,6 +70,9 @@ public class CellFromStart : MonoBehaviour
     [Tooltip("Penalty applied per prior visit to a candidate node (per player). Higher = avoids revisiting.")]
     public float revisitPenaltyPerVisit = 5f;
 
+    [Tooltip("MustPass field multiplier. Set so (mustPassFieldBase * multiplier) > targetFieldMax to dominate.")]
+    public float mustPassFieldMultiplier = 6f; // 200*6=1200 > 1000
+
     // -----------------------------
     // Weight Field Params (Manhattan)
     // -----------------------------
@@ -85,7 +88,8 @@ public class CellFromStart : MonoBehaviour
 
     [Tooltip("MustPass bonus decay per Manhattan step (0-1). Higher = longer reach.")]
     [Range(0.5f, 0.99f)]
-    public float mustPassFieldDecay = 0.85f;
+    //public float mustPassFieldDecay = 0.85f;
+    public float mustPassFieldDecay = 0.95f;
 
     [Tooltip("How often (frames) to rebuild MustPass cache. (For 10+ MustPass, 30 is a good start.)")]
     public int mustPassCacheRefreshFrames = 30;
@@ -1632,7 +1636,8 @@ public class CellFromStart : MonoBehaviour
             if (dM != int.MaxValue)
             {
                 float mustBonus = mustPassFieldBase * Mathf.Pow(mustPassFieldDecay, dM);
-                score += mustBonus;
+                //score += mustBonus;
+                score += mustBonus * mustPassFieldMultiplier;
             }
         }
 
