@@ -88,8 +88,8 @@ public class CellFromStart : MonoBehaviour
 
     [Tooltip("MustPass bonus decay per Manhattan step (0-1). Higher = longer reach.")]
     [Range(0.5f, 0.99f)]
-    //public float mustPassFieldDecay = 0.85f;
-    public float mustPassFieldDecay = 0.95f;
+    public float mustPassFieldDecay = 0.85f;
+    //public float mustPassFieldDecay = 0.95f;
 
     [Tooltip("How often (frames) to rebuild MustPass cache. (For 10+ MustPass, 30 is a good start.)")]
     public int mustPassCacheRefreshFrames = 30;
@@ -1636,8 +1636,8 @@ public class CellFromStart : MonoBehaviour
             if (dM != int.MaxValue)
             {
                 float mustBonus = mustPassFieldBase * Mathf.Pow(mustPassFieldDecay, dM);
-                //score += mustBonus;
-                score += mustBonus * mustPassFieldMultiplier;
+                score += mustBonus;
+                //score += mustBonus * mustPassFieldMultiplier;
             }
         }
 
