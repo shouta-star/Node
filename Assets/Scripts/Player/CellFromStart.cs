@@ -84,12 +84,13 @@ public class CellFromStart : MonoBehaviour
     public float targetFieldSlope = 10f;
 
     [Tooltip("MustPass peak bonus at MustPass node (keep smaller than targetFieldMax).")]
-    public float mustPassFieldBase = 200f;
+    //public float mustPassFieldBase = 200f;
+    public float mustPassFieldBase = 1000f;
 
     [Tooltip("MustPass bonus decay per Manhattan step (0-1). Higher = longer reach.")]
     [Range(0.5f, 0.99f)]
-    public float mustPassFieldDecay = 0.85f;
-    //public float mustPassFieldDecay = 0.95f;
+    //public float mustPassFieldDecay = 0.85f;
+    public float mustPassFieldDecay = 0.95f;
 
     [Tooltip("How often (frames) to rebuild MustPass cache. (For 10+ MustPass, 30 is a good start.)")]
     public int mustPassCacheRefreshFrames = 30;
