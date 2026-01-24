@@ -10,7 +10,7 @@ public class FrontierRestartManager : MonoBehaviour
     public static FrontierRestartManager Instance = null;
 
     [Header("CSV")]
-    public string outputSubFolder = "CSV/Frontier"; // �v���W�F�N�g��������̑���
+    public string outputSubFolder = "CSV/Frontier";
     public string filePrefix = "Frontier";
 
     [Header("Restart")]
@@ -19,7 +19,6 @@ public class FrontierRestartManager : MonoBehaviour
     private bool isRestarting = false;
     private bool hasRestarted = false;
 
-    // ���u���݂�Run�ԍ��v(1�n�܂�)
     private int runIndex = 1;
 
     [Header("Periodic Snapshot (Color + Screenshot)")]
@@ -86,99 +85,6 @@ public class FrontierRestartManager : MonoBehaviour
         StartCoroutine(RestartFlow(player));
     }
 
-
-    //private IEnumerator RestartFlow(FrontierExplorer player)
-    //{
-    //    yield return null; // Goal到達フレームの処理が落ち着くのを待つ
-
-    //    int finishedRun = runIndex;
-
-    //    try
-    //    {
-    //        // A) 色確定（スクショ用）
-    //        FrontierNode.ApplyColorsOnceBeforeScreenshot();
-
-    //        // B) CSV 出力（ここが例外で落ちると Reload されないので try/catch）
-    //        try { WriteFrontierNodeCsv(finishedRun); }
-    //        catch (Exception ex) { Debug.LogError($"[FrontierRestartManager] WriteFrontierNodeCsv failed: {ex}"); }
-
-    //        try { WriteRunSummaryCsv(finishedRun, player); }
-    //        catch (Exception ex) { Debug.LogError($"[FrontierRestartManager] WriteRunSummaryCsv failed: {ex}"); }
-
-    //        // C) 次 Run へ（Visitログ切替）
-    //        runIndex++;
-    //        try { FrontierEvaluationLogger.ResetNodeVisitLog(filePrefix, runIndex); }
-    //        catch (Exception ex) { Debug.LogError($"[FrontierRestartManager] ResetNodeVisitLog failed: {ex}"); }
-    //    }
-    //    finally
-    //    {
-    //        // D) Player 削除（任意）
-    //        if (destroyPlayersBeforeReload)
-    //        {
-    //            var players = FindObjectsOfType<FrontierExplorer>();
-    //            foreach (var p in players) Destroy(p.gameObject);
-    //        }
-
-    //        yield return null;
-
-    //        // E) Node クリア
-    //        FrontierNode.ClearAllNodes();
-
-    //        // F) フラグ解除
-    //        isRestarting = false;
-    //        hasRestarted = false;
-
-    //        // G) シーンリロード
-    //        string sceneName = SceneManager.GetActiveScene().name;
-    //        Debug.Log($"[FrontierRestartManager] Reload scene: {sceneName}");
-    //        SceneManager.LoadScene(sceneName);
-    //    }
-    //}
-    //private IEnumerator RestartFlow(FrontierExplorer player)
-    //{
-    //    // Goal到達フレームの処理が落ち着くのを待つ
-    //    yield return null;
-
-    //    int finishedRun = runIndex;
-
-    //    // A) 色確定（スクショ用）
-    //    try { FrontierNode.ApplyColorsOnceBeforeScreenshot(); }
-    //    catch (Exception ex) { Debug.LogError($"[FrontierRestartManager] ApplyColors failed: {ex}"); }
-
-    //    // B) CSV 出力（失敗してもリロードは止めない）
-    //    try { WriteFrontierNodeCsv(finishedRun); }
-    //    catch (Exception ex) { Debug.LogError($"[FrontierRestartManager] WriteFrontierNodeCsv failed: {ex}"); }
-
-    //    try { WriteRunSummaryCsv(finishedRun, player); }
-    //    catch (Exception ex) { Debug.LogError($"[FrontierRestartManager] WriteRunSummaryCsv failed: {ex}"); }
-
-    //    // C) 次 Run へ（Visitログ切替）
-    //    runIndex++;
-    //    try { FrontierEvaluationLogger.ResetNodeVisitLog(filePrefix, runIndex); }
-    //    catch (Exception ex) { Debug.LogError($"[FrontierRestartManager] ResetNodeVisitLog failed: {ex}"); }
-
-    //    // D) Player 削除（任意）
-    //    if (destroyPlayersBeforeReload)
-    //    {
-    //        var players = FindObjectsOfType<FrontierExplorer>();
-    //        foreach (var p in players) Destroy(p.gameObject);
-    //    }
-
-    //    yield return null;
-
-    //    // E) Node クリア
-    //    try { FrontierNode.ClearAllNodes(); }
-    //    catch (Exception ex) { Debug.LogError($"[FrontierRestartManager] ClearAllNodes failed: {ex}"); }
-
-    //    // F) フラグ解除
-    //    isRestarting = false;
-    //    hasRestarted = false;
-
-    //    // G) シーンリロード
-    //    string sceneName = SceneManager.GetActiveScene().name;
-    //    Debug.Log($"[FrontierRestartManager] Reload scene: {sceneName}");
-    //    SceneManager.LoadScene(sceneName);
-    //}
     private IEnumerator RestartFlow(FrontierExplorer player)
     {
         Debug.Log($"[FRM][Flow] BEGIN runIndex={runIndex} player={(player ? player.name : "null")}");
