@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Attacks nearest Enemy in range (distance-based, no collider needed).
+/// </summary>
 public class PlayerAttack : MonoBehaviour
 {
     [Header("Target")]

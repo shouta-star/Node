@@ -1,5 +1,11 @@
 using UnityEngine;
 
+/// <summary>
+/// Player health component.
+/// - Manages HP
+/// - Receives damage via TakeDamage
+/// - Records last time damaged (for "no-damage time window" logic later)
+/// </summary>
 public class PlayerHealth : MonoBehaviour
 {
     [Header("HP")]
