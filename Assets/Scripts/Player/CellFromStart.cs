@@ -78,7 +78,8 @@ public class CellFromStart : MonoBehaviour
     // -----------------------------
     [Header("Weight Field (Manhattan)")]
     [Tooltip("BestTarget weight at the target (the maximum).")]
-    public float targetFieldMax = 1000f;
+    //public float targetFieldMax = 1000f;
+    public float targetFieldMax = 100f;
 
     [Tooltip("How much the BestTarget weight decreases per Manhattan step.")]
     public float targetFieldSlope = 10f;
@@ -89,8 +90,8 @@ public class CellFromStart : MonoBehaviour
 
     [Tooltip("MustPass bonus decay per Manhattan step (0-1). Higher = longer reach.")]
     [Range(0.5f, 0.99f)]
-    public float mustPassFieldDecay = 0.85f;
-    //public float mustPassFieldDecay = 0.95f;
+    //public float mustPassFieldDecay = 0.85f;
+    public float mustPassFieldDecay = 0.95f;
 
     [Tooltip("How often (frames) to rebuild MustPass cache. (For 10+ MustPass, 30 is a good start.)")]
     public int mustPassCacheRefreshFrames = 30;
