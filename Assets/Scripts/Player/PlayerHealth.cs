@@ -1,11 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Player health component.
-/// - Manages HP
-/// - Receives damage via TakeDamage
-/// - Records last time damaged (for "no-damage time window" logic later)
-/// </summary>
 public class PlayerHealth : MonoBehaviour
 {
     [Header("HP")]
@@ -81,7 +75,6 @@ public class PlayerHealth : MonoBehaviour
         // if (currentHP == 0) { ... }
     }
 
-    /// <summary>Seconds since last hit. Returns +infinity if never damaged.</summary>
     public float TimeSinceLastDamaged()
     {
         if (lastDamagedTime < 0f) return float.PositiveInfinity;
