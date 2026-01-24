@@ -1,4 +1,4 @@
-﻿///// <summary>
+﻿//// <summary>
 ///// CellFromStart（改良版）　B版
 ///// UnknownCount・DistanceFromStart を用いた探索＋最適化ハイブリッドAI
 ///// 終端では Unknown最優先＋複数候補なら Distance を採用

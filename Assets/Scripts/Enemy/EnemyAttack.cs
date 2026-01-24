@@ -1,8 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Attacks the current target selected by EnemyTargetSelector when in range.
-/// </summary>
 [RequireComponent(typeof(EnemyTargetSelector))]
 public class EnemyAttack : MonoBehaviour
 {
