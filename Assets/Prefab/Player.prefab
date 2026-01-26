@@ -143,7 +143,7 @@ MonoBehaviour:
   nodePrefab: {fileID: 3747964638906286118, guid: 5c5db537eebc4e04991638df38c716d5, type: 3}
   stopMoveWhileRecentlyDamaged: 1
   unknownReferenceDepth: 5
-  weightUnknown: 1
+  weightUnknown: 5
   weightDistance: 1
   useLocalNextStepOnly: 1
   weightToTarget: 1
@@ -153,11 +153,11 @@ MonoBehaviour:
   mustPassScoreScale: 10
   revisitPenaltyPerVisit: 5
   mustPassFieldMultiplier: 6
-  targetFieldMax: 1000
+  targetFieldMax: 100
   targetFieldSlope: 10
-  mustPassFieldBase: 200
+  mustPassFieldBase: 100
   mustPassFieldDecay: 0.85
-  mustPassCacheRefreshFrames: 30
+  mustPassCacheRefreshFrames: 20
   linkRayMaxSteps: 10
   pointGridOrigin: {x: 0, y: 0, z: 0}
   pointCellSize: 1
@@ -174,7 +174,7 @@ MonoBehaviour:
   tempAvoidSteps: 20
   oscillLimit: 4
   destroyAfterNewNodes: 1000
-  mustPassLifetimeSec: 8
+  mustPassLifetimeSec: 60
   mustPassScanIntervalSec: 0.25
   useMustPassAsWeight: 1
   normalEnterCost: 1

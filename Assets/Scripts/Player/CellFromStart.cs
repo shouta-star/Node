@@ -35,10 +35,10 @@ public class CellFromStart : MonoBehaviour
     public Vector3 gridOrigin = Vector3.zero;
     public GameObject nodePrefab;
 
-    [Header("Damage Stop (No-damage resume)")]
+    [Header("ダメージ停止（無被弾で再開）")]
     public bool stopMoveWhileRecentlyDamaged = true;
 
-    [Tooltip("Movement is paused until Time.time >= damageStopUntilTime")]
+    [Tooltip("Time.time が damageStopUntilTime 以上になるまで移動を停止する")]
     private float damageStopUntilTime = -1f;
 
     [Header("探索パラメータ")]
@@ -48,52 +48,54 @@ public class CellFromStart : MonoBehaviour
     public float weightUnknown = 1f;
     public float weightDistance = 1f;
 
-    [Header("Local Next-Step (no full path)")]
-    [Tooltip("If true, next node is chosen only from neighbors using node weights (no full path search).")]
+    [Header("局所次ステップ（全経路探索なし）")]
+    [Tooltip("true の場合、隣接ノードのみから重みで次ノードを選ぶ（フルパス探索しない）")]
     public bool useLocalNextStepOnly = true;
 
-    [Tooltip("Target proximity weight. Higher means stronger pull toward bestTarget (smaller distance).")]
+    [Tooltip("BestTarget（目標）への引力の強さ。大きいほど目標へ寄りやすい")]
     public float weightToTarget = 1f;
 
-    [Tooltip("Large penalty to avoid immediate backtrack to the previous node.")]
+    [Tooltip("直前ノードへの即時バックトラックを避けるための大きなペナルティ")]
     public float backtrackPenalty = 1000f;
 
-    [Tooltip("If true, when from.links is empty, also treat reverse links (other.links contains from) as candidates.")]
+    [Tooltip("from.links が空のとき、逆リンク（other.links に from が含まれる）も候補として扱う")]
     public bool localUseReverseLinkRescue = true;
 
-    [Tooltip("If true, write computed weight to MapNode.value and distance-to-target to MapNode.DistanceFromGoal (debug/visualization).")]
+    [Tooltip("計算した重みを MapNode.value、目標距離を MapNode.DistanceFromGoal に書き込む（デバッグ可視化用）")]
     public bool localWriteWeightToNode = true;
 
-    [Tooltip("MustPass score scale when using local next-step. (Uses normalEnterCost - GetEnterCost(node)) * scale")]
+    [Header("MustPass関連（局所次ステップ用）")]
+    [Tooltip("MustPassの進入コスト差分（normalEnterCost - EnterCost）に掛けるスケール")]
     public float mustPassScoreScale = 10f;
 
-    [Tooltip("Penalty applied per prior visit to a candidate node (per player). Higher = avoids revisiting.")]
+    [Tooltip("候補ノードの過去訪問回数に応じて減点する係数（大きいほど再訪を避ける）")]
     public float revisitPenaltyPerVisit = 5f;
 
-    [Tooltip("MustPass field multiplier. Set so (mustPassFieldBase * multiplier) > targetFieldMax to dominate.")]
+    [Tooltip("MustPassフィールドの倍率。mustPassFieldBase * multiplier が targetFieldMax より大きいと MustPass が優勢になりやすい")]
     public float mustPassFieldMultiplier = 6f; // 200*6=1200 > 1000
 
     // -----------------------------
     // Weight Field Params (Manhattan)
     // -----------------------------
-    [Header("Weight Field (Manhattan)")]
-    [Tooltip("BestTarget weight at the target (the maximum).")]
-    //public float targetFieldMax = 1000f;
-    public float targetFieldMax = 100f;
+    [Header("重みフィールド（マンハッタン距離）")]
+    [Tooltip("BestTarget上（距離0）の最大スコア（天井値）")]
+    //public float targetFieldMax = 100f;
+    public float targetFieldMax = 0f;
 
-    [Tooltip("How much the BestTarget weight decreases per Manhattan step.")]
-    public float targetFieldSlope = 10f;
+    [Tooltip("BestTargetからマンハッタン距離が1増えるごとに、どれだけスコアが減るか（傾き）")]
+    //public float targetFieldSlope = 10f;
+    public float targetFieldSlope = 0f;
 
-    [Tooltip("MustPass peak bonus at MustPass node (keep smaller than targetFieldMax).")]
-    public float mustPassFieldBase = 200f;
-    //public float mustPassFieldBase = 1000f;
+    [Tooltip("MustPass上（距離0）の最大ボーナス（ピーク値）")]
+    //public float mustPassFieldBase = 200f;
+    public float mustPassFieldBase = 1000f;
 
-    [Tooltip("MustPass bonus decay per Manhattan step (0-1). Higher = longer reach.")]
+    [Tooltip("MustPassボーナスの距離減衰率（0〜1）。高いほど遠くまで影響する")]
     [Range(0.5f, 0.99f)]
     //public float mustPassFieldDecay = 0.85f;
-    public float mustPassFieldDecay = 0.95f;
+    public float mustPassFieldDecay = 0.90f;
 
-    [Tooltip("How often (frames) to rebuild MustPass cache. (For 10+ MustPass, 30 is a good start.)")]
+    [Tooltip("MustPassキャッシュを再構築する間隔（フレーム）。MustPassが多い場合は30程度が目安")]
     public int mustPassCacheRefreshFrames = 30;
     [Header("Ray設定")]
     public int linkRayMaxSteps = 100;

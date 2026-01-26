@@ -111,7 +111,7 @@ public static class EvaluationLogger
             //string baseDir = @"D:\GitHub\Node\CSV\NoWallYesDisappearingwallYesEnemy\AStar";
             //string baseDir = @"D:\GitHub\Node\CSV\YesWallNoDisappearingwallYesEnemy\CellFromStart";
             //string baseDir = @"D:\GitHub\Node\CSV\YesWallNoDisappearingwallYesEnemy\AStar";
-            string baseDir = @"D:\GitHub\NodeGitHub\CSV\0124";
+            string baseDir = @"D:\GitHub\Node\CSV\0126";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);
@@ -245,7 +245,7 @@ public static class EvaluationLogger
             //string baseDir = @"D:\GitHub\Node\CSV\NoWallYesDisappearingwallYesEnemy\AStar";
             //string baseDir = @"D:\GitHub\Node\CSV\YesWallNoDisappearingwallYesEnemy\CellFromStart";
             //string baseDir = @"D:\GitHub\Node\CSV\YesWallNoDisappearingwallYesEnemy\AStar";
-            string baseDir = @"D:\GitHub\NodeGitHub\CSV\0124";
+            string baseDir = @"D:\GitHub\Node\CSV\0126";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);

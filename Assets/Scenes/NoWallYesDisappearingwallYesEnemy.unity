@@ -204,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -293,7 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -382,7 +382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -392,7 +392,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -539,7 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -628,7 +628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -717,7 +717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -821,7 +821,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -910,7 +910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -999,7 +999,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -1123,7 +1123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -1212,7 +1212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -1233,15 +1233,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &57818161 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 337112381}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &62252214
 GameObject:
   m_ObjectHideFlags: 0
@@ -1424,7 +1419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -1513,7 +1508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -1584,15 +1579,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &86033703 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 533267986}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &86201474
 Transform:
   m_ObjectHideFlags: 0
@@ -1770,7 +1760,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -1859,7 +1849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -1948,7 +1938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -2052,7 +2042,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -2191,7 +2181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -2280,7 +2270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -2369,7 +2359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -2405,15 +2395,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &122598914 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 156654707}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &123189441
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2499,7 +2484,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -2603,7 +2588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -2692,7 +2677,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -2781,7 +2766,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -2900,7 +2885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -2910,7 +2895,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3057,7 +3042,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -3146,7 +3131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -3156,7 +3141,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3303,7 +3288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -3392,7 +3377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -3413,15 +3398,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &174564387 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 666244390}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &176667659
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3507,7 +3487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -3528,22 +3508,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &177182382 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 538792654}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &177667248
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3690,7 +3665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -3779,7 +3754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -3789,7 +3764,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3868,15 +3843,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 1
   autoStart: 1
---- !u!4 &199345722 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 742713882}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &202174724
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3962,7 +3932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -4051,7 +4021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -4160,7 +4130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -4170,7 +4140,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4317,7 +4287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -4338,15 +4308,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &228391044 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 860064820}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &230002937
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4432,7 +4397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -4521,7 +4486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -4630,7 +4595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -4651,15 +4616,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &243538364 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 924352447}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &243628247
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4745,7 +4705,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -4854,7 +4814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -4943,7 +4903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -5032,7 +4992,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -5136,7 +5096,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -5225,7 +5185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -5314,7 +5274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -5403,7 +5363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -5492,7 +5452,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -5581,7 +5541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -5685,7 +5645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -5772,7 +5732,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5919,7 +5879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -6008,7 +5968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -6097,7 +6057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -6202,7 +6162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -6448,7 +6408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -6478,7 +6438,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6625,7 +6585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -6635,7 +6595,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6697,80 +6657,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 57818160}
   m_SourcePrefab: {fileID: 100100000, guid: fa4994329249af3438497f53f67cb831, type: 3}
---- !u!1 &340272477
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 340272478}
-  m_Layer: 6
-  m_Name: TimeHideWall
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &340272478
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 340272477}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1978419738}
-  - {fileID: 1821590870}
-  - {fileID: 1944653945}
-  - {fileID: 529085191}
-  - {fileID: 2105296540}
-  - {fileID: 2007319948}
-  - {fileID: 1983034775}
-  - {fileID: 86033703}
-  - {fileID: 2049814043}
-  - {fileID: 790344670}
-  - {fileID: 174564387}
-  - {fileID: 926867008}
-  - {fileID: 1951020416}
-  - {fileID: 1744033295}
-  - {fileID: 737605117}
-  - {fileID: 792901406}
-  - {fileID: 402458838}
-  - {fileID: 2032840660}
-  - {fileID: 1857479604}
-  - {fileID: 1989417051}
-  - {fileID: 199345722}
-  - {fileID: 1846117989}
-  - {fileID: 1035162869}
-  - {fileID: 177182382}
-  - {fileID: 1287039707}
-  - {fileID: 1968209480}
-  - {fileID: 1889606677}
-  - {fileID: 1225018675}
-  - {fileID: 122598914}
-  - {fileID: 1970989121}
-  - {fileID: 243538364}
-  - {fileID: 1330007223}
-  - {fileID: 549004876}
-  - {fileID: 502050084}
-  - {fileID: 423229970}
-  - {fileID: 1220273124}
-  - {fileID: 1118836301}
-  - {fileID: 943960794}
-  - {fileID: 1531269763}
-  - {fileID: 2021052410}
-  - {fileID: 228391044}
-  - {fileID: 2114746805}
-  - {fileID: 57818161}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &342232667
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6856,7 +6742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -6985,7 +6871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -7074,7 +6960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -7163,7 +7049,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -7267,7 +7153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -7371,7 +7257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -7460,7 +7346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -7549,7 +7435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -7638,7 +7524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -7727,7 +7613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -7816,7 +7702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -7905,7 +7791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -7994,7 +7880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -8015,15 +7901,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &402458838 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1473452983}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &406225999
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8109,7 +7990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -8396,7 +8277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -8437,15 +8318,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &423229970 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 707970408}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &423433520
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8531,7 +8407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -8640,7 +8516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -8650,7 +8526,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8797,7 +8673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -8902,7 +8778,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -8991,7 +8867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -9080,7 +8956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -9169,7 +9045,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -9258,7 +9134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -9347,7 +9223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -9436,7 +9312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -9525,7 +9401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -9696,7 +9572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -9785,7 +9661,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -9874,7 +9750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -10060,7 +9936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -10170,7 +10046,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -10274,7 +10150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -10363,7 +10239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -10452,7 +10328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -10561,7 +10437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -10650,7 +10526,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -10760,7 +10636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -10770,7 +10646,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10917,7 +10793,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -10942,7 +10818,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11010,7 +10886,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11089,15 +10965,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &502050084 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 334163860}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &503320312
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11183,7 +11054,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -11272,7 +11143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -11282,7 +11153,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11429,7 +11300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -11518,7 +11389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -11607,7 +11478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -11696,7 +11567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -11785,7 +11656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -11874,7 +11745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -11895,15 +11766,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &529085191 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 2116309601}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &530569169
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11989,7 +11855,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -12078,7 +11944,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -12088,7 +11954,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12235,7 +12101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -12245,7 +12111,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12392,7 +12258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -12481,7 +12347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -12502,15 +12368,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &549004876 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 495346784}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &551417169
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12596,7 +12457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -12705,7 +12566,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -12794,7 +12655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -12883,7 +12744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -12987,7 +12848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -13076,7 +12937,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -13165,7 +13026,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -13254,7 +13115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -13343,7 +13204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -13432,7 +13293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -13521,7 +13382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -13645,7 +13506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -13734,7 +13595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -13823,7 +13684,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -13953,7 +13814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -14193,7 +14054,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -14302,7 +14163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -14513,7 +14374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -14602,7 +14463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -14691,7 +14552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -14780,7 +14641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -14869,7 +14730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -14958,7 +14819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -14988,7 +14849,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15150,7 +15011,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -15239,7 +15100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -15405,7 +15266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -15494,7 +15355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -15583,7 +15444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -15805,7 +15666,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -15894,7 +15755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -15983,7 +15844,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -16072,7 +15933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -16161,7 +16022,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -16250,7 +16111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -16380,7 +16241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -16469,7 +16330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -16558,7 +16419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -16647,7 +16508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -16657,7 +16518,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16804,7 +16665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -16893,7 +16754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -16982,7 +16843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -17071,7 +16932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -17160,7 +17021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -17181,15 +17042,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &737605117 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 183994063}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &737929745
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17275,7 +17131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -17285,7 +17141,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17432,7 +17288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -17442,7 +17298,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17510,7 +17366,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17657,7 +17513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -17746,7 +17602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -17835,7 +17691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -17940,7 +17796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -18029,7 +17885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -18118,7 +17974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -18207,7 +18063,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -18296,7 +18152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -18385,7 +18241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -18426,15 +18282,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &790344670 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1200007046}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &792241634
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18520,7 +18371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -18541,15 +18392,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &792901406 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 494350175}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &793948200
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18635,7 +18481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -18724,7 +18570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -18813,7 +18659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -18917,7 +18763,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -18927,7 +18773,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -19095,7 +18941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -19184,7 +19030,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -19293,7 +19139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -19397,7 +19243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -19486,7 +19332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -19605,7 +19451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -19779,7 +19625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -19868,7 +19714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -19957,7 +19803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -20046,7 +19892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -20135,7 +19981,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -20224,7 +20070,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -20313,7 +20159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -20323,7 +20169,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20470,7 +20316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -20559,7 +20405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -20648,7 +20494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -20737,7 +20583,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -20826,7 +20672,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -20935,7 +20781,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -21044,7 +20890,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -21133,7 +20979,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -21222,7 +21068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -21311,7 +21157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -21400,7 +21246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -21505,7 +21351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -21615,7 +21461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -21704,7 +21550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -21808,7 +21654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -21917,7 +21763,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -22006,7 +21852,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -22016,7 +21862,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -22163,7 +22009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -22272,7 +22118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -22313,15 +22159,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &926867008 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1416535751}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &932627959
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22407,7 +22248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -22496,7 +22337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -22585,7 +22426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -22674,7 +22515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -22695,15 +22536,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &943960794 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1127414886}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &944579451
 Transform:
   m_ObjectHideFlags: 0
@@ -22805,7 +22641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -22979,7 +22815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -23068,7 +22904,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -23157,7 +22993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -23246,7 +23082,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -23355,7 +23191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -23444,7 +23280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -23554,7 +23390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -23643,7 +23479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -23820,7 +23656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -23909,7 +23745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -23963,7 +23799,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -24110,7 +23946,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -24199,7 +24035,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -24329,7 +24165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -24418,7 +24254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -24528,15 +24364,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1035162869 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 142274502}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1037047497
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24622,7 +24453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -24711,7 +24542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -24721,7 +24552,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -24868,7 +24699,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -24957,7 +24788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -25062,7 +24893,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -25151,7 +24982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -25260,7 +25091,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -25349,7 +25180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -25438,7 +25269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -25543,7 +25374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -25632,7 +25463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -25761,7 +25592,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -25890,7 +25721,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -25979,7 +25810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -26068,7 +25899,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -26157,7 +25988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -26267,7 +26098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -26356,7 +26187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -26461,7 +26292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -26550,7 +26381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -26639,7 +26470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -26728,7 +26559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -26817,7 +26648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -26922,7 +26753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -26932,7 +26763,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -27079,7 +26910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -27216,15 +27047,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1118836301 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 516535889}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1121309784
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27310,7 +27136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -27415,7 +27241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -27504,7 +27330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -27514,7 +27340,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -27682,7 +27508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -27787,7 +27613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -27876,7 +27702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -27965,7 +27791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -28054,7 +27880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -28164,7 +27990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -28342,7 +28168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -28431,7 +28257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -28520,7 +28346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -28625,7 +28451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -28734,7 +28560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -28823,7 +28649,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -28912,7 +28738,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -29016,7 +28842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -29105,7 +28931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -29115,7 +28941,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -29262,7 +29088,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -29351,7 +29177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -29460,7 +29286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -29600,7 +29426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -29621,15 +29447,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1220273124 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1907761893}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1220284013
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29715,7 +29536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -29824,7 +29645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -29913,7 +29734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -30002,7 +29823,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -30023,15 +29844,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1225018675 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 177667248}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1225406973
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30117,7 +29933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -30206,7 +30022,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -30295,7 +30111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -30384,7 +30200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -30473,7 +30289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -30562,7 +30378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -30651,7 +30467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -30740,7 +30556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -30829,7 +30645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -30933,7 +30749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -31037,7 +30853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -31147,7 +30963,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -31236,7 +31052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -31325,7 +31141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -31414,7 +31230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -31524,7 +31340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -31613,7 +31429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -31702,7 +31518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -31806,7 +31622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -31895,7 +31711,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -32020,7 +31836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -32145,7 +31961,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -32181,15 +31997,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1287039707 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1886557571}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1292162995
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32275,7 +32086,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -32364,7 +32175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -32488,7 +32299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -32598,7 +32409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -32687,7 +32498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -32776,7 +32587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -32865,7 +32676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -32954,7 +32765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -33043,7 +32854,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -33152,7 +32963,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -33173,15 +32984,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1330007223 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 305064915}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1333176620
 Transform:
   m_ObjectHideFlags: 0
@@ -33283,7 +33089,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -33372,7 +33178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -33461,7 +33267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -33550,7 +33356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -33639,7 +33445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -33728,7 +33534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -33838,7 +33644,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -33927,7 +33733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -34032,7 +33838,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -34142,7 +33948,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -34231,7 +34037,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -34320,7 +34126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -34409,7 +34215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -34514,7 +34320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -34603,7 +34409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -34692,7 +34498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -34781,7 +34587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -34890,7 +34696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -34979,7 +34785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -35068,7 +34874,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -35172,7 +34978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -35282,7 +35088,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -35292,7 +35098,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35439,7 +35245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -35449,7 +35255,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35596,7 +35402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -35685,7 +35491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -35774,7 +35580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -35879,7 +35685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -35968,7 +35774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -36073,7 +35879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -36162,7 +35968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -36266,7 +36072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -36355,7 +36161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -36444,7 +36250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -36533,7 +36339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -36622,7 +36428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -36727,7 +36533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -36737,7 +36543,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36884,7 +36690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -36973,7 +36779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -37078,7 +36884,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -37183,7 +36989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -37272,7 +37078,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -37361,7 +37167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -37450,7 +37256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -37559,7 +37365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -37569,7 +37375,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37736,7 +37542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -37841,7 +37647,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -37930,7 +37736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -37951,15 +37757,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1531269763 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1041150135}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1533989476
 Transform:
   m_ObjectHideFlags: 0
@@ -38060,7 +37861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -38185,7 +37986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -38274,7 +38075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -38384,7 +38185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -38473,7 +38274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -38562,7 +38363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -38651,7 +38452,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -38740,7 +38541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -38829,7 +38630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -38934,7 +38735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -39039,7 +38840,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -39128,7 +38929,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -39217,7 +39018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -39306,7 +39107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -39395,7 +39196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -39484,7 +39285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -39594,7 +39395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -39704,7 +39505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -39829,7 +39630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -39918,7 +39719,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -40007,7 +39808,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -40096,7 +39897,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -40185,7 +39986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -40305,7 +40106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -40394,7 +40195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -40483,7 +40284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -40572,7 +40373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -40682,7 +40483,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -40791,7 +40592,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -40901,7 +40702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -40990,7 +40791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -41000,7 +40801,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -41147,7 +40948,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -41236,7 +41037,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -41325,7 +41126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -41435,7 +41236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -41621,7 +41422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -41731,7 +41532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -41820,7 +41621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -41929,7 +41730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -42018,7 +41819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -42107,7 +41908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -42196,7 +41997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -42285,7 +42086,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -42390,7 +42191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -42479,7 +42280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -42584,7 +42385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -42673,7 +42474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -42762,7 +42563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -42867,7 +42668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -42877,7 +42678,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -43024,7 +42825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -43164,7 +42965,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -43274,7 +43075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -43372,15 +43173,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1744033295 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 488086017}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1745067302
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43466,7 +43262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -43555,7 +43351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -43644,7 +43440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -43749,7 +43545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -43889,7 +43685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -43978,7 +43774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -44067,7 +43863,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -44156,7 +43952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -44245,7 +44041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -44355,7 +44151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -44444,7 +44240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -44533,7 +44329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -44638,7 +44434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -44727,7 +44523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -44816,7 +44612,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -44905,7 +44701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -44994,7 +44790,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -45083,7 +44879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -45193,7 +44989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -45282,7 +45078,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -45371,7 +45167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -45481,7 +45277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -45570,7 +45366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -45680,7 +45476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -45790,7 +45586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -45879,7 +45675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -45984,7 +45780,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -46005,15 +45801,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1821590870 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1953263329}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1833728996
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46099,7 +45890,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -46255,7 +46046,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -46344,7 +46135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -46433,7 +46224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -46522,7 +46313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -46543,15 +46334,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1846117989 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 754325039}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1852055339
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46637,7 +46423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -46658,15 +46444,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1857479604 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 218671904}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1859621649
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46752,7 +46533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -46841,7 +46622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -46851,7 +46632,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -46998,7 +46779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -47108,7 +46889,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -47197,7 +46978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -47286,7 +47067,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -47375,7 +47156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -47385,7 +47166,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -47453,7 +47234,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -47600,7 +47381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -47621,15 +47402,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1889606677 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1871035523}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1890117087
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47715,7 +47491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -47804,7 +47580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -47893,7 +47669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -47998,7 +47774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -48087,7 +47863,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -48176,7 +47952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -48265,7 +48041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -48275,7 +48051,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -48422,7 +48198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -48527,7 +48303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -48616,7 +48392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -48751,7 +48527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -48840,7 +48616,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -48850,7 +48626,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -48997,7 +48773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -49086,7 +48862,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -49190,7 +48966,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -49300,7 +49076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -49321,15 +49097,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1944653945 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 433669374}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1945097123
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -49415,7 +49186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -49504,7 +49275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -49593,7 +49364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -49682,7 +49453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -49807,7 +49578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -49896,7 +49667,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -49917,15 +49688,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1951020416 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 5168475}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1952103772
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50011,7 +49777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -50021,7 +49787,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -50168,7 +49934,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -50273,7 +50039,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -50362,7 +50128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -50383,15 +50149,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1968209480 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1932268063}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1969984847
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50477,7 +50238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -50498,15 +50259,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1970989121 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1714137590}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1971356326
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50592,7 +50348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -50681,7 +50437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -50770,7 +50526,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -50859,7 +50615,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -50880,15 +50636,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1978419738 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1880477346}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1981591189
 Transform:
   m_ObjectHideFlags: 0
@@ -50990,7 +50741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -51011,15 +50762,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1983034775 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1631642024}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1989330991
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51105,7 +50851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -51126,15 +50872,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &1989417051 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 810907465}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1990105994
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51220,7 +50961,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -51309,7 +51050,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -51419,7 +51160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -51524,7 +51265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -51613,7 +51354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -51702,7 +51443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -51791,7 +51532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -51901,7 +51642,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -51922,15 +51663,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &2007319948 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1405216913}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2018128509
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52016,7 +51752,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -52037,15 +51773,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &2021052410 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 747722236}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2022356290
 Transform:
   m_ObjectHideFlags: 0
@@ -52147,7 +51878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -52236,7 +51967,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -52325,7 +52056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -52414,7 +52145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -52503,7 +52234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -52592,7 +52323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -52681,7 +52412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -52770,7 +52501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -52791,15 +52522,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &2032840660 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1011157006}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2035857847
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52885,7 +52611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -52974,7 +52700,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -53063,7 +52789,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -53152,7 +52878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -53162,7 +52888,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -53309,7 +53035,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -53398,7 +53124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -53552,7 +53278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -53573,15 +53299,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &2049814043 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 2041034123}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2050945518
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -53667,7 +53388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -53777,7 +53498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -53866,7 +53587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -53955,7 +53676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -54044,7 +53765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -54133,7 +53854,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -54222,7 +53943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -54327,7 +54048,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -54432,7 +54153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -54542,7 +54263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -54631,7 +54352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -54736,7 +54457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -54846,7 +54567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -54935,7 +54656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -55040,7 +54761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -55129,7 +54850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -55218,7 +54939,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -55328,7 +55049,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -55438,7 +55159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -55527,7 +55248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -55616,7 +55337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -55754,7 +55475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -55859,7 +55580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -55969,7 +55690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -56058,7 +55779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -56147,7 +55868,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -56168,15 +55889,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &2105296540 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1513008291}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2105649831
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56262,7 +55978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -56367,7 +56083,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -56456,7 +56172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -56695,7 +56411,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -56793,22 +56509,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
---- !u!4 &2114746805 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
-  m_PrefabInstance: {fileID: 1112188454}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2116309601
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 340272478}
+    m_TransformParent: {fileID: 2110121286}
     m_Modifications:
     - target: {fileID: 250659904410358745, guid: fa4994329249af3438497f53f67cb831, type: 3}
       propertyPath: m_LocalPosition.x
@@ -56971,7 +56682,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -57076,7 +56787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -57181,7 +56892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -57286,7 +56997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -57561,7 +57272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -57650,7 +57361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -57739,7 +57450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058063ce1733d84458bbd20c62713238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideAfterSeconds: 10
+  hideAfterSeconds: 30
   respawn: 1
   hiddenDurationSeconds: 3
   autoStart: 1
@@ -58244,6 +57955,5 @@ SceneRoots:
   - {fileID: 1115453997}
   - {fileID: 445717830}
   - {fileID: 998317527}
-  - {fileID: 340272478}
   - {fileID: 4951063221113943595}
   - {fileID: 1005574309}
