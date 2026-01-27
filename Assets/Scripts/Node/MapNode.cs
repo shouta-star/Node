@@ -666,6 +666,7 @@ public class MapNode : MonoBehaviour
     private static bool s_useMustPassAsWeight = false;
     private static float s_mustPassFieldBase = 0f;
     private static float s_mustPassFieldDecay = 1f;
+    private static float s_mustPassFieldSlope = 0f; // ★追加：線形MustPass用の傾き
 
     private static float s_weightUnknown = 0f;
     private static float s_revisitPenaltyPerVisit = 0f;
@@ -687,6 +688,7 @@ public class MapNode : MonoBehaviour
         bool useMustPassAsWeight,
         float mustPassFieldBase,
         float mustPassFieldDecay,
+        float mustPassFieldSlope,
         float weightUnknown,
         float revisitPenaltyPerVisit,
         int mustPassCacheRefreshFrames,
@@ -698,6 +700,7 @@ public class MapNode : MonoBehaviour
         s_useMustPassAsWeight = useMustPassAsWeight;
         s_mustPassFieldBase = mustPassFieldBase;
         s_mustPassFieldDecay = mustPassFieldDecay;
+        s_mustPassFieldSlope = mustPassFieldSlope;
 
         s_weightUnknown = weightUnknown;
         s_revisitPenaltyPerVisit = revisitPenaltyPerVisit;
@@ -790,8 +793,10 @@ public class MapNode : MonoBehaviour
             int dM = GetNearestUnvisitedMustPassDistance(candidate.cell, visitedMustPassCells);
             if (dM != int.MaxValue)
             {
-                float mustBonus = s_mustPassFieldBase * Mathf.Pow(s_mustPassFieldDecay, dM);
-                score += mustBonus;
+                //float mustBonus = s_mustPassFieldBase * Mathf.Pow(s_mustPassFieldDecay, dM);
+                //score += mustBonus;
+                float mustBonus = s_mustPassFieldBase - s_mustPassFieldSlope * dM;
+                if (mustBonus > 0f) score += mustBonus;
             }
         }
 

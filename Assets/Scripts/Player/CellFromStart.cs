@@ -5,6 +5,36 @@ using System.Reflection;
 
 public class CellFromStart : MonoBehaviour
 {
+    // -----------------------------
+    // Weight Field Params (Manhattan)
+    // -----------------------------
+    [Header("重みフィールド（マンハッタン距離）")]
+    [Tooltip("BestTarget上（距離0）の最大スコア（天井値）")]
+    public float targetFieldMax = 100f;
+    //public float targetFieldMax = 0f;
+
+    [Tooltip("BestTargetからマンハッタン距離が1増えるごとに、どれだけスコアが減るか（傾き）")]
+    public float targetFieldSlope = 10f;
+    //public float targetFieldSlope = 0f;
+
+    [Tooltip("MustPass上（距離0）の最大ボーナス（ピーク値）")]
+    public float mustPassFieldBase = 100f;
+    //public float mustPassFieldBase = 1000f;
+
+    [Tooltip("MustPassボーナスの距離減衰率（0〜1）。高いほど遠くまで影響する")]
+    [Range(0.5f, 0.99f)]
+    public float mustPassFieldDecay = 0.85f;
+    //public float mustPassFieldDecay = 0.90f;
+    public float mustPassFieldSlope = 10f; // ★追加
+
+    [Tooltip("MustPassキャッシュを再構築する間隔（フレーム）。MustPassが多い場合は30程度が目安")]
+    public int mustPassCacheRefreshFrames = 20;
+
+    [Header("スコア重み（A：現状の式）")]
+    [Tooltip("未知をどれだけ優先するか")]
+    public float weightUnknown = 10f;
+    public float weightDistance = 1f;
+
     [Header("移動設定")]
     public float moveSpeed = 3f;
     public float cellSize = 1f;
@@ -44,10 +74,6 @@ public class CellFromStart : MonoBehaviour
     [Header("探索パラメータ")]
     public int unknownReferenceDepth = 3; // ★ BFS探索深さとして使用
 
-    [Header("スコア重み（A：現状の式）")]
-    public float weightUnknown = 1f;
-    public float weightDistance = 1f;
-
     [Header("局所次ステップ（全経路探索なし）")]
     [Tooltip("true の場合、隣接ノードのみから重みで次ノードを選ぶ（フルパス探索しない）")]
     public bool useLocalNextStepOnly = true;
@@ -74,29 +100,30 @@ public class CellFromStart : MonoBehaviour
     [Tooltip("MustPassフィールドの倍率。mustPassFieldBase * multiplier が targetFieldMax より大きいと MustPass が優勢になりやすい")]
     public float mustPassFieldMultiplier = 6f; // 200*6=1200 > 1000
 
-    // -----------------------------
-    // Weight Field Params (Manhattan)
-    // -----------------------------
-    [Header("重みフィールド（マンハッタン距離）")]
-    [Tooltip("BestTarget上（距離0）の最大スコア（天井値）")]
-    //public float targetFieldMax = 100f;
-    public float targetFieldMax = 0f;
+    //// -----------------------------
+    //// Weight Field Params (Manhattan)
+    //// -----------------------------
+    //[Header("重みフィールド（マンハッタン距離）")]
+    //[Tooltip("BestTarget上（距離0）の最大スコア（天井値）")]
+    ////public float targetFieldMax = 100f;
+    //public float targetFieldMax = 0f;
 
-    [Tooltip("BestTargetからマンハッタン距離が1増えるごとに、どれだけスコアが減るか（傾き）")]
-    //public float targetFieldSlope = 10f;
-    public float targetFieldSlope = 0f;
+    //[Tooltip("BestTargetからマンハッタン距離が1増えるごとに、どれだけスコアが減るか（傾き）")]
+    ////public float targetFieldSlope = 10f;
+    //public float targetFieldSlope = 0f;
 
-    [Tooltip("MustPass上（距離0）の最大ボーナス（ピーク値）")]
-    //public float mustPassFieldBase = 200f;
-    public float mustPassFieldBase = 1000f;
+    //[Tooltip("MustPass上（距離0）の最大ボーナス（ピーク値）")]
+    ////public float mustPassFieldBase = 200f;
+    //public float mustPassFieldBase = 1000f;
 
-    [Tooltip("MustPassボーナスの距離減衰率（0〜1）。高いほど遠くまで影響する")]
-    [Range(0.5f, 0.99f)]
-    //public float mustPassFieldDecay = 0.85f;
-    public float mustPassFieldDecay = 0.90f;
+    //[Tooltip("MustPassボーナスの距離減衰率（0〜1）。高いほど遠くまで影響する")]
+    //[Range(0.5f, 0.99f)]
+    ////public float mustPassFieldDecay = 0.85f;
+    //public float mustPassFieldDecay = 0.90f;
 
-    [Tooltip("MustPassキャッシュを再構築する間隔（フレーム）。MustPassが多い場合は30程度が目安")]
-    public int mustPassCacheRefreshFrames = 30;
+    //[Tooltip("MustPassキャッシュを再構築する間隔（フレーム）。MustPassが多い場合は30程度が目安")]
+    //public int mustPassCacheRefreshFrames = 30;
+    
     [Header("Ray設定")]
     public int linkRayMaxSteps = 100;
 
@@ -368,6 +395,7 @@ public class CellFromStart : MonoBehaviour
             useMustPassAsWeight,
             mustPassFieldBase,
             mustPassFieldDecay,
+            mustPassFieldSlope,
             weightUnknown,
             revisitPenaltyPerVisit,
             mustPassCacheRefreshFrames,
