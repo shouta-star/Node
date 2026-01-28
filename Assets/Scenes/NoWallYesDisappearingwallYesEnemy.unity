@@ -15486,7 +15486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 286847407677603923, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 286847407677603923, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
       propertyPath: endColor.b
@@ -15562,7 +15562,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1557108063541798161, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1557108063541798161, guid: 43dbcc59968f0f64f835c271f94e327f, type: 3}
       propertyPath: passCount
@@ -55357,7 +55357,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2098698226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55370,7 +55370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e60adcd603e8b44e9420fb25b5696a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outputSubFolder: D:\GitHub\Node\CSV\NoWallYesDisappearingwallYesEnemy\Frontier
+  outputSubFolder: D:\GitHub\Node\CSV\0127\MapB\Frontier
   filePrefix: Frontier
   destroyPlayersBeforeReload: 1
   enablePeriodicSnapshots: 1
