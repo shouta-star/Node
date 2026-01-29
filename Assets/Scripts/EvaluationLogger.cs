@@ -124,7 +124,8 @@ public static class EvaluationLogger
             //string baseDir = @"D:\GitHub\Node\CSV\0127\MapC\NodeBase\BestTarget";
             //string baseDir = @"D:\GitHub\Node\CSV\0127\MapC\NodeBase\MustPass";
             //string baseDir = @"D:\GitHub\Node\CSV\0127\MapC\NodeBase\Unknown";
-            string baseDir = @"D:\GitHub\Node\CSV\0127\MapC\AStar";
+            //string baseDir = @"D:\GitHub\Node\CSV\0127\MapC\AStar";
+            string baseDir = @"D:\GitHub\Node\CSV\Test";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);
@@ -272,7 +273,8 @@ public static class EvaluationLogger
             //string baseDir = @"D:\GitHub\Node\CSV\0127\MapC\NodeBase\BestTarget";
             //string baseDir = @"D:\GitHub\Node\CSV\0127\MapC\NodeBase\MustPass";
             //string baseDir = @"D:\GitHub\Node\CSV\0127\MapC\NodeBase\Unknown";
-            string baseDir = @"D:\GitHub\Node\CSV\0127\MapC\AStar";
+            //string baseDir = @"D:\GitHub\Node\CSV\0127\MapC\AStar";
+            string baseDir = @"D:\GitHub\Node\CSV\Test";
             if (!Directory.Exists(baseDir))
             {
                 Directory.CreateDirectory(baseDir);
